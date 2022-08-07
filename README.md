@@ -44,4 +44,7 @@ Here is sample shell interaction to verify that Node.js is working:
 
 You two shell sessions
 
+- ZenSheet REPL Client on the left
+- ZenSheet Server on the right
+
 ![alt text](session.png)
