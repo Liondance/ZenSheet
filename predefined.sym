@@ -1,0 +1,79 @@
+const function(var, var) __plus_double_string;
+const function(var, var) __plus_var_var;
+const function(var, var) __minus_var_var;
+const function(var, var) __eq_var_var;
+const function(var, var) __neq_var_var;
+const function(var, var) __le_var_var;
+const function(var,var) __bwand_var_var;
+const function(string,string) __bwand_string_string;
+const function(var,string) __bwand_var_string;
+const function(string,var) __bwand_string_var;
+const function(int,int) __bwand_int_int;
+const function(var,int) __bwand_var_int;
+const function(int,var) __bwand_int_var;
+const function(var,var) __div_var_var;
+const function(int,var) __div_int_var;
+const function(var,int) __div_var_int;
+
+
+// Monte Carlo
+
+const fun(string view, int n, int k) => null _mc_run;
+const fun(string view, int nb, double lb, double ub) => null _mc_params;
+
+struct {
+    const fun(string view, int nb, double lb, double ub) => null params;
+    const fun(string view, int n, int k) => null run;
+} mc;
+
+const fun() => string _sys_version;
+const fun() => null _sys_build;
+const fun() => null _sys_info;
+const fun(string name) => null _sys_load;
+const fun(string name) => null _sys_save;
+const fun(string name) => null _sys_run;
+const fun() => null _sys_tick;
+const fun(string name, string op, var remove, var add) => var _sys_view;
+const fun() => null _sys_refresh;
+const fun(var v) => null _sys_undefine;
+const fun() => null _sys_reset;
+const fun(int level) => null _sys_debug;
+const fun(string) => string _sys_parse;
+const fun() => null _sys_shutdown;
+const fun() => int _sys_compute_cycle;
+const fun() => int _sys_idle;
+const fun() => int _sys_active_connections;
+const fun(string) =>  struct { string;string;string;string;string;} _sys_describe;
+const fun(int ms) => null _sys_cycle;
+const fun() => string _sys_model;
+const fun() => array [] => string _sys_models;
+const fun() => null _sys_flush;
+const fun(string) => bool _sys_db;
+const fun() => string _sys_context;
+
+
+struct { const fun() => string version;
+         const fun() => null build;
+         const fun() => null info;
+         const fun(string name) => null load;
+         const fun(string name) => null save;
+         const fun(string name) => null run;
+         const fun() => null tick;
+         const fun(string name, string op, var remove, var add) => var view;
+         const fun() => null refresh;
+         const fun(var v) => null undefine;
+         const fun() => null reset;
+         const fun(int level) => null debug;
+         const fun(string) => string parse;
+         const fun() => null shutdown;
+         const fun() => int compute_cycle;
+         const fun() => int idle;
+         const fun() => int active_connections;
+         const fun(string) => struct { string;string;string;string;string;} describe;
+         const fun(int ms) => null cycle;
+         const fun() => string model;
+         const fun() => null flush;
+         const fun(string) => bool db;
+         const fun() => string context;
+         const fun() => array [] => string models;
+         } sys;
