@@ -17,7 +17,7 @@ Follow instructions in the following sites:
 
 To download and install Node.js, follow the instructions in ***https://nodejs.org/en/***
 
-Here is sample shell interaction to verify that Node.js is working:
+Here is a sample shell interaction to verify that Node.js is working:
 
     liondance@Antares MINGW64 /e/Test/ZenSheet
     $ node
