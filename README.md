@@ -7,16 +7,17 @@ ZenSheet Beta distribution - Windows version
 ### 1. GitHub
 
 You must have a GitHub account and the GitHub client (GitHub CLI ) for Windows.
+
 Follow instructions in the following sites:
 
-  https://github.com/
-  https://cli.github.com/
+    https://github.com/
+    https://cli.github.com/
 
 ### 2. Node.js
 
 To download and install Node.js, follow the instructions in ***https://nodejs.org/en/***
 
-Here is sample shell interaction to verify that Node.js is working:
+Here is a sample shell interaction to verify that Node.js is working:
 
     liondance@Antares MINGW64 /e/Test/ZenSheet
     $ node
