@@ -72,12 +72,13 @@ Then, start the REPL in the ZenSheet Client window, as follows:
 
 ### Semi-automated, with scripts
 
-- Open one window shells open in the ZenSheet directory
-- Run the zen script, which should start the server in a separate shell window
+Open one window shells open in the ZenSheet directory
+
+Run the zen script, which should start the server in a separate shell window
 
 	./zen
 
-- Run the cli script, which will run the ZenSheet REPL in your current window
+Run the cli script, which will run the ZenSheet REPL in your current window
 
 	./cli
 
