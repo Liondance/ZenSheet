@@ -1,8 +1,7 @@
 
-# Just in case, Trash, etc.
+# Just in case, old files, trash, backup files, etc.
 .jic
+.old
 .trash
-
-# backup files
 *.bak
 *.old
