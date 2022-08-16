@@ -52,13 +52,12 @@ First, we strongly recommend running the server and client processes in differen
   
 Here we show two ways to start the ZenSheet processes:
 
-### Manual
+### Manual procedure
 
-First, have two window shells open in the ZenSheet directory:
+Open two window shells in the ZenSheet directory. The standard layout is shown in the image below:  
 
-	The standard layout is shown in the image below:  
-	- The ZenSheet REPL Client is running on the left window
-	- The ZenSheet Server is running on the right window
+- The ZenSheet REPL Client is running on the left window
+- The ZenSheet Server is running on the right window
 
 ![ZenSheet session: client (left) and server (right)](session.png)
 
@@ -70,7 +69,7 @@ Then, start the REPL in the ZenSheet Client window, as follows:
 
 	node cli.js
 
-### Semi-automated, with scripts
+### Semi-automated procedure, using convenience scripts
 
 Open one window shell in the ZenSheet directory
 
@@ -138,19 +137,19 @@ The REPL client can still be started as usual:
 
 But (good news) we have simplified the above, as explained in the next section! 
 
-### Semi-automated way to start sessions with smart scripts
+### Semi-automated way to start sessions, using convenience scripts
 
 Instead of opening two shells, just open *one* in the ZenSheet directory
 
-Run the newly added zen script. It should start the server in a separate shell window!
+Run the newly added zen script: this will start the server in a separate shell window!
 
 	./zen
 
-Then run the cli script, which will run the ZenSheet REPL in your current window
+Then run the cli script, which will run the ZenSheet REPL in your current window.
 
 	./cli
 
-Now you only need to execute ***./zen*** and ***./cli*** to establish a session! 
+It's that easy: you only need to execute ***./zen*** and ***./cli*** to establish a session! 
 
 ### Some useful REPL commands
 
@@ -172,7 +171,7 @@ You will find these commands convenient
 	run heavy
 	run full
 
-## Week 2 Feedback
+### Week 2 Feedback
 
 Depending on the speed of your computer, some tests may take over 10 seconds to complete.
 At the end of each test **run** you should see ***test statistics*** like this in the output:
@@ -182,6 +181,8 @@ At the end of each test **run** you should see ***test statistics*** like this i
 	failed 0
 	errors 0
 
-Copy and paste the test statistics, for each run, into your feedback email.
-It would be useful to know which processor you have, GHz included.
+
+- Copy and paste the test statistics, for each run, into your feedback email
+- It would be useful to know which processor you have, GHz included
+
 That's all for this week!
