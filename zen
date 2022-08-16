@@ -1,1 +1,1 @@
-./zensheet --zst ./zst
+start ./zensheet.exe --zst ./zst
