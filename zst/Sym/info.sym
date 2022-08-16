@@ -1,0 +1,514 @@
+///
+/// info.sym
+///
+/// ZenVM test suite for information / reflection / conversion functions
+///
+
+//
+
+sys.reset();
+
+//
+// Constructors & Type Validators (Type System Order)
+//
+
+lazy var v;
+
+// Null
+
+verify isnull(?)
+verify isblank(v)
+
+verify isnull(v)
+verify not(isinvalid(v))
+verify not(isbool(v))
+verify not(isint(v))
+verify not(isreal(v))
+verify not(isdate(v))
+verify not(istime(v))
+verify not(isdatetime(v))
+verify not(isstring(v))
+
+// Invalid
+
+verify isinvalid(invalid("HORROR"))
+verify isinvalid(log(0))
+verify isinvalid(1/0)
+verify isinvalid(undefined)
+
+v :- invalid("HORROR");
+verify isinvalid(v)
+verify v = invalid("HORROR")
+
+verify not(isnull(v))
+verify isinvalid(v)
+verify not(isbool(v))
+verify not(isint(v))
+verify not(isreal(v))
+verify not(isdate(v))
+verify not(istime(v))
+verify not(isdatetime(v))
+verify not(isstring(v))
+
+// Boolean
+
+v :- true();
+
+verify isbool(true())
+verify isbool(v)
+
+v :- false();
+
+verify isbool(false())
+verify isbool(v)
+
+verify not(isnull(v))
+verify not(isinvalid(v))
+verify isbool(v)
+verify not(isint(v))
+verify not(isreal(v))
+verify not(isdate(v))
+verify not(istime(v))
+verify not(isdatetime(v))
+verify not(isstring(v))
+
+// Integer
+
+v :- 42;
+
+verify isint(0)
+verify isint(int( 2 ^ 31) - 1)
+verify isint(int(-2 ^ 31)    )
+verify isnumber(v)
+
+verify not(isnull(v))
+verify not(isinvalid(v))
+verify not(isbool(v))
+verify isint(v)
+verify not(isreal(v))
+verify not(isdate(v))
+verify not(istime(v))
+verify not(isdatetime(v))
+verify not(isstring(v))
+
+// Real
+
+v :- log(42);
+
+verify isreal(0.0)
+verify isreal( 2 ^ 31 - 1)
+verify isreal(-2 ^ 31    )
+verify isnumber(v)
+
+verify not(isnull(v))
+verify not(isinvalid(v))
+verify not(isbool(v))
+verify not(isint(v))
+verify isreal(v)
+verify not(isdate(v))
+verify not(istime(v))
+verify not(isdatetime(v))
+verify not(isstring(v))
+
+// Date
+
+v :- date();
+
+verify isdate(date())
+
+verify not(isnull(v))
+verify not(isinvalid(v))
+verify not(isbool(v))
+verify not(isint(v))
+verify not(isreal(v))
+verify isdate(v)
+verify not(istime(v))
+verify not(isdatetime(v))
+verify not(isstring(v))
+
+// Time
+
+v :- time();
+
+verify istime(time())
+
+verify not(isnull(v))
+verify not(isinvalid(v))
+verify not(isbool(v))
+verify not(isint(v))
+verify not(isreal(v))
+verify not(isdate(v))
+verify istime(v)
+verify not(isdatetime(v))
+verify not(isstring(v))
+
+// DateTime
+
+v :- now();
+
+verify isdatetime(now())
+
+verify not(isnull(v))
+verify not(isinvalid(v))
+verify not(isbool(v))
+verify not(isint(v))
+verify not(isreal(v))
+verify not(isdate(v))
+verify not(istime(v))
+verify isdatetime(v)
+verify not(isstring(v))
+
+// String
+
+v :- "";
+
+verify istext("")
+verify isstring("")
+verify isstring("hello, world")
+
+verify not(isnull(v))
+verify not(isinvalid(v))
+verify not(isbool(v))
+verify not(isint(v))
+verify not(isreal(v))
+verify not(isdate(v))
+verify not(istime(v))
+verify not(isdatetime(v))
+verify isstring(v)
+
+//
+// Conversions (Type System Order)
+//
+
+// Null
+
+verify null(?) = ?
+verify null(invalid("HORROR")) = ?
+verify null(1/0) = ?
+verify null(false()) = ?
+verify null(true()) = ?
+verify null(0) = ?
+verify null(7) = ?
+verify null(0.0) = ?
+verify null(log(7)) = ?
+verify null(date()) = ?
+verify null(time()) = ?
+verify null(now()) = ?
+verify null("resistance is futile") = ?
+verify null([]) = ?
+
+// Invalid
+
+verify invalid(?) = invalid("#VALUE!")
+verify invalid(int(?)) = invalid("#VALUE!")
+verify invalid(invalid("P")) = invalid("#VALUE!")
+verify invalid(true()) = invalid("#VALUE!")
+verify invalid(false()) = invalid("#VALUE!")
+verify invalid(0) = invalid("#VALUE!")
+verify invalid(7) = invalid("#VALUE!")
+verify invalid(0.0) = invalid("#VALUE!")
+verify invalid(log(7)) = invalid("#VALUE!")
+verify invalid(date()) = invalid("#VALUE!")
+verify invalid(time()) = invalid("#VALUE!")
+verify invalid(now()) = invalid("#VALUE!")
+verify invalid("YES!") = invalid("YES!")
+verify invalid([]) = invalid("#VALUE!")
+
+// Bool
+
+verify bool(?) = invalid("#VALUE!")
+verify bool(1/0) = invalid("#VALUE!")
+verify bool(invalid("WHAT?")) = invalid("#VALUE!")
+verify bool(0) = false()
+verify bool(1) = true()
+verify bool(42) = true()
+verify bool(0.0) = false()
+verify bool(1.0) = true()
+verify bool(42.24) = true()
+verify bool(date()) = invalid("#VALUE!")
+verify bool(time()) = invalid("#VALUE!")
+verify bool(now()) = invalid("#VALUE!")
+verify bool("false") = false()
+verify bool("true") = true()
+verify bool("FALSE") = false()
+verify bool("TRUE") = true()
+verify bool("False") = false()
+verify bool("True") = true()
+verify bool([]) = invalid("#VALUE!")
+
+// Integer
+
+verify int(?) = invalid("#VALUE!")
+verify int(1/0) = invalid("#VALUE!")
+verify int(invalid("42")) = invalid("#VALUE!")
+verify int(false()) = 0
+verify int(true()) = 1
+verify int(42) = 42
+verify int(-42) = -42
+verify int(42.01) = 42
+verify int(42.99) = 42
+verify int(-42.01) = -43
+verify int(-42.99) = -43
+verify int(date()) = invalid("#VALUE!")
+verify int(time()) = invalid("#VALUE!")
+verify int(now()) = invalid("#VALUE!")
+verify int("42") = 42
+verify int("-42") = -42
+verify int("42.01") = 42
+verify int("42.99") = 42
+verify int("-42.01") = -43
+verify int("-42.99") = -43
+verify int([]) = invalid("#VALUE!")
+
+// Float
+
+verify float(?) = invalid("#VALUE!")
+verify float(1/0) = invalid("#VALUE!")
+verify float(invalid("42")) = invalid("#VALUE!")
+verify float(42) = 42.0
+verify float(-42) = -42.0
+verify float(42.42) = float(42.42)
+verify float(-42.42) = float(-42.42)
+verify float(date()) = invalid("#VALUE!")
+verify float(time()) = invalid("#VALUE!")
+verify float(now()) = invalid("#VALUE!")
+verify float("42") = 42.0
+verify float("-42") = -42.0
+verify float("42.42") = float(42.42)
+verify float("-42.42") = float(-42.42)
+verify float([]) = invalid("#VALUE!")
+
+// Double
+
+verify double(?) = invalid("#VALUE!")
+verify double(1/0) = invalid("#VALUE!")
+verify double(invalid("42")) = invalid("#VALUE!")
+verify double(42) = 42.0
+verify double(-42) = -42.0
+verify double(42.42) = 42.42
+verify double(-42.42) = -42.42
+verify double(date()) = invalid("#VALUE!")
+verify double(time()) = invalid("#VALUE!")
+verify double(now()) = invalid("#VALUE!")
+verify double("42") = 42.0
+verify double("-42") = -42.0
+verify double("42.42") = 42.42
+verify double("-42.42") = -42.42
+verify double([]) = invalid("#VALUE!")
+
+// String
+
+verify string(?) = ""
+// verify string(log(0)) = "#NUM!"
+// verify string(1/0) = "#DIV/0!"
+// verify string(invalid("HORROR")) = "HORROR"
+verify string(false()) = "false"
+verify string(true()) = "true"
+verify string(-9) = "-9"
+verify string(0) = "0"
+verify string(9) = "9"
+verify left(string(-42.24), 6) = "-42.24"
+verify left(string(0.0), 3) = "0.0"
+verify left(string(42.24), 5) = "42.24"
+verify string(date(2006, 12, 31)) = "12/31/2006"
+verify string(time(19, 47, 16)) = "19:47:16"
+verify string(datetime(69, 5, 7, 19, 47, 16)) = "May 7, 69 19:47:16"
+verify string("already a string!") = "already a string!"
+verify string([0, 1, 0+1, 1 + (0+1)]) = "[0, 1, 1, 2]"
+
+//
+// Other Information Functions (Alphabetical Order)
+//
+
+// CELL
+
+// ERROR_TYPE
+
+verify error_type(invalid("#NULL!")) = 1
+verify error_type(invalid("#DIV/0!")) = 2
+verify error_type(invalid("#VALUE!")) = 3
+verify error_type(invalid("#REF!")) = 4
+verify error_type(invalid("#NAME?")) = 5
+verify error_type(invalid("#NUM!")) = 6
+verify error_type(invalid("#N/A")) = 7
+verify error_type(invalid("#HORRID")) = invalid("#N/A")
+
+// INFO
+
+verify info("version") = "OPL"
+verify info("release") = "1.0"
+
+// ISERR
+
+verify iserr(1/0)
+verify iserr(log(0))
+verify iserr(invalid("HORROR"))
+verify not(iserr(invalid("#N/A")))
+
+// ISERROR
+
+verify iserror(1/0)
+verify iserror(log(0))
+verify iserror(invalid("HORROR"))
+verify iserror(invalid("#N/A"))
+
+// ISLOGICAL
+
+verify islogical(?) = isbool(?)
+verify islogical(invalid("?")) = isbool(invalid("?"))
+verify islogical(false()) = isbool(false())
+verify islogical(true()) = isbool(true())
+verify islogical(0) = isbool(0)
+verify islogical(-7) = isbool(-7)
+verify islogical(0.0) = isbool(0.0)
+verify islogical(7.7) = isbool(7.7)
+verify islogical(date()) = isbool(date())
+verify islogical(time()) = isbool(time())
+verify islogical(now()) = isbool(now())
+verify islogical("?") = isbool("?")
+verify islogical([]) = isbool([])
+
+// ISNA
+
+verify isna(invalid("#N/A"))
+verify not(isna(invalid("OTHER")))
+
+// ISNONTEXT
+
+verify isnontext(?)
+verify isnontext(1/0)
+verify isnontext(log(0))
+verify isnontext(false())
+verify isnontext(true())
+verify isnontext(0)
+verify isnontext(1000)
+verify isnontext(-1000)
+verify isnontext(0.0)
+verify isnontext(1000.0)
+verify isnontext(-1000.0)
+verify isnontext(date())
+verify isnontext(time())
+verify isnontext(now())
+verify not(isnontext("TEXT"))
+verify isnontext([])
+
+// ISNUMBER
+
+verify not(isnumber(?))
+verify not(isnumber(1/0))
+verify not(isnumber(log(0)))
+verify not(isnumber(false()))
+verify not(isnumber(true()))
+verify isnumber(0)
+verify isnumber(1000)
+verify isnumber(-1000)
+verify isnumber(0.0)
+verify isnumber(1000.0)
+verify isnumber(-1000.0)
+verify not(isnumber(date()))
+verify not(isnumber(time()))
+verify not(isnumber(now()))
+verify not(isnumber("TEXT"))
+verify not(isnumber([]))
+
+// ISTEXT
+
+verify istext(?) = isstring(?)
+verify istext(invalid("?")) = isstring(invalid("?"))
+verify istext(false()) = isstring(false())
+verify istext(true()) = isstring(true())
+verify istext(0) = isstring(0)
+verify istext(-7) = isstring(-7)
+verify istext(0.0) = isstring(0.0)
+verify istext(7.7) = isstring(7.7)
+verify istext(date()) = isstring(date())
+verify istext(time()) = isstring(time())
+verify istext(now()) = isstring(now())
+verify istext("?") = isstring("?")
+verify istext([]) = isstring([])
+
+// IVL
+
+verify ivl(?, "WAS INVALID") = ?
+verify ivl(1/0, "WAS INVALID") = "WAS INVALID" 
+verify ivl(log(0), "WAS INVALID") = "WAS INVALID"
+verify ivl(false(), "WAS INVALID") = false()
+verify ivl(true(), "WAS INVALID") = true()
+verify ivl(0, "WAS INVALID") = 0
+verify ivl(1000, "WAS INVALID") = 1000
+verify ivl(-1000, "WAS INVALID") = -1000
+verify ivl(0.0, "WAS INVALID") = 0.0
+verify ivl(1000.0, "WAS INVALID") = 1000.0
+verify ivl(-1000.0, "WAS INVALID") = -1000.0
+verify ivl(date(), "WAS INVALID") = date()
+verify ivl(time(), "WAS INVALID") = time()
+verify ivl(now(), "WAS INVALID") = now()
+verify ivl("TEXT", "WAS INVALID") = "TEXT"
+verify ivl([], "WAS INVALID") = []
+
+// N
+
+verify n(?) = 0
+verify n(1/0) = invalid("#DIV/0!")
+verify n(log(0)) = invalid("#NUM!")
+verify n(false()) = 0
+verify n(true()) = 1
+verify n(0) = 0
+verify n(1000) = 1000
+verify n(-1000) = -1000
+verify n(0.0) = 0.0
+verify n(1000.0) = 1000.0
+verify n(-1000.0) = -1000.0
+verify n(date()) = 0
+verify n(time()) = 0
+verify n(now()) = 0
+verify n("TEXT") = 0
+verify n([]) = 0
+
+// NA
+
+verify na() = invalid("#N/A")
+
+// NVL
+
+verify nvl(?, "WAS NULL") = "WAS NULL"
+verify nvl(1/0, "WAS NULL") = invalid("#DIV/0!")
+verify nvl(log(0), "WAS NULL") = invalid("#NUM!")
+verify nvl(na(), "WAS NULL") = invalid("#N/A")
+verify nvl(false(), "WAS NULL") = false()
+verify nvl(true(), "WAS NULL") = true()
+verify nvl(0, "WAS NULL") = 0
+verify nvl(1000, "WAS NULL") = 1000
+verify nvl(-1000, "WAS NULL") = -1000
+verify nvl(0.0, "WAS NULL") = 0.0
+verify nvl(1000.0, "WAS NULL") = 1000.0
+verify nvl(-1000.0, "WAS NULL") = -1000.0
+verify nvl(date(), "WAS NULL") = date()
+verify nvl(time(), "WAS NULL") = time()
+verify nvl(now(), "WAS NULL") = now()
+verify nvl("TEXT", "WAS NULL") = "TEXT"
+verify nvl([], "WAS NULL") = []
+
+// XLSTYPE
+
+verify xlstype(?) = invalid("#VALUE!")
+verify xlstype(1/0) = 16
+verify xlstype(log(0)) = 16
+verify xlstype(invalid("?")) = 16
+verify xlstype(false()) = 4
+verify xlstype(true()) = 4
+verify xlstype(0) = 1
+verify xlstype(1000) = 1
+verify xlstype(-1000) = 1
+verify xlstype(0.0) = 1
+verify xlstype(1000.0) = 1
+verify xlstype(-1000.0) = 1
+verify xlstype(date()) = invalid("#VALUE!")
+verify xlstype(time()) = invalid("#VALUE!")
+verify xlstype(now()) = invalid("#VALUE!")
+verify xlstype("TEXT") = 2
+verify xlstype([]) = 64
+
+//
+
+verify true

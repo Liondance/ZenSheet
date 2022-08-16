@@ -1,0 +1,189 @@
+///
+/// zilly.sym
+///
+/// ZenVM reactive integer calculator experiment
+///
+
+//
+
+sys.reset();
+
+//
+// Primitive functions
+//
+
+:: lz := fn(int x) -> x < 0;
+:: minus := fn(int x) -> fn(int y) -> x - y;
+:: nand := fn(bool x) -> fn(bool y) -> !(x && y);
+
+//
+// Derived
+//
+
+:: not := fn(bool x) -> if(x, false, true);
+// :: not := fn(bool x) -> nand(x, true);
+// :: not := fn(bool x) -> nand(x, x);
+
+:: and := fn(bool x) -> fn(bool y) -> not(nand(x)(y));
+
+:: or := fn(bool x) -> fn(bool y) -> nand(not(x))(not(y));
+
+:: lt := fn(int x) -> fn(int y) -> lz(minus(x)(y));
+
+:: gt := fn(int x) -> fn(int y) -> lt(y)(x);
+// :: gt := fn(int x) -> fn(int y) -> lz(minus(y)(x));
+
+:: le := fn(int x) -> fn(int y) -> not(gt(x)(y));
+
+:: ge := fn(int x) -> fn(int y) -> not(lt(x)(y));
+
+// :: ge := fn(int x) -> fn(int y) -> or(gt(x)(y))(eq(x)(y));
+
+:: ne := fn(int x) -> fn(int y) -> or(lt(x)(y))(lt(y)(x));
+
+:: eq := fn(int x) -> fn(int y) -> not(ne(x)(y));
+
+:: chs := minus(0);
+
+:: plus := fn(int x) -> fn(int y) -> minus(x)(chs(y));
+
+// Future enhancement (performance): switch arguments when necessary so that x is smaller than y
+:: _mult := fn(int x) -> fn(int y) -> if(eq(x)(0), 0, plus(_mult(minus(x)(1))(y))(y));
+:: mult := fn(int x) -> fn(int y) -> if(lt(0)(x), _mult(x)(y), chs(_mult(chs(x))(y)));
+
+//
+// tests
+//
+
+// Primitive functions
+
+verify lz(-9) = true
+verify lz(-1) = true
+verify lz( 0) = false
+verify lz( 1) = false
+verify lz( 9) = false
+
+verify minus(7)(9) = -2
+verify minus(7)(7) =  0
+verify minus(9)(9) =  0
+verify minus(9)(7) =  2
+
+verify nand(false)(false) = true
+verify nand(false)(true) = true
+verify nand(true)(false) = true
+verify nand(true)(true) = false
+
+// Derived
+
+verify not(false) = true
+verify not(true) = false
+
+verify and(false)(false) = false
+verify and(false)(true) = false
+verify and(true)(false) = false
+verify and(true)(true) = true
+
+verify or(false)(false) = false
+verify or(false)(true) = true
+verify or(true)(false) = true
+verify or(true)(true) = true
+
+verify lt(7)(9) = true
+verify lt(8)(8) = false
+verify lt(9)(7) = false
+
+verify le(7)(9) = true
+verify le(8)(8) = true
+verify le(9)(7) = false
+
+verify ne(7)(9) = true
+verify ne(8)(8) = false
+verify ne(9)(7) = true
+
+verify eq(7)(9) = false
+verify eq(8)(8) = true
+verify eq(9)(7) = false
+
+verify ge(7)(9) = false
+verify ge(8)(8) = true
+verify ge(9)(7) = true
+
+verify gt(7)(9) = false
+verify gt(8)(8) = false
+verify gt(9)(7) = true
+
+//
+
+verify chs(-1) =  1
+verify chs( 0) =  0
+verify chs( 1) = -1
+
+verify plus(9)(7) = 16
+verify plus(7)(9) = 16
+
+verify mult(-6)(-7) =  42
+verify mult(-6)( 7) = -42
+verify mult( 6)(-7) = -42
+verify mult( 6)( 7) =  42
+
+//
+
+:: mod := fn(x) -> fn(y) -> if(lt(x)(y), x, mod(minus(x)(y))(y));
+:: div := fn(x) -> fn(y) -> if(lt(x)(y), 0, plus(1)(div(minus(x)(y))(y)));
+:: gcd := fn(x) -> fn(y) -> if(lt(x)(y), gcd(y)(x), if(eq(mod(x)(y))(0), y, gcd(y)(minus(x)(y))));
+
+:: x := 3768;
+:: y := 1472;
+:: z :- gcd(x)(y);
+
+verify mod(x)(y) = x % y
+verify div(x)(y) = quotient(x, y)
+verify plus(mult(y)(div(x)(y)))(mod(x)(y)) = x
+verify eq(plus(mult(div(x)(y))(y))(mod(x)(y)))(x) = true
+verify z = 8
+
+x :=   10;
+y := 1000;
+
+verify eq(plus(mult(div(x)(y))(y))(mod(x)(y)))(x) = true
+verify z = 10
+
+x := 1000;
+y := 10;
+
+verify eq(plus(mult(div(x)(y))(y))(mod(x)(y)))(x) = true
+verify z = 10
+
+x := 24;
+y := 32;
+
+verify eq(plus(mult(div(x)(y))(y))(mod(x)(y)))(x) = true
+verify z = 8
+
+x := mult(1393)(427);
+y := plus(mult(7)(x))(997);
+
+verify eq(plus(mult(div(x)(y))(y))(mod(x)(y)))(x) = true
+verify z = 1
+
+y := mult(1393)(427);
+x := plus(mult(7)(y))(997);
+
+verify eq(plus(mult(div(x)(y))(y))(mod(x)(y)))(x) = true
+verify z = 1
+
+x := mult(2401)(497);
+y := plus(mult(7)(x))(997);
+
+verify eq(plus(mult(div(x)(y))(y))(mod(x)(y)))(x) = true
+verify z = 1
+
+y := mult(2401)(497);
+x := plus(mult(7)(y))(997);
+
+verify eq(plus(mult(div(x)(y))(y))(mod(x)(y)))(x) = true
+verify z = 1
+
+//
+
+verify true

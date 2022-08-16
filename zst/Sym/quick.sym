@@ -1,0 +1,18 @@
+///
+/// quick - quick ZenSheet test
+///
+
+echo off
+
+run info
+run logical
+run tuple
+run 1D
+run 2D
+run 3D
+run lazy
+run lambda
+run closure
+run sort
+
+echo on

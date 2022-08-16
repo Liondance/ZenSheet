@@ -1,0 +1,82 @@
+///
+/// regen-i.sym
+///
+/// ZenVM test suite for model regeneration with closures
+///
+
+//
+
+sys.reset()
+
+:: closure_factory := /. (int i) => fun(int i) => int -> /. (int j) => int -> i + j + 3;
+
+:: f1 := closure_factory(17);
+:: f2 := closure_factory(-3);
+
+verify f1(22) = 42
+verify f2(25) = 25
+
+verify | symbols() | = 3
+sys.save("./Out/regen.sym")
+
+sys.reset();
+
+verify | symbols() | = 0
+sys.load("./Out/regen.sym");
+
+verify f1(22) = 42
+verify f1(21) = 41
+verify f2(25) = 25
+verify f2(3)  = 3
+
+
+//
+
+sys.reset()
+
+:: closure_factory := /. (int i) => lazy double -> 'i + uniform()';
+
+:: b := closure_factory(42);
+:: c := closure_factory(1);
+
+verify 42.0 <= b && b <= 43.0
+verify  1.0 <= c && c <=  2.0
+
+verify | symbols() | = 3
+sys.save("./Out/regen.sym")
+
+sys.reset();
+
+verify | symbols() | = 0
+sys.load("./Out/regen.sym");
+
+verify b <> #REF!
+verify c <> #REF!
+
+verify 42.0 <= b && b <= 43.0
+verify  1.0 <= c && c <=  2.0
+
+//
+
+sys.reset()
+
+:: closure_factory := /.(int i) => lazy double -> 'i + uniform()';
+
+// lazy double b := 'i + uniform()'; // <= crashes instead of simply returning an error and leaving b undefined
+lazy double c := '1 + uniform()';
+lazy double d := closure_factory(7);
+
+sys.save("./Out/regen.sym")
+
+sys.reset();
+
+verify | symbols() | = 0
+sys.load("./Out/regen.sym");
+
+verify | symbols() | = 3
+
+verify b = #REF!
+verify  1.0 <= c && c <=  2.0
+verify  7.0 <= d && d <=  8.0
+
+verify | symbols() | = 3

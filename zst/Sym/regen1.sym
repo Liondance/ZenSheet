@@ -1,0 +1,313 @@
+///
+/// regen1.sym
+///
+/// ZenVM test suite 1 for model regeneration
+///
+
+//
+
+sys.reset();
+
+:: k := 10;
+
+:: x :- 7.0 + uniform();
+:: y :- 8.0;
+:: z :- k * (x + y);
+
+sys.save("./Out/regen.sym");
+sys.reset();
+verify symbols() = []
+sys.load("./Out/regen.sym");
+
+verify 150 < z && z < 160
+
+//
+
+sys.reset();
+
+array[] => array[] => lazy double A :- [[0], [1, uniform()], [2, uniform(), uniform()], [3, uniform(), uniform(), uniform()] ];
+array[] => lazy array[] => double B := ['[0]', '[1, uniform()]', '[2, uniform(), uniform()]', '[3, uniform(), uniform(), uniform()]' ];
+lazy array[] => array[] => double C := '[[0], [1, uniform()], [2, uniform(), uniform()], [3, uniform(), uniform(), uniform()] ]';
+
+verify ltype(A) = array[] => array[] => lazy double
+verify ltype(B) = array[] => lazy array[] => double
+verify ltype(C) = lazy array[] => array[] => double
+
+sys.save("./Out/regen.sym");
+sys.reset();
+verify symbols() = []
+sys.load("./Out/regen.sym");
+
+verify ltype(A) = array[] => array[] => lazy double
+verify ltype(B) = array[] => lazy array[] => double
+verify ltype(C) = lazy array[] => array[] => double
+
+//
+
+sys.reset();
+
+:: A :- [[0], [1, uniform()], [2, uniform(), uniform()], [3, uniform(), uniform(), uniform()] ];
+:: B := ['[0]', '[1, uniform()]', '[2, uniform(), uniform()]', '[3, uniform(), uniform(), uniform()]' ];
+:: C := '[[0], [1, uniform()], [2, uniform(), uniform()], [3, uniform(), uniform(), uniform()] ]';
+
+verify ltype(A) = array[] => array[] => lazy double
+verify ltype(B) = array[] => lazy array[] => double
+verify ltype(C) = lazy array[] => array[] => double
+
+sys.save("./Out/regen.sym");
+sys.reset();
+verify symbols() = []
+sys.load("./Out/regen.sym");
+
+verify ltype(A) = array[] => array[] => lazy double
+verify ltype(B) = array[] => lazy array[] => double
+verify ltype(C) = lazy array[] => array[] => double
+
+//
+
+sys.reset();
+
+:: x :- uniform();
+:: y := uniform();
+
+:: s0 :- [
+	[x],
+	[1 + x, 1 + y],
+	[2 + x, 2 + y, 2 + x * y],
+	[3 + x, 3 + y, 3 + x * y, 3 + (x * y)^2]
+];
+
+:: s1 := [
+	['x'],
+	['1 + x', '1 + y'],
+	['2 + x', '2 + y', '2 + x * y'],
+	['3 + x', '3 + y', '3 + x * y', '3 + (x * y)^2']
+];
+
+:: s2 := [
+	'[x]',
+	'[1 + x, 1 + y]',
+	'[2 + x, 2 + y, 2 + x * y]',
+	'[3 + x, 3 + y, 3 + x * y, 3 + (x * y)^2]'
+];
+
+:: s3 := '[
+	[x],
+	[1 + x, 1 + y],
+	[2 + x, 2 + y, 2 + x * y],
+	[3 + x, 3 + y, 3 + x * y, 3 + (x * y)^2]
+]';
+
+sys.save("./Out/regen.sym");
+sys.reset();
+verify symbols() = []
+sys.load("./Out/regen.sym");
+
+:: snap := s3;
+
+>>
+
+verify s0 = s1
+verify s1 = s2
+verify s2 = s3
+
+verify s3 <> snap
+
+//
+
+sys.reset();
+
+:: N := 8;
+
+:: randa := /.(n) -> if(n = 0, [], cons(uniform(), randa(n-1)));
+
+:: V :- randa(N);
+
+verify length(V) = 8
+
+sys.save("./Out/regen.sym");
+sys.reset();
+verify symbols() = []
+sys.load("./Out/regen.sym");
+
+verify length(V) = 8
+
+//
+
+sys.reset();
+
+:: tuple := (1, uniform());
+
+verify rtype(tuple) = struct { int; double;}
+verify ltype(tuple) = struct { int; double;}
+
+sys.save("./Out/regen.sym");
+sys.reset();
+verify symbols() = []
+sys.load("./Out/regen.sym");
+
+verify rtype(tuple) = struct { int; double;}
+verify ltype(tuple) = struct { int; double;}
+
+//
+
+sys.reset();
+
+:: tuple := ('1', 'uniform()');
+
+verify rtype(tuple) = struct { int; double;}
+verify ltype(tuple) = struct { lazy int; lazy double;}
+
+sys.save("./Out/regen.sym");
+sys.reset();
+verify symbols() = []
+sys.load("./Out/regen.sym");
+
+verify rtype(tuple) = struct { int; double;}
+verify ltype(tuple) = struct { lazy int; lazy double;}
+
+//
+
+sys.reset();
+
+:: t0 := (false, 0, 0.0);
+:: t1 := (true, 1, 1.0);
+
+verify ltype(t0) = struct { bool; int; double; }
+verify ltype(t0) = ltype(t1)
+verify t0 <> t1
+
+sys.save("./Out/regen.sym");
+sys.reset();
+verify symbols() = []
+sys.load("./Out/regen.sym");
+
+verify ltype(t0) = struct { bool; int; double; }
+verify ltype(t0) = ltype(t1)
+verify t0 <> t1
+
+t1 := (!t1[0], 1 - t1[1], 1 - t1[2]);
+
+verify t0 = t1
+
+sys.save("./Out/regen.sym");
+sys.reset();
+verify symbols() = []
+sys.load("./Out/regen.sym");
+
+verify ltype(t0) = struct { bool; int; double; }
+verify ltype(t0) = ltype(t1)
+verify t0 = t1
+
+t1 := (!t1[0], 1 - t1[1], 1 - t1[2]);
+verify t0 <> t1
+
+//
+
+sys.reset();
+
+:: t0 :- (false, 0, 0.0);
+:: t1 :- (true, 1, 1.0);
+
+verify ltype(t0) = struct { lazy bool; lazy int; lazy double; }
+verify ltype(t0) = ltype(t1)
+verify t0 <> t1
+
+sys.save("./Out/regen.sym");
+sys.reset();
+verify symbols() = []
+sys.load("./Out/regen.sym");
+
+verify ltype(t0) = struct { lazy bool; lazy int; lazy double; }
+verify ltype(t0) = ltype(t1)
+verify t0 <> t1
+
+t1 := (!t1[0], 1 - t1[1], 1 - t1[2]);
+
+verify t0 = t1
+>>
+verify t0 = t1
+
+sys.save("./Out/regen.sym");
+sys.reset();
+verify symbols() = []
+sys.load("./Out/regen.sym");
+
+verify ltype(t0) = struct { lazy bool; lazy int; lazy double; }
+verify ltype(t0) = ltype(t1)
+verify t0 = t1
+
+//
+
+sys.reset();
+
+:: tuple :- (0.0, 1.0, uniform());
+
+verify rtype(tuple) = struct { double; double; double; }
+verify ltype(tuple) = struct { lazy double; lazy double; lazy double; }
+
+verify tuple[0] = 0
+verify tuple[1] = 1
+verify 0 <= tuple[2] && tuple[2] <= 1
+
+sys.save("./Out/regen.sym");
+sys.reset();
+verify symbols() = []
+sys.load("./Out/regen.sym");
+
+verify tuple[0] = 0
+verify tuple[1] = 1
+verify 0 <= tuple[2] && tuple[2] <= 1
+
+>>
+
+verify tuple[0] = 0
+verify tuple[1] = 1
+verify 0 <= tuple[2] && tuple[2] <= 1
+
+.
+
+//
+// uses self-reference: needs recursive (fixed point) type inference 
+//
+
+sys.reset();
+
+:: tuple :- (0, 1, uniform());
+
+tuple[2] :- uniform(tuple[0], tuple[1]);
+
+verify 0.0 <= tuple[2] && tuple[2] <= 1.0
+>>
+verify 0.0 <= tuple[2] && tuple[2] <= 1.0
+>>
+verify 0.0 <= tuple[2] && tuple[2] <= 1.0
+
+:: l :- uniform(0.0, 0.5);
+:: u :- uniform(0.5, 1.0);
+
+tuple[0] :- l;
+tuple[1] :- u;
+
+verify l <= tuple[2] && tuple[2] <= u
+>>
+verify l <= tuple[2] && tuple[2] <= u
+>>
+verify l <= tuple[2] && tuple[2] <= u
+
+sys.save("./Out/regen.sym");
+sys.reset();
+verify symbols() = []
+sys.load("./Out/regen.sym");
+
+verify l <= tuple[2] && tuple[2] <= u
+>>
+verify l <= tuple[2] && tuple[2] <= u
+>>
+verify l <= tuple[2] && tuple[2] <= u
+
+//
+
+sys.reset();
+
+verify "regen1" <> ?

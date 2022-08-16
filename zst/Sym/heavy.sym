@@ -1,0 +1,11 @@
+///
+/// heavy - heavy ZenSheet test
+///
+
+echo off
+
+run zilly
+run zilly-min
+run ackermann
+
+echo on

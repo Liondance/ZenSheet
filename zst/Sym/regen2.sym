@@ -1,0 +1,110 @@
+///
+/// regen2.sym
+///
+/// ZenVM test suite 2 for model regeneration
+///
+
+sys.reset()
+
+:: x := 42;
+:: y :- uniform();
+
+verify x = 42
+sys.undefine('x')
+verify x = #REF!
+
+sys.save("./Out/regen.sym");
+sys.reset()
+verify | symbols() | = 0
+
+sys.load("./Out/regen.sym");
+verify | symbols() | = 1
+verify 0 <= y && y <= 1
+verify x = #REF!
+
+//
+
+sys.reset()
+
+// With nominal types
+
+type Coord :- struct { int x; int y; int w; int h; };
+type XArea :- struct { string exp;Coord coord; };
+type Group :- struct { string label;array[] => XArea xarea; };
+type UXM   :- struct { string label;array[] => Group group; };
+
+:: uxm := UXM(
+    "The Dice Game",
+    [
+        Group("Game State",
+			[
+				XArea("game", Coord(0,0,3,3))
+			]
+		),
+        Group("Functions",
+			[
+                XArea("dice", Coord(4,0,3,3)),
+                XArea("series", Coord(8,0,3,3)),
+                XArea("reduce", Coord(12,0,3,3))
+			]
+        )
+    ]
+);
+
+verify structural(UXM) = struct { string label;array[] => struct { string label;array[] => struct { string exp;struct { int x;int y;int w;int h; } coord; } xarea; } group; }
+
+
+sys.save("./Out/regen.sym");
+sys.reset()
+verify | symbols() | = 0
+
+sys.load("./Out/regen.sym");
+verify | symbols() | = 5
+
+
+verify uxm.label = "The Dice Game"
+verify uxm.group[0].label = "Game State"
+verify uxm.group[0].xarea[0].exp = "game"
+verify uxm.group[0].xarea[0].coord = Coord(0,0,3,3)
+verify uxm.group[1].label = "Functions"
+verify uxm.group[1].xarea[0].exp = "dice"
+verify uxm.group[1].xarea[0].coord = Coord(4,0,3,3)
+verify uxm.group[1].xarea[1].exp = "series"
+verify uxm.group[1].xarea[1].coord = Coord(8,0,3,3)
+verify uxm.group[1].xarea[2].exp = "reduce"
+verify uxm.group[1].xarea[2].coord = Coord(12,0,3,3)
+
+verify structural(UXM) = struct {
+	string label;
+	array[] => struct {
+		string label;
+		array[] => struct {
+			string exp;
+			struct {
+				int x;
+				int y;
+				int w;
+				int h;
+			} coord;
+		} xarea;
+	} group;
+}
+
+sys.undefine('uxm');
+sys.undefine('UXM');
+
+verify | symbols() | = 3
+
+sys.save("./Out/regen.sym");
+sys.reset()
+verify | symbols() | = 0
+
+sys.load("./Out/regen.sym");
+verify | symbols() | = 3
+verify UXM = #REF!
+
+//
+
+sys.reset();
+
+verify "regen2" <> ?

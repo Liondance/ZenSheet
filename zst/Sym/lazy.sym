@@ -1,0 +1,422 @@
+///
+/// lazy.sym
+///
+
+//
+
+sys.reset();
+
+:: x :- uniform();
+:: a := x;
+
+verify a = x
+>>
+verify a <> x
+
+//
+
+sys.reset();
+
+lazy int z42 :- 40 + 2;
+
+verify z42 = 42
+
+//
+
+sys.reset();
+
+int x := 7;
+lazy int y := 'x';
+
+verify y = 7
+verify x = 7
+verify y = x
+
+x := x + 1;
+
+verify y = 8
+verify x = 8
+verify y = x
+
+//
+
+sys.reset();
+
+int x := 6;
+lazy int y := 'x + 1';
+
+verify y = 7
+verify x = 6
+verify y = x + 1
+
+x := x + 1;
+
+verify y = 8
+verify x = 7
+verify y = x + 1
+
+//
+
+sys.reset();
+
+lazy var y :- x;
+var x := 0;
+
+verify y = 0
+
+x := 1;
+
+verify y = 1
+
+//
+
+sys.reset();
+
+int x := 8;
+lazy int z :- x;
+verify z = 8
+
+x := 2 * x;
+verify z = 16
+
+//
+
+sys.reset();
+
+int x := 8;
+>>
+lazy int z :- x;
+
+verify z = 8
+
+//
+
+sys.reset();
+
+int x := 8;
+lazy int z :- x;
+
+verify z = 8
+
+//
+
+sys.reset();
+
+:: x := 4;
+:: y := 7;
+
+:: z :- x + 8 * y;
+
+verify z = 60
+
+//
+
+sys.reset();
+
+lazy int z :- x;
+int x := 8;
+
+verify z = 8
+
+//
+
+sys.reset();
+
+lazy int z :- x + y;
+lazy int x :- 6;
+lazy int y :- 2;
+
+verify z = 8
+
+//
+
+sys.reset();
+
+lazy int x := '6';
+lazy int y := '2';
+lazy int z := 'x + y';
+
+verify x = 6
+verify y = 2
+verify z = 8
+
+//
+
+sys.reset();
+
+lazy int x :- 6;
+lazy int y :- 2;
+lazy int z :- x + y;
+
+verify x = 6
+verify y = 2
+verify z = 8
+
+//
+
+sys.reset();
+
+:: x := '6';
+:: y := '2';
+:: z := 'x + y';
+
+verify x = 6
+verify y = 2
+verify z = 8
+
+//
+
+sys.reset();
+
+:: x :- 6;
+:: y :- 2;
+:: z :- x + y;
+
+verify x = 6
+verify y = 2
+verify z = 8
+
+//
+
+sys.reset();
+
+lazy int x :- 6;
+>>
+lazy int y :- 2;
+>>
+lazy int z :- x + y;
+>>
+
+verify z = 8
+
+//
+
+sys.reset();
+
+:: z :- x + y;
+:: w :- x + 1;
+:: y := 'x + 1';
+:: x := 7;
+
+verify x =  7
+verify y =  8
+verify w =  8
+verify z = 15
+
+x := x + 1;
+
+verify x =  8
+verify y =  9
+verify w =  9
+verify z = 17
+
+verify rtype(x) = int
+verify rtype(y) = int
+verify rtype(w) = int
+verify rtype(z) = int
+
+verify ltype(x) = int
+verify ltype(y) = lazy int
+verify ltype(w) = lazy int
+verify ltype(z) = lazy int
+
+//
+// value change
+//
+
+sys.reset();
+
+lazy var y :- x;
+var x := 0;
+
+verify y = 0
+
+x := 1;
+
+verify y = 1
+
+//
+
+sys.reset();
+
+lazy var y :- 1 - x;
+var x := 0;
+
+verify x = 0
+verify y = 1
+
+x := 1;
+
+verify x = 1
+verify y = 0
+
+//
+// formula change
+//
+
+sys.reset();
+
+var x := 0;
+var y := 1;
+
+lazy var z :- x + y;
+
+>>
+
+verify z = 1
+
+z :- x - y;
+
+verify z = -1
+
+//
+
+sys.reset();
+
+array[] => var ae1 := [ 42 ];
+array[] => array[] => var ae2 := [[ 42 ]];
+
+verify ae1[0]    = 42
+verify ae2[0][0] = 42
+
+array[] => lazy var al1 := [ '42' ];
+array[] => array[] => lazy var al2 := [[ '42' ]];
+
+verify al1[0]    = 42
+verify al2[0][0] = 42
+
+//
+
+sys.reset();
+
+double x := 7;
+
+array[] => lazy double a := [ 'x', '1', 'x + 1' ];
+
+verify a[0] = 7
+verify a[1] = 1
+verify a[2] = 8
+
+x := 8;
+
+verify a[0] = 8
+verify a[1] = 1
+verify a[2] = 9
+
+a[2] :- a[0] + a[1];
+
+verify a[0] = 8
+verify a[1] = 1
+verify a[2] = 9
+
+//
+// nested laziness
+//
+
+sys.reset();
+
+int x := 8;
+int y := 7;
+
+lazy int z :- x + y;
+
+verify z = 15
+
+//
+
+sys.reset();
+
+int x := 8;
+int y := 7;
+
+lazy int z := 'x + y';
+
+verify z = 15
+
+//
+
+sys.reset();
+
+int x := 8;
+int y := 7;
+
+lazy lazy int zz :- 'x + y';
+
+verify zz = 'x + y'
+
+lazy int z := zz;
+
+verify z = 15
+
+y := 8;
+
+verify z = 16
+
+//
+
+sys.reset();
+
+var X := [ 0, 1, 2, 3, 4, 5, 6, 7 ];
+
+var a := 1.6;
+var b := 2.4;
+
+lazy var Y :- [
+	a + b * X[0] + uniform(),
+	a + b * X[1] + uniform(),
+	a + b * X[2] + uniform(),
+	a + b * X[3] + uniform(),
+	a + b * X[4] + uniform(),
+	a + b * X[5] + uniform(),
+	a + b * X[6] + uniform(),
+	a + b * X[7] + uniform()
+];
+
+:: LL := 0.9973;
+:: UL := 0.9999;
+
+lazy var r :- correl(X, Y);
+
+verify LL < r && r < UL
+verify LL < r && r < UL
+verify LL < r && r < UL
+verify LL < r && r < UL
+verify LL < r && r < UL
+verify LL < r && r < UL
+verify LL < r && r < UL
+verify LL < r && r < UL
+verify LL < r && r < UL
+verify LL < r && r < UL
+verify LL < r && r < UL
+verify LL < r && r < UL
+verify LL < r && r < UL
+verify LL < r && r < UL
+verify LL < r && r < UL
+verify LL < r && r < UL
+
+//
+
+sys.reset();
+
+int x := 8;
+int y := 7;
+
+lazy int zl :- x + y;
+
+:: zx := /.() => int -> x + y;
+
+verify zl = zx()
+
+x := x + 1;
+verify zl = zx()
+
+y := y + 1;
+verify zl = zx()
+
+x := 8 * x - 1;
+y := 7 * y + 1;
+verify zl = zx()
+
+//
+
+verify true

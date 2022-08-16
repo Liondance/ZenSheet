@@ -1,0 +1,106 @@
+///
+/// Ackermann function
+///
+
+//
+
+sys.reset();
+
+// untyped
+
+:: Au := /.(m, n) -> if(m = 0, n+1, if(n = 0, Au(m-1, 1), Au(m-1, Au(m, n-1))));
+
+// integer
+
+:: Ai := /.(int m, int n) => int -> if(m = 0, n+1, if(n = 0, Ai(m-1, 1), Ai(m-1, Ai(m, n-1))));
+
+// double
+
+:: Ad := /.(double m, double n) => double -> if(m = 0, n+1, if(n = 0, Ad(m-1, 1), Ad(m-1, Ad(m, n-1))));
+
+// meta
+
+:: A := /.(f, m, n) -> f(m, n);
+
+verify A(Au, 0, 0) = 1
+verify A(Au, 0, 1) = 2
+verify A(Au, 1, 0) = 2
+verify A(Au, 1, 1) = 3
+verify A(Au, 1, 2) = 4
+verify A(Au, 2, 0) = 3
+verify A(Au, 2, 1) = 5
+verify A(Au, 2, 2) = 7
+verify A(Au, 2, 3) = 9
+verify A(Au, 3, 0) = 5
+verify A(Au, 3, 1) = 13
+verify A(Au, 3, 2) = 29
+verify A(Au, 3, 3) = 61
+verify A(Au, 3, 4) = 125
+verify A(Au, 3, 5) = 253
+verify A(Au, 3, 6) = 509
+// verify A(Au, 3, 7) = 1021
+// verify A(Au, 3, 8) = 2045
+// verify A(Au, 3, 9) = 4093
+
+verify A(Ai, 0, 0) = 1
+verify A(Ai, 0, 1) = 2
+verify A(Ai, 1, 0) = 2
+verify A(Ai, 1, 1) = 3
+verify A(Ai, 1, 2) = 4
+verify A(Ai, 2, 0) = 3
+verify A(Ai, 2, 1) = 5
+verify A(Ai, 2, 2) = 7
+verify A(Ai, 2, 3) = 9
+verify A(Ai, 3, 0) = 5
+verify A(Ai, 3, 1) = 13
+verify A(Ai, 3, 2) = 29
+verify A(Ai, 3, 3) = 61
+verify A(Ai, 3, 4) = 125
+verify A(Ai, 3, 5) = 253
+verify A(Ai, 3, 6) = 509
+// verify A(Ai, 3, 7) = 1021
+// verify A(Ai, 3, 8) = 2045
+// verify A(Ai, 3, 9) = 4093
+
+verify A(Ad, 0, 0) = 1
+verify A(Ad, 0, 1) = 2
+verify A(Ad, 1, 0) = 2
+verify A(Ad, 1, 1) = 3
+verify A(Ad, 1, 2) = 4
+verify A(Ad, 2, 0) = 3
+verify A(Ad, 2, 1) = 5
+verify A(Ad, 2, 2) = 7
+verify A(Ad, 2, 3) = 9
+verify A(Ad, 3, 0) = 5
+verify A(Ad, 3, 1) = 13
+verify A(Ad, 3, 2) = 29
+verify A(Ad, 3, 3) = 61
+verify A(Ad, 3, 4) = 125
+verify A(Ad, 3, 5) = 253
+verify A(Ad, 3, 6) = 509
+// verify A(Ad, 3, 7) = 1021
+// verify A(Ad, 3, 8) = 2045
+// verify A(Ad, 3, 9) = 4093
+
+.
+
+//
+// Heavy comparative benchmark
+//
+
+var t;
+
+t := now();
+A(Au, 3, 9)
+t := now() - t;
+t
+
+t := now();
+A(Ai, 3, 9)
+t := now() - t;
+t
+
+t := now();
+A(Ad, 3, 9)
+t := now() - t;
+t

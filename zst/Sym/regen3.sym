@@ -1,0 +1,49 @@
+///
+/// regen3.sym
+///
+/// ZenVM test suite 3 for model regeneration (worksheets)
+///
+
+//
+
+sys.reset();
+
+array[8,6] => double a;
+array[8,6] => lazy double w;
+
+sys.save("./Out/regen.sym");
+sys.reset();
+verify | symbols() | = 0
+sys.load("./Out/regen.sym");
+verify | symbols() | = 2
+
+verify ltype(a) = array[,] => double
+verify rtype(a) = array[,] => double
+
+verify ltype(w) = array[,] => lazy double
+verify rtype(w) = array[,] => double
+
+//
+
+sys.reset();
+
+array[8,6] => var a;
+array[8,6] => lazy var w;
+
+sys.save("./Out/regen.sym");
+sys.reset();
+verify | symbols() | = 0
+sys.load("./Out/regen.sym");
+verify | symbols() | = 2
+
+verify ltype(a) = array[,] => var
+verify rtype(a) = array[,] => var
+
+verify ltype(w) = array[,] => var
+verify rtype(w) = array[,] => var
+
+//
+
+sys.reset();
+
+verify "regen3" <> ?

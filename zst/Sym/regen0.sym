@@ -1,0 +1,103 @@
+///
+/// regen0.sym
+///
+/// ZenVM test suite 0 for model regeneration
+///
+
+//
+
+sys.reset();
+
+// "near equality" for floating point numbers
+:: near := /.(x, y) -> fabs(x - y) < 0.00000001;
+
+:: x := 7.0;
+:: y :- 8.0;
+:: z :- x + y;
+
+verify z = 15
+
+y :- 8.0 + uniform();
+
+:: a0 :=  [ x, y, z ] ;
+:: a1 :-  [ x, y, z ] ;
+:: a2 := '[ x, y, z ]';
+
+>>
+
+verify a0 <> a1
+verify a0 <> a2
+verify a1 =  a2
+
+:: t0 :=  (x, y, z) ;
+:: t1 :-  (x, y, z) ;
+:: t2 := '(x, y, z)';
+
+>>
+
+verify t0 <> t1
+verify t0 <> t2
+verify t1 =  t2
+
+verify | symbols() | = 10
+
+// Save and reload: note the 'Out' directory
+
+sys.save("./Out/regen.sym");
+sys.reset();
+verify | symbols() | = 0
+sys.load("./Out/regen.sym");
+verify | symbols() | = 10
+
+// Save and reload again, just to prove we can do it
+
+sys.save("./Out/regen.sym");
+sys.reset();
+verify | symbols() | = 0
+sys.load("./Out/regen.sym");
+verify | symbols() | = 10
+
+verify sort(symbols()) = ["a0", "a1", "a2", "near", "t0", "t1", "t2", "x", "y", "z" ]
+
+verify ltype(x) = double
+verify ltype(y) = lazy double
+verify ltype(z) = lazy double
+
+verify ltype(a0) = array[] => double
+verify ltype(a1) = array[] => lazy double
+verify ltype(a2) = lazy array[] => double
+
+verify ltype(t0) = struct { double; double; double; }
+verify ltype(t1) = struct { lazy double; lazy double; lazy double; }
+verify ltype(t2) = lazy struct { double; double; double; }
+
+verify 8 <= y && y <= 9
+verify near(x + y, z)
+>>
+verify 8 <= y && y <= 9
+verify near(x + y, z)
+>>
+verify 8 <= y && y <= 9
+verify near(x + y, z)
+
+verify a0 <> a1
+verify a0 <> a2
+verify a1 =  a2
+
+verify t0 <> t1
+verify t0 <> t2
+verify t1 =  t2
+
+verify near(a0[2], a0[1] + a0[0])
+verify near(a1[2], a1[1] + a1[0])
+verify near(a2[2], a2[1] + a2[0])
+
+verify near(t0[2], t0[1] + t0[0])
+verify near(t1[2], t1[1] + t1[0])
+verify near(t2[2], t2[1] + t2[0])
+
+//
+
+sys.reset();
+
+verify "regen0" <> ?

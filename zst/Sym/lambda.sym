@@ -1,0 +1,1524 @@
+///
+/// @file: lambda.sym
+///
+/// ZenVM Lambda test suite
+///
+
+//
+
+sys.reset();
+
+lazy var f :- sin;
+lazy var g :- cos;
+
+double x := 0;
+
+verify f(x) = sin(x)
+verify g(x) = cos(x)
+
+x := 0.1;
+
+verify f(x) = sin(x)
+verify g(x) = cos(x)
+
+x := 0.2;
+
+verify f(x) = sin(x)
+verify g(x) = cos(x)
+
+x := 0.3;
+
+verify f(x) = sin(x)
+verify g(x) = cos(x)
+
+x := 0.4;
+
+verify f(x) = sin(x)
+verify g(x) = cos(x)
+
+x := 0.5;
+
+verify f(x) = sin(x)
+verify g(x) = cos(x)
+
+x := 0.6;
+
+verify f(x) = sin(x)
+verify g(x) = cos(x)
+
+x := 0.7;
+
+verify f(x) = sin(x)
+verify g(x) = cos(x)
+
+x := 0.8;
+
+verify f(x) = sin(x)
+verify g(x) = cos(x)
+
+x := 0.9;
+
+verify f(x) = sin(x)
+verify g(x) = cos(x)
+
+x := 1.0;
+
+verify f(x) = sin(x)
+verify g(x) = cos(x)
+
+//
+
+sys.reset();
+
+lazy var f :- /.(angle) -> sin(angle);
+lazy var g :- /.(angle) -> cos(angle);
+
+double x := 0;
+
+verify f(x) = sin(x)
+verify g(x) = cos(x)
+
+x := 0.1;
+
+verify f(x) = sin(x)
+verify g(x) = cos(x)
+
+x := 0.2;
+
+verify f(x) = sin(x)
+verify g(x) = cos(x)
+
+x := 0.3;
+
+verify f(x) = sin(x)
+verify g(x) = cos(x)
+
+x := 0.4;
+
+verify f(x) = sin(x)
+verify g(x) = cos(x)
+
+x := 0.5;
+
+verify f(x) = sin(x)
+verify g(x) = cos(x)
+
+x := 0.6;
+
+verify f(x) = sin(x)
+verify g(x) = cos(x)
+
+x := 0.7;
+
+verify f(x) = sin(x)
+verify g(x) = cos(x)
+
+x := 0.8;
+
+verify f(x) = sin(x)
+verify g(x) = cos(x)
+
+x := 0.9;
+
+verify f(x) = sin(x)
+verify g(x) = cos(x)
+
+x := 1.0;
+
+verify f(x) = sin(x)
+verify g(x) = cos(x)
+
+//
+
+sys.reset();
+
+var f := sin;
+lazy var r :- f(0);
+
+verify r = 0
+
+f := cos;
+verify r = 1
+
+f := log;
+verify r = #NUM!
+
+//
+// change of function value is reflected on lazy var evaluation
+//
+
+sys.reset();
+
+var f := sin;
+lazy var r :- f(0);
+>>
+verify r = sin(0)
+
+f := cos;
+verify r = cos(0)
+
+//
+
+sys.reset();
+
+var f := sin;
+lazy var r :- f(0);
+verify r = sin(0)
+
+f := cos;
+verify r = cos(0)
+
+//
+
+sys.reset();
+
+string hello := "Hello, world";
+
+:: concat1 :- /.(string s, string c) => string -> s & c;
+
+verify hello = "Hello, world"
+verify hello = concat1("Hello", ", world")
+
+//
+
+sys.reset();
+
+lazy var id :- /.(x) -> x;
+
+verify id(6) = 6
+
+lazy var f :- /.(x) -> x + 2;
+
+verify f(6) = 8
+
+f :- /.(x) -> id(x) + 2;
+
+verify f(6) = 8
+
+//
+
+sys.reset();
+
+:: condor := /.(int n) => int -> if(n = 0, 0, 1 + condor(n-1));
+
+verify rtype(condor) = fun(int n) => int
+
+verify condor(0) = 0
+verify condor(1) = 1
+verify condor(10) = 10
+verify condor(100) = 100
+verify condor(1000) = 1000
+
+//
+
+sys.reset();
+
+:: f := /.(double x, double y) => double -> x + y;
+:: g := /.(double x, double y, double z) => double -> x + y + z;
+:: h := /.(double x, double y, double z) => double -> f(x, y) + z;
+:: u := /.(double x, double y, double z) => double -> x + f(y, z);
+
+:: epsilon := 0.00000001;
+
+:: nearby := /.(double eps) => fun(double x, double y) => bool ->  /.(double x, double y) => bool -> abs(x / y - 1.0) < epsilon;
+:: near := nearby(epsilon);
+
+:: a :- uniform();
+:: b :- uniform();
+:: c :- uniform();
+
+verify near(g(a, b, c), h(a, b, c))
+verify near(h(a, b, c), u(a, b, c))
+verify near(u(a, b, c), g(a, b, c))
+
+>>
+
+verify near(g(a, b, c), h(a, b, c))
+verify near(h(a, b, c), u(a, b, c))
+verify near(u(a, b, c), g(a, b, c))
+
+>>
+
+verify near(g(a, b, c), h(a, b, c))
+verify near(h(a, b, c), u(a, b, c))
+verify near(u(a, b, c), g(a, b, c))
+
+//
+
+sys.reset();
+
+lazy var f :- /.(x, z) -> /.(y) -> x * y + z;
+
+lazy var g :- /.(x, y) -> f(x, 1)(y);
+
+verify g(1, 1) = 2
+verify g(1, 2) = 3
+verify g(2, 3) = 7
+verify g(2, 4) = 9
+
+g :- /.(z, y) -> f(2, z)(y);
+
+verify g(1, 1) = 3
+verify g(1, 2) = 5
+verify g(1, 3) = 7
+verify g(1, 4) = 9
+
+g :- f(2, 1);
+
+verify g(0) = 1
+verify g(1) = 3
+verify g(2) = 5
+verify g(3) = 7
+
+g :- /.(x) -> f(2, x);
+
+verify g(0)(2) = 4
+verify g(1)(2) = 5
+verify g(2)(2) = 6
+verify g(3)(2) = 7
+
+g :- /.(x) -> f(x, 1);
+
+verify g(0)(2) = 1
+verify g(1)(2) = 3
+verify g(2)(2) = 5
+verify g(3)(2) = 7
+
+//
+
+sys.reset();
+
+verify (/.(x) -> x)(7) = 7
+verify (/.(x, y) -> x + y)(3, 4) = 7
+
+lazy var times2 :- /.(x) -> x + x;
+lazy var square :- /.(x) -> x * x;
+
+verify times2(3) = 6
+verify square(3) = 9
+verify times2(square(3)) = 18
+verify square(times2(3)) = 36
+
+//
+
+sys.reset();
+
+lazy var id :- /.(x) -> x;
+
+lazy var sqrz :- /.(x) -> sqrt(x);
+
+lazy var apply :- /.(f) -> /.(x) -> f(x);
+
+lazy var f :- apply(sqrz);
+verify f(100) = 10
+verify apply(sqrz)(100) = 10
+
+f :- apply(sqrt);
+verify f(100) = 10
+verify apply(sqrt)(100) = 10
+
+f :- id(apply(sqrz));
+verify f(100) = 10
+verify apply(sqrz)(100) = 10
+
+f :- id(apply(sqrt));
+verify f(100) = 10
+verify apply(sqrt)(100) = 10
+
+
+//
+
+sys.reset();
+
+lazy var addz :- /.(x) -> /.(y) -> x + y;
+
+lazy var addz1 :- addz(1);
+
+verify addz1(addz1(addz1(4))) = 7
+
+//
+
+sys.reset();
+
+lazy var adder :- /.(y) -> /.(x) -> x + y;
+
+lazy var f0 :- adder(0);
+lazy var f1 :- adder(1);
+lazy var f2 :- adder(2);
+lazy var f3 :- adder(3);
+
+verify f0(100) = 100
+verify f1(100) = 101
+verify f2(100) = 102
+verify f3(100) = 103
+
+//
+
+sys.reset();
+
+lazy var countdown :- /.(x) -> if(x = 0, 0, 1 + countdown(x-1));
+verify countdown( 0) =  0
+verify countdown( 1) =  1
+verify countdown( 2) =  2
+verify countdown( 4) =  4
+verify countdown( 8) =  8
+verify countdown(16) = 16
+
+//
+
+sys.reset();
+
+lazy var size :- /.(x) -> if(x = [], 0, size(tail(x)) + 1);
+
+verify size([ ]) = 0
+verify size([0]) = 1
+verify size([0, 1]) = 2
+verify size([0, 1, 2]) = 3
+verify size([0, 1, 2, 3]) = 4
+verify size([0, 1, 2, 3, 4]) = 5
+verify size([0, 1, 2, 3, 4, 5]) = 6
+verify size([0, 1, 2, 3, 4, 5, 6]) = 7
+verify size([0, 1, 2, 3, 4, 5, 6, 7]) = 8
+
+//
+
+sys.reset();
+
+lazy var fibo :- /.(x) -> if(x < 2, x, fibo(x-1) + fibo(x-2));
+
+verify fibo(0) =  0
+verify fibo(1) =  1
+verify fibo(2) =  1
+verify fibo(3) =  2
+verify fibo(4) =  3
+verify fibo(5) =  5
+verify fibo(6) =  8
+verify fibo(7) = 13
+verify fibo(8) = 21
+verify fibo(9) = 34
+
+//
+
+sys.reset();
+
+lazy var tribonacci :- /.(x) -> if(x < 3, x, tribonacci(x-1) + tribonacci(x-2) + tribonacci(x-3));
+
+verify tribonacci(0) =   0
+verify tribonacci(1) =   1
+verify tribonacci(2) =   2
+verify tribonacci(3) =   3
+verify tribonacci(4) =   6
+verify tribonacci(5) =  11
+verify tribonacci(6) =  20
+verify tribonacci(7) =  37
+verify tribonacci(8) =  68
+verify tribonacci(9) = 125
+
+//
+
+sys.reset();
+
+lazy var prod :- /.(x) -> x;
+
+lazy var index :- [ 0, 1, 2, 3 ];
+lazy var S :- fmap(prod, index);
+
+verify sum(S) = 6.0
+
+//
+
+sys.reset();
+
+lazy var prod :- /.(x) -> x;
+
+lazy var L :- [ 0, 1, 2, 3 ];
+lazy var S :- fmap(prod, L);
+
+verify sum(S) = 6.0
+
+//
+
+sys.reset();
+
+lazy var prod :- /.(x) -> x + 1;
+
+lazy var L :- [ 0, 1, 2, 3 ];
+lazy var S :- fmap(prod, L);
+
+verify sum(S) = 10.0
+verify S = [ 1, 2, 3, 4 ]
+
+//
+
+sys.reset();
+
+var prod := /.(x) -> x + 1;
+
+var L := [ 0, 1, 2, 3 ];
+var S := fmap(prod, L);
+
+verify sum(S) = 10.0
+verify S = [ 1, 2, 3, 4 ]
+
+//
+
+sys.reset();
+
+lazy var prod :- /.(x) -> x + 1;
+
+lazy var index :- [ 0, 1, 2, 3 ];
+lazy var S :- fmap(prod, index);
+
+verify sum(S) = 10.0
+
+//
+
+sys.reset();
+
+lazy var S :- [ 0, 1, 2, 3, 4, 5, 6, 7 ];
+
+lazy var fodd :- /.(x) -> x % 2 = 1;
+
+lazy var filterz :- /.(pred, seq) -> if(empty(seq), seq, if(pred(head(seq)), cons(head(seq), filterz(pred, tail(seq))), filterz(pred, tail(seq))));
+
+verify filter(fodd, S) = [ 1, 3, 5, 7 ]
+verify filter(fodd, S) = filterz(fodd, S)
+
+//
+
+sys.reset();
+
+var S := [ 0, 1, 2, 3, 4, 5, 6, 7 ];
+
+var fodd := /.(x) -> x % 2 = 1;
+
+var filterz := /.(pred, seq) -> if(empty(seq), seq, if(pred(head(seq)), cons(head(seq), filterz(pred, tail(seq))), filterz(pred, tail(seq))));
+
+verify filter(fodd, S) = [ 1, 3, 5, 7 ]
+verify filter(fodd, S) = filterz(fodd, S)
+
+//
+
+sys.reset();
+
+lazy var S :- [ 0, 1.1, 2, 3.3, 4, 5.5, 6, 7.7 ];
+
+var is_integer := /.(x) -> isint(x);
+
+lazy var filterz :- /.(pred, seq) -> if(empty(seq), seq, if(pred(head(seq)), cons(head(seq), filterz(pred, tail(seq))), filterz(pred, tail(seq))));
+
+verify filter(is_integer, S) = [ 0, 2, 4, 6 ]
+verify filterz(is_integer, S) = [ 0, 2, 4, 6 ]
+verify filter(is_integer, S) = filterz(isint, S)
+
+//
+
+sys.reset();
+
+fun(fun(var exp) => bool criteria, var list) => var filterz;
+
+filterz := filter;
+
+verify sum(filterz(/.(x) -> x =  0, [ 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1 ])) = 0
+verify sum(filterz(/.(x) -> x <> 0, [ 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1 ])) = 6
+
+filterz := /.(fun(var exp) => bool criteria, var list) => var -> if(list = [], [], if(criteria(head(list)), cons(head(list), filterz(criteria, tail(list))), filterz(criteria, tail(list))));
+
+verify sum(filterz(/.(x) -> x =  0, [ 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1 ])) = 0
+verify sum(filterz(/.(x) -> x <> 0, [ 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1 ])) = 6
+
+//
+
+sys.reset();
+
+lazy var S :- [ 0, 1.1, 2, 3.3, 4, 5.5, 6, 7.7 ];
+
+:: filterz := /.(fun(var exp) => bool criteria, var list) => var -> if(list = [], [], if(criteria(head(list)), cons(head(list), filterz(criteria, tail(list))), filterz(criteria, tail(list))));
+
+verify filter(isint, S) = [ 0, 2, 4, 6 ]
+verify filterz(isint, S) = [ 0, 2, 4, 6 ]
+verify filter(isint, S) = filterz(isint, S)
+
+//
+
+sys.reset();
+
+lazy var S :- [ 0, 1.0, 2, 3.0, 4, 5.0, 6, 7.0 ];
+
+var smaller := /.(y) -> /.(x) -> x < y;
+
+lazy var filterz :- /.(pred, seq) -> if(empty(seq), seq, if(pred(head(seq)), cons(head(seq), filterz(pred, tail(seq))), filterz(pred, tail(seq))));
+
+verify filter(smaller(4), S) = [ 0, 1.0, 2, 3.0 ]
+verify filterz(smaller(4), S) = [ 0, 1.0, 2, 3.0 ]
+verify filter(smaller(4), S) = filterz(smaller(4), S)
+
+//
+
+sys.reset();
+
+var fmapz := /.(f, seq) -> if(empty(seq), seq, cons(f(head(seq)), fmapz(f, tail(seq))));
+
+lazy var S :- [ 0, 1, 2, 3 ];
+
+lazy var R :- fmap(sqrt, S);
+lazy var RZ :- fmapz(sqrt, S);
+
+verify R = RZ
+
+//
+
+sys.reset();
+
+var fmapz := /.(f, seq) -> if(empty(seq), seq, cons(f(head(seq)), fmapz(f, tail(seq))));
+
+var S := [ 0, 1, 2, 3 ];
+
+var square := /.(x) -> x * x;
+
+var R := fmap(square, S);
+var RZ := fmapz(square, S);
+
+verify R = RZ
+
+verify R = [ 0, 1, 4, 9 ]
+
+//
+
+sys.reset();
+
+lazy var sqrz :- /.(x) -> sqrt(x);
+
+lazy var fmapz :- /.(mfn, seq) -> if(empty(seq), seq, cons(mfn(head(seq)), fmapz(mfn, tail(seq))));
+
+lazy var S :- [ 0, 1, 2, 3 ];
+
+lazy var R :- fmap(sqrz, S);
+lazy var RZ :- fmapz(sqrz, S);
+
+verify R = RZ
+
+//
+
+sys.reset();
+
+lazy var danglex :- 7;
+
+lazy var fmapz :- /.(mfn, seq) -> if(empty(seq), seq, cons(mfn(head(seq)) + danglex, fmapz(mfn, tail(seq))));
+
+lazy var S :- [ 0, 1, 2, 3 ];
+
+lazy var adds :- /.(x) -> sqrt(x) + danglex;
+
+lazy var R :- fmap(adds, S);
+lazy var RZ :- fmapz(sqrt, S);
+
+verify R = RZ
+
+danglex :- 111;
+
+verify R = RZ
+
+danglex :- 0;
+
+verify R = RZ
+
+//
+
+sys.reset();
+
+lazy var S :- cons(4, cons(3, cons(2, [ 1, 0 ])));
+
+verify S = [ 4, 3, 2, 1, 0 ]
+
+//
+
+sys.reset();
+
+lazy var S :- [ 0, 1, 2, 3, 4 ];
+
+lazy var foldz :- /.(mfn, init, seq) -> if(empty(seq), init, foldz(mfn, mfn(init, head(seq)), tail(seq)));
+
+verify fold(sum, 0, S) = 10
+verify fold(sum, 0, S) = foldz(sum, 0, S)
+
+lazy var sumz :- /.(x, y) -> x + y;
+
+verify fold(sumz, 0, S) = 10
+verify fold(sumz, 0, S) = foldz(sum, 0, S)
+
+//
+
+sys.reset();
+
+var S := [ 0, 1, 2, 3, 4 ];
+
+var foldz := /.(mfn, init, seq) -> if(empty(seq), init, foldz(mfn, mfn(init, head(seq)), tail(seq)));
+
+verify fold(sum, 0, S) = 10
+verify fold(sum, 0, S) = foldz(sum, 0, S)
+
+var sumz := /.(x, y) -> x + y;
+
+verify fold(sumz, 0, S) = 10
+verify fold(sumz, 0, S) = foldz(sum, 0, S)
+
+//
+
+sys.reset();
+
+var S := [ 0, 1, 2, 3, 4 ];
+
+var foldz := /.(mfn, init, seq) -> if(empty(seq), init, mfn(head(seq), foldz(mfn, init, tail(seq))));
+
+verify fold(sum, 0, S) = 10
+verify fold(sum, 0, S) = foldz(sum, 0, S)
+
+var sumz := /.(x, y) -> x + y;
+
+verify fold(sumz, 0, S) = 10
+verify fold(sumz, 0, S) = foldz(sum, 0, S)
+
+//
+
+sys.reset();
+
+lazy var T :- ?;
+
+lazy var equal_T :- /.(x) -> (x = T);
+
+lazy var S :- [ 0, 1, 2, 3, 4, 5, 6, 7 ];
+
+T :- 0;
+verify findindex(equal_T, S) = T
+T :- 1;
+verify findindex(equal_T, S) = T
+T :- 2;
+verify findindex(equal_T, S) = T
+T :- 3;
+verify findindex(equal_T, S) = T
+T :- 4;
+verify findindex(equal_T, S) = T
+T :- 5;
+verify findindex(equal_T, S) = T
+T :- 6;
+verify findindex(equal_T, S) = T
+T :- 7;
+verify findindex(equal_T, S) = T
+T :- 8;
+verify findindex(equal_T, S) = ?
+
+const var findindexy := /.(hfn, seq) -> ivl(if(empty(seq), invalid("not found"), if(hfn(head(seq)), 0, 1 + findindexy(hfn, tail(seq)))), ?);
+
+T :- 0;
+verify findindexy(equal_T, S) = T
+T :- 1;
+verify findindexy(equal_T, S) = T
+T :- 2;
+verify findindexy(equal_T, S) = T
+T :- 3;
+verify findindexy(equal_T, S) = T
+T :- 4;
+verify findindexy(equal_T, S) = T
+T :- 5;
+verify findindexy(equal_T, S) = T
+T :- 6;
+verify findindexy(equal_T, S) = T
+T :- 7;
+verify findindexy(equal_T, S) = T
+T :- 8;
+verify findindexy(equal_T, S) = ?
+
+lazy var findindexz :- /.(hfn, seq) -> ivl(if(empty(seq), invalid("not found"), if(hfn(head(seq)), 0, 1 + findindexz(hfn, tail(seq)))), ?);
+
+T :- 0;
+verify findindexz(equal_T, S) = T
+T :- 1;
+verify findindexz(equal_T, S) = T
+T :- 2;
+verify findindexz(equal_T, S) = T
+T :- 3;
+verify findindexz(equal_T, S) = T
+T :- 4;
+verify findindexz(equal_T, S) = T
+T :- 5;
+verify findindexz(equal_T, S) = T
+T :- 6;
+verify findindexz(equal_T, S) = T
+T :- 7;
+verify findindexz(equal_T, S) = T
+T :- 8;
+verify findindexz(equal_T, S) = ?
+
+//
+
+sys.reset();
+
+lazy var T :- ?;
+
+lazy var equal_T :- /.(x) -> x = T;
+
+lazy var xfind :- /.(hfn, seq) -> if(empty(seq), false(), if(hfn(head(seq)), true(), xfind(hfn, tail(seq))));
+
+lazy var S :- [ 0, 1, 2, 3, 4, 5, 6, 7 ];
+
+T :- 0;
+verify xfind(equal_T, S)
+T :- 1;
+verify xfind(equal_T, S)
+T :- 4;
+verify xfind(equal_T, S)
+T :- 7;
+verify xfind(equal_T, S)
+T :- 8;
+verify xfind(equal_T, S) = false()
+
+//
+
+sys.reset();
+
+lazy var apply :- /.(f, x) -> f(x);
+
+verify apply(sqrt, 4) = 2
+verify apply(sqrt, 9) = 3
+
+//
+// Mutually recursive
+//
+
+//
+
+sys.reset();
+
+lazy var oddx;
+lazy var evenx;
+
+oddx  := /.(x) -> if(x = 0, false(), evenx(x - 1));
+evenx := /.(x) -> if(x = 0, true(),   oddx(x - 1));
+
+verify evenx(0)
+verify  oddx(1)
+verify evenx(2)
+verify  oddx(3)
+verify evenx(4)
+verify  oddx(5)
+verify evenx(6)
+verify  oddx(7)
+
+verify not( oddx(0))
+verify not(evenx(1))
+verify not( oddx(2))
+verify not(evenx(3))
+verify not( oddx(4))
+verify not(evenx(5))
+verify not( oddx(6))
+verify not(evenx(7))
+
+//
+
+sys.reset();
+
+lazy var oddx;
+lazy var evenx;
+
+oddx  :- /.(x) -> if(x = 0, false(), evenx(x - 1));
+evenx :- /.(x) -> if(x = 0, true(),   oddx(x - 1));
+
+verify evenx(0)
+verify  oddx(1)
+verify evenx(2)
+verify  oddx(3)
+verify evenx(4)
+verify  oddx(5)
+verify evenx(6)
+verify  oddx(7)
+
+verify not( oddx(0))
+verify not(evenx(1))
+verify not( oddx(2))
+verify not(evenx(3))
+verify not( oddx(4))
+verify not(evenx(5))
+verify not( oddx(6))
+verify not(evenx(7))
+
+//
+// CLOSURE TESTS
+//
+
+//
+
+sys.reset();
+
+lazy var funw :- /.(f) -> /.(x) -> f(x);
+lazy var sqrtw :- funw(sqrt);
+verify sqrtw(4) = 2
+
+//
+
+sys.reset();
+
+lazy var twice :- /.(f) -> /.(x) -> f(f(x));
+
+lazy var sq4 :- twice(sqrt);
+
+verify sq4(16) = 2
+verify sq4(81) = 3
+
+//
+
+sys.reset();
+
+lazy var compose :- /.(f, g) -> /.(x) -> f(g(x));
+
+lazy var sqlog :- compose(sqrt, log);
+
+lazy var eps :- 0.0000000001;
+
+verify abs(sqlog(10 ^ (1 * 1)) - 1) < eps
+verify abs(sqlog(10 ^ (2 * 2)) - 2) < eps
+verify abs(sqlog(10 ^ (3 * 3)) - 3) < eps
+
+//
+
+sys.reset();
+
+lazy var compose :- /.(f, g) -> /.(x) -> f(g(x));
+
+lazy var eps :- 0.0000000001;
+
+verify abs(compose(sqrt, log)(10 ^ (1 * 1)) - 1) < eps
+verify abs(compose(sqrt, log)(10 ^ (2 * 2)) - 2) < eps
+verify abs(compose(sqrt, log)(10 ^ (3 * 3)) - 3) < eps
+
+//
+
+sys.reset();
+
+lazy var twice :- /.(f) -> /.(x) -> f(f(x));
+lazy var compose :- /.(f, g) -> /.(x) -> f(g(x));
+lazy var twize :- /.(f) -> compose(f, f);
+
+lazy var loglog :- twice(log);
+lazy var logloz :- twize(log);
+
+verify loglog(1) = logloz(1)
+verify loglog(2) = logloz(2)
+verify loglog(4) = logloz(4)
+verify loglog(7) = logloz(7)
+verify loglog(9) = logloz(9)
+
+//
+
+//
+// LRef rebind test A OK, Test B OK!
+//
+
+// Test A
+
+sys.reset();
+
+lazy var s2 :- /.(x) -> /.(y) -> x + y + 4;
+lazy var s1 :- s2(1);
+lazy var s0 :- s1(2);
+
+verify s0 = 7
+verify s1(2) = 7
+verify s2(1)(2) = 7
+
+// Test B
+
+sys.reset();
+
+lazy var s3 :- /.(x) -> /.(y) -> /.(z) -> x + y + z;
+lazy var s2 :- s3(1);
+lazy var s1 :- s2(2);
+lazy var s0 :- s1(4);
+
+verify s0 = 7
+verify s1(4) = 7
+verify s2(2)(4) = 7
+verify s3(1)(2)(4) = 7
+
+//
+
+sys.reset();
+
+:: index := /.(a, i) -> a[i];
+
+var A := [ 0, 1, 2, 3 ];
+
+verify index(A, 0) = A[0]
+verify index(A, 1) = A[1]
+verify index(A, 2) = A[2]
+verify index(A, 3) = A[3]
+
+//
+
+sys.reset();
+
+:: indexer := /.(a) -> /.(i) -> a[i];
+
+var A := [ 0, 1, 2, 3 ];
+
+:: f := indexer(A);
+
+verify f(0) = A[0]
+verify f(1) = A[1]
+verify f(2) = A[2]
+verify f(3) = A[3]
+
+//
+
+sys.reset();
+
+:: indexer := /.(a) -> /.(i) -> a[i];
+
+var A := [ 10, 11, 12, 13 ];
+
+var permutation := [ 1, 3, 2, 0 ];
+
+var f := indexer(A);
+
+verify fmap(f, permutation) = [ 11, 13, 12, 10 ]
+
+//
+
+sys.reset();
+
+:: indexer := /.(a) -> /.(i) -> a[i];
+
+var A := [ 10, 11, 12, 13 ];
+
+var permutation := [ 1, 3, 2, 0 ];
+
+verify fmap(indexer(A), permutation) = [ 11, 13, 12, 10 ]
+
+//
+
+sys.reset();
+
+lazy var A := [  1,  2 ,  3 ,  4 ];
+lazy var B := [ 10, 20 , 30 , 40 ];
+
+lazy var mapper :- /.(i) -> A[i] + B[i];
+
+lazy var S :- fmap(mapper, [ 0, 1, 2, 3 ]);
+
+verify S = [ 11, 22, 33, 44 ]
+
+lazy var t :- sum(S);
+
+verify t = 110
+
+//
+
+sys.reset();
+
+lazy var W :- [ 0.1, 0.2, 0.3, 0.4 ];
+lazy var P :- [ 4.0, 3.0, 2.0, 1.0 ];
+
+lazy var prod :- /.(i) -> W[i] * P[i];
+
+lazy var L :- [ 0, 1, 2, 3 ];
+
+lazy var S :- fmap(prod, L);
+
+lazy var WAVG :- sum(S);
+
+verify WAVG = 2.0
+
+//
+
+sys.reset();
+
+lazy var fibo :- /.(k) -> /.(n) -> if(n < 2, n + k, fibo(k)(n - 1) + fibo(k)(n - 2));
+
+lazy var f0 :- fibo(0);
+lazy var f1 :- fibo(1);
+
+verify f0(2) = f1(0)
+verify f0(3) = f1(1)
+verify f0(4) = f1(2)
+verify f0(5) = f1(3)
+verify f0(6) = f1(4)
+verify f0(7) = f1(5)
+verify f0(8) = f1(6)
+verify f0(9) = f1(7)
+
+//
+
+sys.reset();
+
+lazy var add$3 :- /.(x) -> /.(y) -> /.(z) -> x + y + z;
+
+verify add$3(1)(2)(3) = 6
+
+lazy var add1$2 :- add$3(1);
+
+verify add1$2(2)(3) = 6
+
+lazy var add3$1 :- add$3(1)(2);
+
+verify add3$1(3) = 6
+
+add3$1 :- add1$2(2);
+
+verify add3$1(3) = 6
+
+//
+
+sys.reset();
+
+lazy var add$3 :- /.(x) -> /.(y) -> /.(z) -> x + (y + z);
+
+verify add$3(1)(2)(3) = 6
+
+lazy var add1$2 :- add$3(1);
+
+verify add1$2(2)(3) = 6
+
+lazy var add3$1 :- add$3(1)(2);
+
+verify add3$1(3) = 6
+
+add3$1 :- add1$2(2);
+
+verify add3$1(3) = 6
+
+//
+
+sys.reset();
+
+lazy var add$3 :- /.(x, y) -> /.(z) -> x + y + z;
+
+verify add$3(1, 2)(3) = 6
+
+lazy var add1$2 :- /.(x) -> add$3(1, x);
+
+verify add1$2(2)(3) = 6
+
+add1$2 :- /.(x) -> add$3(x, 1);
+
+// verify add1$2(2)(3) = 6
+
+lazy var add3$1 :- add$3(1, 2);
+
+verify add3$1(3) = 6
+
+add3$1 :- add1$2(2);
+
+verify add3$1(3) = 6
+
+//
+
+sys.reset();
+
+lazy var add$3 :- /.(x, y) -> /.(z) -> x + (y + z);
+
+verify add$3(1, 2)(3) = 6
+
+lazy var add1$2 :- /.(x) -> add$3(1, x);
+
+verify add1$2(2)(3) = 6
+
+lazy var add3$1 :- add$3(1, 2);
+
+verify add3$1(3) = 6
+
+add3$1 :- add1$2(2);
+
+verify add3$1(3) = 6
+
+//
+
+sys.reset();
+
+lazy var add$3 :- /.(x, y, z) -> x + y + z;
+
+verify add$3(1, 2, 3) = 6
+
+lazy var add1$2 :- /.(x, y) -> add$3(1, x, y);
+
+verify add1$2(2, 3) = 6
+
+add1$2 :- /.(x, y) -> add$3(x, 1, y);
+
+verify add1$2(2, 3) = 6
+
+add1$2 :- /.(x, y) -> add$3(x, y, 1);
+
+verify add1$2(2, 3) = 6
+
+lazy var add3$1 :- /.(x) -> add$3(x, 1, 2);
+
+verify add3$1(3) = 6
+
+add3$1 :- /.(x) -> add$3(1, x, 2);
+
+verify add3$1(3) = 6
+
+add3$1 :- /.(x) -> add$3(1, 2, x);
+
+verify add3$1(3) = 6
+
+//
+
+sys.reset();
+
+var indirector := /.(i) -> /.(a) -> a[i];
+
+var x0 := indirector(0);
+var x1 := indirector(1);
+var x2 := indirector(2);
+var x3 := indirector(3);
+
+array[] => var vector := [ 0, 1, 2, 3 ];
+
+verify x0(vector) = 0
+verify x1(vector) = 1
+verify x2(vector) = 2
+verify x3(vector) = 3
+
+//
+
+sys.reset();
+
+lazy var indirector :- /.(i) -> /.(a) -> a[i];
+
+lazy var x0 :- indirector(0);
+lazy var x1 :- indirector(1);
+lazy var x2 :- indirector(2);
+lazy var x3 :- indirector(3);
+
+array[] => var vector := [ 0, 1, 2, 3 ];
+
+verify x0(vector) = 0
+verify x1(vector) = 1
+verify x2(vector) = 2
+verify x3(vector) = 3
+
+//
+
+sys.reset();
+
+:: indirector :- /.(a) -> /.(i) -> a[i];
+
+:: zumba :- indirector([ 0, 1, 2, 3 ]);
+
+verify zumba(0) = 0
+verify zumba(1) = 1
+verify zumba(2) = 2
+verify zumba(3) = 3
+
+//
+
+sys.reset();
+
+:: indirector :- /.(i) -> /.(a) -> a[i];
+
+:: zumba :- indirector(0);
+verify zumba([ 0, 1, 2, 3 ]) = 0
+
+zumba :- indirector(1);
+verify zumba([ 0, 1, 2, 3 ]) = 1
+
+zumba :- indirector(2);
+verify zumba([ 0, 1, 2, 3 ]) = 2
+
+zumba :- indirector(3);
+verify zumba([ 0, 1, 2, 3 ]) = 3
+
+:: k := 8;
+zumba :- indirector(k);
+verify zumba([ 0, 1, 2, 3 ]) = #REF!
+
+k := 0;
+verify zumba([ 0, 1, 2, 3 ]) = 0
+k := 1;
+verify zumba([ 0, 1, 2, 3 ]) = 1
+k := 2;
+verify zumba([ 0, 1, 2, 3 ]) = 2
+k := 3;
+verify zumba([ 0, 1, 2, 3 ]) = 3
+
+//
+
+sys.reset();
+
+:: k := 0;
+
+:: indirector := /.(i) -> /.(a) -> a[i];
+:: zumba :- indirector(k);
+:: choice :- zumba([ 0, 1, 2, 3 ]);
+
+verify choice = k
+k := 1;
+verify choice = k
+k := 2;
+verify choice = k
+k := 3;
+verify choice = k
+
+//
+
+sys.reset();
+
+var f := /.(x) -> x;
+
+verify f(8) = 8
+verify f(8.0) = 8.0
+verify (/.(x) -> x)(8) = 8
+verify (/.(x) -> x)(8.0) = 8.0
+
+sys.reset();
+
+var f := /.(double x) -> x;
+
+verify f(8) = 8
+verify f(8.0) = 8.0
+verify (/.(double x) -> x)(8) = 8
+verify (/.(double x) -> x)(8.0) = 8.0
+
+sys.reset();
+
+:: f := /.(double x) -> x;
+
+verify f(8) = 8
+verify f(8.0) = 8.0
+verify (/.(double x) -> x)(8) = 8
+verify (/.(double x) -> x)(8.0) = 8.0
+
+//
+
+sys.reset();
+
+:: f := /.(double x ) => double -> x;
+
+verify f(8) = 8
+verify f(8.0) = 8.0
+verify (/.(double x ) => double -> x)(8) = 8
+verify (/.(double x ) => double -> x)(8.0) = 8.0
+
+//
+
+sys.reset();
+
+:: sub := /.(array[] => int a, int index) => int -> a[index];
+
+:: a := [ 0, 1, 2, 3 ];
+
+verify sub(a, 0) = 0
+verify sub(a, 1) = 1
+verify sub(a, 2) = 2
+verify sub(a, 3) = 3
+
+//
+
+sys.reset();
+
+:: add := /.(int x, int y) => int -> x + y;
+
+:: f :- /.(int x) => :: -> /.(int y) => int -> x + y;
+
+:: ff :- /.(int x) => fun(int _) => int -> /.(int y) => int -> x + y;
+
+:: fff :- /.(int x) => fun(int _) => int -> /.(int y) => :: -> x + y;
+
+:: ffff :- /.(int x) => fun(int _) => int -> /.(int y) => int -> x + y;
+
+:: fibox :- /.(int x) => int -> if(x < 2, x, fibox(x-1) + fibox(x-2));
+
+:: fibon :- /.(int x) => int -> if(x < 2, x, fibon(x-1) + fibon(x-2));
+
+:: lt0 := /.(int x, int y) => bool -> x < y;
+
+bool effort := fibox = fibon;
+
+//
+
+sys.reset();
+
+:: contains := /.(string s, string pattern) => bool -> find(pattern, s, 0) <> #VALUE!;
+
+:: fruit := "strawberry";
+
+:: limit := 10;
+
+:: query := /.(p, x) -> contains(fruit, p) && x < limit;
+
+:: p := "berry";
+:: x := 9;
+
+:: ask := /.() => bool -> query(p, x);
+
+verify ask()
+
+p := "berry";
+x := 11;
+
+verify not(ask())
+
+p := "straw";
+x := 7;
+
+verify ask()
+
+p := "raw";
+x := 7;
+
+verify ask()
+
+p := "row";
+x := 7;
+
+verify not(ask())
+
+//
+
+sys.reset();
+
+:: N := 8;
+
+:: randa := /.(int n) => array[] => lazy double -> if(n = 0, [], cons('uniform()', randa(n-1)));
+
+:: A := randa(N);
+
+array[] => lazy double V := randa(N);
+
+verify ltype(A) = array[] => lazy double
+verify ltype(V) = array[] => lazy double
+
+verify ltype(A[0]) = lazy double
+verify ltype(V[0]) = lazy double
+
+verify rtype(A) = array[] => double
+verify rtype(V) = array[] => double
+
+verify rtype(A[0]) = double
+verify rtype(V[0]) = double
+
+//
+
+sys.reset();
+
+:: frandarr := /.(n) -> if(n = 0, [], cons(uniform(), frandarr(n-1)));
+
+:: N := 8;
+
+:: A := frandarr(N);
+
+:: slice := /.(lb, ub) -> A[lb .. ub];
+
+verify slice(0, N-1) = A
+
+verify slice(0, 3)[0] <= A[0]
+verify slice(0, 3)[1] <= A[1]
+verify slice(0, 3)[2] <= A[2]
+verify slice(0, 3)[3] <= A[3]
+
+verify slice(1, 4)[0] <= A[1]
+verify slice(1, 4)[1] <= A[2]
+verify slice(1, 4)[2] <= A[3]
+verify slice(1, 4)[3] <= A[4]
+
+//
+
+//
+// With structs and tuples
+//
+
+//
+
+sys.reset();
+
+:: f := /.(z) -> /.(p) -> (p[0] + z, p[1] - z);
+
+:: g := f(1);
+
+verify (1, 9) = (1, 9)
+verify g((1, 9)) = (2, 8)
+verify g(g((1, 9))) = (3, 7)
+verify g(g(g((1, 9)))) = (4, 6)
+verify g(g(g(g((1, 9))))) = (5, 5)
+verify g(g(g(g(g((1, 9)))))) = (6, 4)
+verify g(g(g(g(g(g((1, 9))))))) = (7, 3)
+verify g(g(g(g(g(g(g((1, 9)))))))) = (8, 2)
+verify g(g(g(g(g(g(g(g((1, 9))))))))) = (9, 1)
+
+//
+
+sys.reset();
+
+:: f := /.(x, y) -> /.(z) -> (x + z, y - z);
+
+:: g := f(7, 3);
+
+verify g(1) = (8, 2)
+verify g(2) = (9, 1)
+
+//
+
+sys.reset();
+
+:: fib := /.(int n) => int -> if (n < 2, n, fib(n - 1) + fib(n - 2));
+
+:: addt3 := /.(t3) -> t3[0] + t3[1] + t3[2];
+
+array[] => lazy :: table := [
+	'(0, fib(0), exp(0))',
+	'(1, fib(1), exp(1))',
+	'(2, fib(2), exp(2))',
+	'(3, fib(3), exp(3))'
+];
+
+verify ltype(table) = array[] => lazy struct { int; int; double; }
+
+verify addt3(table[0]) = 0.0 + fib(0) + exp(0)
+verify addt3(table[1]) = 1.0 + fib(1) + exp(1)
+verify addt3(table[2]) = 2.0 + fib(2) + exp(2)
+
+//
+
+sys.reset();
+
+:: pair := /.(x, y) -> struct { var first; var second; }(x, y);
+
+verify pair(1, "one") = pair(8 - 7, "one")
+verify pair(1, "one") = struct { var first; var second; }(1, "one")
+
+:: s := pair("first", "second");
+
+verify s.first  = "first"
+verify s.second = "second"
+
+//
+
+sys.reset();
+
+:: transform := /.(string s) -> struct { int len; string exp; }(length(s), s);
+
+:: s := transform("abcdef");
+
+verify  struct { int len; string exp; }(6, "abcdef") = struct { int len; string exp; }(6, "abcdef")
+verify transform("abcdef") = struct { int len; string exp; }(6, "abcdef")
+verify s = struct { int len; string exp; }(6, "abcdef")
+verify s.len = 6
+verify s.exp = "abcdef"
+
+//
+
+sys.reset();
+
+// @@ note: function equivalence works here, but is not properly implemented
+
+:: f := /.(x) -> x;
+
+verify f(f(f(f(f(f(f(f(8)))))))) = 8
+verify f(f(f(f(f(f(f(f(f)))))))) = f
+
+//
+
+sys.reset();
+
+verify "lambda.sym" <> ?

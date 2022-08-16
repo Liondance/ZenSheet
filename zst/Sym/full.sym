@@ -1,0 +1,10 @@
+///
+/// full - ZenSheet test
+///
+
+echo off
+
+run quick
+run heavy
+
+echo on

@@ -1,0 +1,216 @@
+///
+/// closure.sym
+///
+
+//
+
+sys.reset();
+
+:: x :- 8;
+:: y :- 7;
+
+:: zl :- x + y;
+
+:: zf := /.() -> x + y;
+:: zg := /.(t) -> /.() -> t + y;
+:: zh := /.(t) -> /.() -> x + t;
+
+x := x + 1;
+verify zl = zf()
+verify zf() = zg(x)()
+verify zg(x)() = zh(y)()
+
+y := y + 1;
+verify zl = zf()
+verify zf() = zg(x)()
+verify zg(x)() = zh(y)()
+
+x := 8 * x - 1;
+y := 7 * y + 1;
+verify zl = zf()
+verify zf() = zg(x)()
+verify zg(x)() = zh(y)()
+
+//
+
+sys.reset();
+
+:: x :- 8;
+:: y :- 7;
+
+:: zl :- x + y;
+
+:: zf := /.() -> x + y;
+:: zg := /.(x) -> /.() -> x + y;
+:: zh := /.(y) -> /.() -> x + y;
+
+x := x + 1;
+verify zl = zf()
+verify zf() = zg(x)()
+verify zg(x)() = zh(y)()
+
+y := y + 1;
+verify zl = zf()
+verify zf() = zg(x)()
+verify zg(x)() = zh(y)()
+
+x := 8 * x - 1;
+y := 7 * y + 1;
+verify zl = zf()
+verify zf() = zg(x)()
+verify zg(x)() = zh(y)()
+
+//
+
+sys.reset();
+
+:: x :- 8;
+:: y :- 7;
+
+:: zl :- x + y;
+
+:: zf := /.() -> x + y;
+:: zg := /.(p) -> (/.(q) -> p + q)(y);
+:: zh := /.(q) -> (/.(p) -> p + q)(x);
+
+x := x + 1;
+verify zl = zf()
+verify zf() = zg(x)
+verify zg(x) = zh(y)
+
+y := y + 1;
+verify zl = zf()
+verify zf() = zg(x)
+verify zg(x) = zh(y)
+
+x := 8 * x - 1;
+y := 7 * y + 1;
+verify zl = zf()
+verify zf() = zg(x)
+verify zg(x) = zh(y)
+
+//
+
+sys.reset();
+
+:: x :- 8;
+:: y :- 7;
+
+:: zl :- x + y;
+
+:: zf := /.() -> x + y;
+:: zg := /.(x) -> (/.(y) -> x + y)(y);
+:: zh := /.(y) -> (/.(x) -> x + y)(x);
+
+x := x + 1;
+verify zl = zf()
+verify zf() = zg(x)
+verify zg(x) = zh(y)
+
+y := y + 1;
+verify zl = zf()
+verify zf() = zg(x)
+verify zg(x) = zh(y)
+
+x := 8 * x - 1;
+y := 7 * y + 1;
+verify zl = zf()
+verify zf() = zg(x)
+verify zg(x) = zh(y)
+
+//
+
+sys.reset();
+
+:: x :- 8;
+:: y :- 7;
+
+:: zl :- x + y;
+
+:: zf := /.() -> x + y;
+:: zg := /.(p) -> (/.(p, q) -> p + q)(p, y);
+:: zh := /.(q) -> (/.(p, q) -> p + q)(x, q);
+
+x := x + 1;
+verify zl = zf()
+verify zf() = zg(x)
+verify zg(x) = zh(y)
+
+y := y + 1;
+verify zl = zf()
+verify zf() = zg(x)
+verify zg(x) = zh(y)
+
+x := 8 * x - 1;
+y := 7 * y + 1;
+verify zl = zf()
+verify zf() = zg(x)
+verify zg(x) = zh(y)
+
+//
+
+sys.reset();
+
+:: x :- 8;
+:: y :- 7;
+
+:: zl :- x + y;
+
+:: zf := /.() -> x + y;
+:: zg := /.(x) -> (/.(x, y) -> x + y)(x, y);
+:: zh := /.(y) -> (/.(x, y) -> x + y)(x, y);
+
+x := x + 1;
+verify zl = zf()
+verify zf() = zg(x)
+verify zg(x) = zh(y)
+
+y := y + 1;
+verify zl = zf()
+verify zf() = zg(x)
+verify zg(x) = zh(y)
+
+x := 8 * x - 1;
+y := 7 * y + 1;
+verify zl = zf()
+verify zf() = zg(x)
+verify zg(x) = zh(y)
+
+//
+
+sys.reset();
+
+lazy var x :- [ uniform(), uniform(), uniform(), uniform(), uniform(), uniform(), uniform(), uniform() ];
+lazy var y :- [ uniform(), uniform(), uniform(), uniform(), uniform(), uniform(), uniform(), uniform() ];
+
+var vecf := /.(f) -> /.(x, y) -> if(length(x) <> length(y), #SIZE!, vect(f)(x, y));
+var vecx := /.(f) -> /.(x, y) -> if(x = [], if(y = [], [], y), if(y = [], x, cons(f(head(x), head(y)), vecx(f)(tail(x), tail(y)))));
+var vect := /.(f) -> /.(x, y) -> if(x = [], [], cons(f(head(x), head(y)), vect(f)(tail(x), tail(y))));
+
+lazy var a1 :- vecf(/.(x, y) -> x + y)(x, y);
+lazy var a2 :- vecx(/.(x, y) -> x + y)(x, y);
+lazy var s1 :- vecf(sum)(x, y);
+lazy var s2 :- vecx(sum)(x, y);
+
+verify a1 = a2
+verify a2 = s1
+verify s1 = s2
+>>
+verify a1 = a2
+verify a2 = s1
+verify s1 = s2
+>>
+verify a1 = a2
+verify a2 = s1
+verify s1 = s2
+
+var vaf := vecf(sum);
+var vsf := vecx(sum);
+
+verify vaf(x, y) = vsf(x, y)
+>>
+verify vaf(x, y) = vsf(x, y)
+>>
+verify vaf(x, y) = vsf(x, y)
+
+verify "closure.sym" <> ?

@@ -1,0 +1,226 @@
+///
+/// logical.sym
+///
+/// ZenVM test suite for logical functions
+///
+
+sys.reset();
+
+// Boolean variables
+
+var F :- false;
+var T :- true;
+
+verify T
+verify not(F)
+
+// NOT
+
+verify not(F) = T
+verify not(T) = F
+
+// AND
+
+verify and([]) = T
+
+verify and(F) = F
+verify and(T) = T
+
+verify and(F, F) = F
+verify and(F, F) = F
+verify and(T, F) = F
+verify and(T, T) = T
+
+verify and(F, F) = (F && F)
+verify and(F, t) = (F && T)
+verify and(T, F) = (T && F)
+verify and(T, T) = (T && T)
+
+verify and(F, F, F) = F
+verify and(F, F, T) = F
+verify and(F, T, F) = F
+verify and(F, T, T) = F
+verify and(T, F, F) = F
+verify and(T, F, T) = F
+verify and(T, T, F) = F
+verify and(T, T, T) = T
+
+verify and([F, F, F]) = F
+verify and([F, F, T]) = F
+verify and([F, T, F]) = F
+verify and([F, T, T]) = F
+verify and([T, F, F]) = F
+verify and([T, F, T]) = F
+verify and([T, T, F]) = F
+verify and([T, T, T]) = T
+
+verify and([F, F, F, F]) = F
+verify and([F, F, F, T]) = F
+verify and([F, F, T, F]) = F
+verify and([F, F, T, T]) = F
+verify and([F, T, F, F]) = F
+verify and([F, T, F, T]) = F
+verify and([F, T, T, F]) = F
+verify and([F, T, T, T]) = F
+verify and([T, F, F, F]) = F
+verify and([T, F, F, T]) = F
+verify and([T, F, T, F]) = F
+verify and([T, F, T, T]) = F
+verify and([T, T, F, F]) = F
+verify and([T, T, F, T]) = F
+verify and([T, T, T, F]) = F
+verify and([T, T, T, T]) = T
+
+verify and("empty") = true()
+verify and("empty", T) = T
+verify and("empty", F) = F
+verify and("empty", 42, T) = T
+verify and("empty", 42, F) = F
+verify and("empty", 42, F, F) = F
+verify and("empty", 42, F, T) = F
+verify and("empty", 42, T, F) = F
+verify and("empty", 42, T, T) = T
+verify and("empty", 42, [F, [F, F, F], F], F, F) = F
+verify and("empty", 42, [T, [T, F, T], T], T, T) = F
+verify and("empty", 42, [T, [T, T, T], T], T, T) = T
+
+// OR
+
+verify or([]) = F
+
+verify or(F) = F
+verify or(T) = T
+
+verify or(F, F) = F
+verify or(F, T) = T
+verify or(T, F) = T
+verify or(T, T) = T
+
+verify or(F, F) = (F || F)
+verify or(F, T) = (F || T)
+verify or(T, F) = (T || F)
+verify or(T, T) = (T || T)
+
+verify or(F, F, F) = F
+verify or(F, F, T) = T
+verify or(F, T, F) = T
+verify or(F, T, T) = T
+verify or(T, F, F) = T
+verify or(T, F, T) = T
+verify or(T, T, F) = T
+verify or(T, T, T) = T
+
+verify or([F, F, F]) = F
+verify or([F, F, T]) = T
+verify or([F, T, F]) = T
+verify or([F, T, T]) = T
+verify or([T, F, F]) = T
+verify or([T, F, T]) = T
+verify or([T, T, F]) = T
+verify or([T, T, T]) = T
+
+verify or([F, F, F, F]) = F
+verify or([F, F, F, T]) = T
+verify or([F, F, T, F]) = T
+verify or([F, F, T, T]) = T
+verify or([F, T, F, F]) = T
+verify or([F, T, F, T]) = T
+verify or([F, T, T, F]) = T
+verify or([F, T, T, T]) = T
+verify or([T, F, F, F]) = T
+verify or([T, F, F, T]) = T
+verify or([T, F, T, F]) = T
+verify or([T, F, T, T]) = T
+verify or([T, T, F, F]) = T
+verify or([T, T, F, T]) = T
+verify or([T, T, T, F]) = T
+verify or([T, T, T, T]) = T
+
+verify or("empty") = F
+verify or("empty", T) = T
+verify or("empty", F) = F
+verify or("empty", 42, T) = T
+verify or("empty", 42, F) = F
+verify or("empty", 42, F, F) = F
+verify or("empty", 42, F, T) = T
+verify or("empty", 42, T, F) = T
+verify or("empty", 42, T, T) = T
+verify or("empty", 42, [F, [F, F, F], F], F, F) = F
+verify or("empty", 42, [F, [F, T, F], F], F, F) = T
+verify or("empty", 42, [T, [T, T, T], T], T, T) = T
+
+// IF
+
+verify if(true(), "YES", "NO") = "YES"
+verify if(false(), "YES", "NO") = "NO"
+verify if(true, "YES", "NO") = "YES"
+verify if(false, "YES", "NO") = "NO"
+verify if(T, "YES", "NO") = "YES"
+verify if(F, "YES", "NO") = "NO"
+
+// MIX
+
+lazy var x :- T;
+lazy var y :- F;
+lazy var z :- and(x, y);
+lazy var w :- or(x, y);
+
+verify w
+verify x
+verify x && w
+verify w && x
+verify and(x, w)
+verify and(w, x)
+
+verify not(y)
+verify not(z)
+verify not(y || z)
+verify not(z || y)
+verify not(or(y, z))
+verify not(or(z, y))
+
+// No implicit conversions
+verify ivl(not("TRUE"), "TYPE?") = "TYPE?"
+verify ivl(not("FALSE"), "TYPE?") = "TYPE?"
+verify ivl("TRUE" && "TRUE", "TYPE?") = "TYPE?"
+verify ivl("TRUE" || "TRUE", "TYPE?") = "TYPE?"
+
+verify ivl(and("TRUE", "TRUE"), "TYPE?") = true()
+verify ivl( or("TRUE", "TRUE"), "TYPE?") = false()
+
+// Relational operators and Boolean constants (FALSE, TRUE)
+
+verify (0 <  0) = F
+verify (0 <= 0) = T
+verify (0 <> 0) = F
+verify (0 =  0) = T
+verify (0 >= 0) = T
+verify (0 >  0) = F
+
+verify (0=0) =  (0=0)
+verify (0=1) =  (0=1)
+verify not((0=0) <> (0=0))
+verify not((0=1) <> (0=1))
+
+verify (0=0) <> (0=1)
+verify not((0=0) =  (0=1))
+verify (0=1) <> (0=0)
+verify not((0=1) =  (0=0))
+
+//
+
+sys.reset();
+
+lazy var za :- and(x, y, z);
+lazy var zo :-  or(x, y, z);
+
+lazy var x :- true;
+lazy var y :- true;
+lazy var z :- true;
+
+verify za = true()
+verify zo = true()
+
+//
+
+verify "logical.sym" <> ?
