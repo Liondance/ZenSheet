@@ -105,7 +105,7 @@ You can exit the REPL and terminate execution of the server with the double dot 
 
 ## Feedback
 
-*Thank you for your help*. Please let us know:
+***Thank you for your help***. Please let us know:
 
 1. Were these instructions easy to understand? If not, what should we improve?
 2. Were you able to complete the installation? If not, where did you get stuck?
