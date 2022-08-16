@@ -72,7 +72,7 @@ Then, start the REPL in the ZenSheet Client window, as follows:
 
 ### Semi-automated, with scripts
 
-Open one window shells open in the ZenSheet directory
+Open one window shell in the ZenSheet directory
 
 Run the zen script, which should start the server in a separate shell window
 
