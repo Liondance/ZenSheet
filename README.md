@@ -2,9 +2,9 @@
 
 ZenSheet Beta distribution - Windows version
 
-## Requisites
+## 1. Requisites
 
-### 1. GitHub
+### GitHub
 
 You must have a GitHub account and the GitHub client (GitHub CLI ) for Windows.
 
@@ -13,7 +13,7 @@ Follow instructions in the following sites:
     https://github.com/
     https://cli.github.com/
 
-### 2. Node.js
+### Node.js
 
 To download and install Node.js, follow the instructions in ***https://nodejs.org/en/***
 
@@ -27,7 +27,7 @@ Here is a sample shell interaction to verify that Node.js is working:
     42
     > .exit
 
-## Getting the ZenSheet distribution
+## 2. Getting the ZenSheet distribution
 
     1. Choose or create a directory to hold your clone of the ZenSheet distribution.
     But first, make sure that there isn't a directory named ZenSheet already there.
@@ -41,7 +41,7 @@ Here is a sample shell interaction to verify that Node.js is working:
     For instance, using the connection string for the SSH protocol, the command will be:
       git clone git@github.com:Liondance/ZenSheet.git
 
-## Starting ZenSheet distribution
+## 3. Starting ZenSheet distribution
 
 A minimal ZenSheet deployment requires two processes:
 
@@ -81,7 +81,7 @@ Run the cli script, which will run the ZenSheet REPL in your current window
 
 	./cli
 
-## Testing ZenSheet
+## 4. Testing ZenSheet
 
 The REPL displays a strange prompt, with numbers, similar to this:
 
@@ -102,17 +102,23 @@ You can exit the REPL and terminate execution of the server with the double dot 
 
 	<2: 2/2 => 2> ..
 
-## Week 1 Feedback
+## 5. Guided Testing and Feedback
 
-***Thank you for your help***. Please let us know:
+Please follow the instructions for each week, answering questions and sending feedback via email.
 
-1. Were these instructions easy to understand? If not, what should we improve?
+***Thank you for your help***.
+
+### Week 1
+
+Go through the installation procedure and test ZenSheet as indicated.
+
+1. Were the instructions easy to understand? If not, what should we improve?
 2. Were you able to complete the installation? If not, where did you get stuck?
 3. If you completed the installation, were you able to evaluate an expression?
 
 Thank you again for contributing to the ZenSheet project!
 
-## Possible Issues
+#### Possible Issues
 
 Whenever you encounter an issue, please let us know, even if you can resolve it.
 A possible error is to be missing a dll file (dynamically linked library) in your system.
@@ -121,25 +127,23 @@ To use a dll file provided in the .lib directory, simply copy it to your ZenShee
 Only use dll files that match the name you see in the error message.
 Do not copy or move dll files if ZenSheet is already working!
 
-## Week 2
+### Week 2
 
-### Indicating the location of the ZenSheet tests database
-
-From now on you should always start the ZenSheet server using this command: 
+From now on you should always start the ZenSheet Server using this command: 
 
 	./zensheet.exe --zst ./zst
 
-The --zst option has a set of defaults that take into account environment variables.
-To keep things simple, I prefer you always set the location explicitly, as indicated.
+The --zst option indicates the location of the ZenSheet tests database.
+That's where the ZenSheet test scripts are located.
 The REPL client can still be started as usual:
 
 	node cli.js
 
-But (good news) we have simplified the above, as explained in the next section! 
+But there is an even simpler way to start the server and the client, as explained next!
 
-### Semi-automated way to start sessions, using convenience scripts
+#### Semi-automated way to start a ZenSheet sessions, using convenience scripts
 
-Instead of opening two shells, just open *one* in the ZenSheet directory
+Instead of opening two shells, just open *one* in the ZenSheet directory.
 
 Run the newly added zen script: this will start the server in a separate shell window!
 
@@ -149,29 +153,29 @@ Then run the cli script, which will run the ZenSheet REPL in your current window
 
 	./cli
 
-It's that easy: you only need to execute ***./zen*** and ***./cli*** to establish a session! 
+That's all: you only need to execute ***./zen*** and ***./cli*** to establish a session! 
 
-### Some useful REPL commands
+#### Some useful REPL commands
 
 You will find these commands convenient
 
-	.						|=> a single dot exits the REPL without terminating the server
-	..						|=> double dot exits the REPL and terminates the server
-	run <script name>		|=> the run command runs a REPL script with commands
+	.                       |=> a single dot exits the REPL without terminating the server
+	..                      |=> double dot exits the REPL and terminates the server
+	run <script name>       |=> the run command runs a REPL script with commands
 
-### Measuring Performance
+#### Testing ZenSheet and Measuring Performance
 
-- Perform a git pull to download the most recent testing scripts
+- Just in case, perform a git pull to download the most recent testing scripts
 - Start a ZenSheet session (server and client) as explained above
 - At the REPL prompt, issue the following commands:
 
-(wait for each command to complete)
+(one by one, waiting for each command to complete)
 
 	run quick
 	run heavy
 	run full
 
-### Week 2 Feedback
+#### Giving Feedback for Week 2
 
 Depending on the speed of your computer, some tests may take over 10 seconds to complete.
 At the end of each test **run** you should see ***test statistics*** like this in the output:
@@ -185,4 +189,4 @@ At the end of each test **run** you should see ***test statistics*** like this i
 - Copy and paste the test statistics, for each run, into your feedback email
 - It would be useful to know which processor you have, GHz included
 
-That's all for this week!
+That's all for week 2!
