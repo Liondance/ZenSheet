@@ -1,3 +1,0 @@
-fun(int i) => lazy double closure_factory := fn (int i) => lazy double -> 'i + uniform()';
-lazy double c := '1 + uniform()';
-lazy double d := '7 + uniform()';
