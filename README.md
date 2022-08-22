@@ -159,9 +159,9 @@ That's all: you only need to execute ***./zen*** and ***./cli*** to establish a 
 
 You will find these commands convenient
 
-	.                       |=> a single dot exits the REPL without terminating the server
-	..                      |=> double dot exits the REPL and terminates the server
-	run <script name>       |=> the run command runs a REPL script with commands
+	.                       => a single dot exits the REPL without terminating the server
+	..                      => double dot exits the REPL and terminates the server
+	run <script name>       => the run command runs a REPL script with commands
 
 #### Testing ZenSheet and Measuring Performance
 
