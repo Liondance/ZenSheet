@@ -7,40 +7,39 @@ const net = require("net");
 const path = require("path");
 
 // ZenSheet Library
-const zlib = "./zlib/";
+const ZLIB = "./ZLIB/";
 
-const Varlib = require(zlib + "varlib.js");
-const Arraylib = require(zlib + "arraylib.js");
+const Varlib = require(ZLIB + "varlib.js");
+const Arraylib = require(ZLIB + "arraylib.js");
 
-const logical = require(zlib + "logical.js");
-const date = require(zlib + "date.js");
-const financial = require(zlib + "financial.js");
-const eng = require(zlib + "engineering.js");
-const math = require(zlib + "math.js");
-const stat = require(zlib + "stat.js");
-const text = require(zlib + "text.js");
-const type = require(zlib + "type.js");
-const sys_view = require(zlib + "sys_view.js");
-const sys_sym = require(zlib + "sys_symbols.js");
-const lazy = require(zlib + "lazy.js");
-const lambda = require(zlib + "lambda2.js");
-const rand_dist = require(zlib + "rand_dist.js");
+const logical = require(ZLIB + "logical.js");
+const date = require(ZLIB + "date.js");
+const financial = require(ZLIB + "financial.js");
+const eng = require(ZLIB + "engineering.js");
+const math = require(ZLIB + "math.js");
+const stat = require(ZLIB + "stat.js");
+const text = require(ZLIB + "text.js");
+const type = require(ZLIB + "type.js");
+const sys_view = require(ZLIB + "sys_view.js");
+const sys_sym = require(ZLIB + "sys_symbols.js");
+const lazy = require(ZLIB + "lazy.js");
+const lambda = require(ZLIB + "lambda2.js");
+const rand_dist = require(ZLIB + "rand_dist.js");
 
-const { CopyObject } = require(zlib + "deepCopy.js");
-const { IntRange } = require(zlib + "int_range.js");
-
-const HOST = "localhost";
+const { CopyObject } = require(ZLIB + "deepCopy.js");
+const { IntRange } = require(ZLIB + "int_range.js");
 
 // Create a server instance, and chain the listen function to it
 // The function passed to net.createServer() becomes the event handler for the 'connection' event
 // The sock object the callback function receives UNIQUE for each connection
 
-const zvm_dir = "./vm/";
+const ZVM = "./vm/";
 
+// @@ WARNING: zst_dir and zst_dir_absolute are shared!
 zst_dir = process.argv[2];
 zst_dir_absolute = path.isAbsolute(zst_dir) ? zst_dir : path.resolve(zst_dir);
-// console.log(`The zst dir is ${zst_dir} and the absolute now is ${zst_dir_absolute}`);
-// const PORT = 8083;
+
+const HOST = "localhost";
 const PORT = process.argv[3];
 
 // const zda = path.isAbsolute(zst_dir) ? zst_dir : path.resolve(zst_dir);
@@ -61,7 +60,7 @@ const _SHUTDOWN = 6;
 const _STORE_DESCR = 7;
 const _UPDATE_MODEL = 8;
 
-const filedata = fs.readFileSync(zvm_dir + "predefined.js", "utf8");
+const filedata = fs.readFileSync(ZVM + "predefined.js", "utf8");
 eval(filedata);
 Arraylib.set_compute_cycle_function(_sys_tick);
 
@@ -92,7 +91,7 @@ client = net.createServer(function (sock) {
       if (instructions[i]["type"] == "command") {
         switch (instructions[i]["instruction"]) {
           case _LOAD_PREDEFS:
-            const filedata = fs.readFileSync(zvm_dir + "predefined.js", "utf8");
+            const filedata = fs.readFileSync(ZVM + "predefined.js", "utf8");
             eval(filedata);
             // Here we can safetly pass _sys_tick without getting a
             // sock not defined error
