@@ -1,0 +1,51 @@
+///
+/// basic.sym
+///
+
+//
+
+sys.reset();
+
+bool   bool_var   := false;
+int    int_var    := -1;
+double double_var := 3.141592654;
+string string_var := "Peano VM";
+
+lazy bool   lazy_bool_var   :- false;
+lazy int    lazy_int_var    :- -1;
+lazy double lazy_double_var :- 3.141592654;
+lazy string lazy_string_var :- "Peano VM";
+
+verify bool_var   = false
+verify int_var    = -1
+verify double_var = 3.141592654
+verify string_var = "Peano VM"
+
+verify lazy_bool_var   = false
+verify lazy_int_var    = -1
+verify lazy_double_var = 3.141592654
+verify lazy_string_var = "Peano VM"
+
+bool_var   := true;
+int_var    := 42;
+double_var := 2.718281828459;
+string_var := "The Peano VM rocks!";
+
+lazy_bool_var   :- true;
+lazy_int_var    :- 42;
+lazy_double_var :- 2.718281828459;
+lazy_string_var :- "The Peano VM rocks!";
+
+verify bool_var   = true
+verify int_var    = 42
+verify double_var = 2.718281828459
+verify string_var = "The Peano VM rocks!"
+
+verify lazy_bool_var   = true
+verify lazy_int_var    = 42
+verify lazy_double_var = 2.718281828459
+verify lazy_string_var = "The Peano VM rocks!"
+
+//
+
+verify true

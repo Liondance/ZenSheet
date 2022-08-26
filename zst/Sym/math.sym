@@ -1,0 +1,940 @@
+///
+/// math.sym
+///
+/// ZenVM test suite for math functions
+///
+
+//
+
+sys.reset();
+
+//
+// Note: unlike other tests, math.sym only uses "sys.reset();" at the beginning
+// variables are undefined explicitly at the end of individual tests
+// error tolerance variable "eps" is undefined at the very end
+//
+
+// double eps := 10^-8;
+// @@ JL: Change absolute error for relative error in the future |1-res/exact| instead
+double eps := 10^-7;
+
+//
+// Check of invalid types
+//
+
+// ABS
+
+verify abs(2) = 2
+verify abs(-2) = 2
+verify abs(-1.2) = 1.2
+verify abs(value("-1.2e3")) = 1200
+
+verify ivl(abs(?), "T?") = "T?"
+verify ivl(abs(1/0), "T?") = "T?"
+verify ivl(abs(na()), "T?") = "T?"
+verify ivl(abs(false()), "T?") = "T?"
+verify ivl(abs( true()), "T?") = "T?"
+verify ivl(abs(date()), "T?") = "T?"
+verify ivl(abs(time()), "T?") = "T?"
+verify ivl(abs( now()), "T?") = "T?"
+verify ivl(abs("7"), "T?") = "T?"
+verify ivl(abs([]), "T?") = "T?"
+
+// ACOS
+
+verify abs(acos(0) - (pi()/2)) < eps
+verify abs(acos(-0.5) * 180/pi() - 120) < eps
+verify acos(-2) = invalid("#NUM!")
+
+verify ivl(acos(?), "T?") = "T?"
+verify ivl(acos(1/0), "T?") = "T?"
+verify ivl(acos(na()), "T?") = "T?"
+verify ivl(acos(false()), "T?") = "T?"
+verify ivl(acos( true()), "T?") = "T?"
+verify ivl(acos(date()), "T?") = "T?"
+verify ivl(acos(time()), "T?") = "T?"
+verify ivl(acos( now()), "T?") = "T?"
+verify ivl(acos("7"), "T?") = "T?"
+verify ivl(acos([]), "T?") = "T?"
+
+// ACOSH
+
+verify acosh(1) = 0
+verify abs(acosh(10) - 2.99322284612638) < eps
+verify acosh(-1) = invalid("#NUM!")
+
+verify ivl(acosh(?), "T?") = "T?"
+verify ivl(acosh(1/0), "T?") = "T?"
+verify ivl(acosh(na()), "T?") = "T?"
+verify ivl(acosh(false()), "T?") = "T?"
+verify ivl(acosh( true()), "T?") = "T?"
+verify ivl(acosh(date()), "T?") = "T?"
+verify ivl(acosh(time()), "T?") = "T?"
+verify ivl(acosh( now()), "T?") = "T?"
+verify ivl(acosh("7"), "T?") = "T?"
+verify ivl(acosh([]), "T?") = "T?"
+
+// ASIN
+
+verify abs(asin(-0.5) * 180/pi() + 30) < eps
+verify asin(0) = 0
+verify asin(-2) = invalid("#NUM!")
+
+verify ivl(asin(?), "T?") = "T?"
+verify ivl(asin(1/0), "T?") = "T?"
+verify ivl(asin(na()), "T?") = "T?"
+verify ivl(asin(false()), "T?") = "T?"
+verify ivl(asin( true()), "T?") = "T?"
+verify ivl(asin(date()), "T?") = "T?"
+verify ivl(asin(time()), "T?") = "T?"
+verify ivl(asin( now()), "T?") = "T?"
+verify ivl(asin("7"), "T?") = "T?"
+verify ivl(asin([]), "T?") = "T?"
+
+// ASINH
+
+verify abs(asinh(1) - 0.881373587019543) < eps
+verify abs(asinh(10) - 2.99822295029797) < eps
+verify abs(asinh(1) + asinh(-1)) < eps
+
+verify ivl(asinh(?), "T?") = "T?"
+verify ivl(asinh(1/0), "T?") = "T?"
+verify ivl(asinh(na()), "T?") = "T?"
+verify ivl(asinh(false()), "T?") = "T?"
+verify ivl(asinh( true()), "T?") = "T?"
+verify ivl(asinh(date()), "T?") = "T?"
+verify ivl(asinh(time()), "T?") = "T?"
+verify ivl(asinh( now()), "T?") = "T?"
+verify ivl(asinh("7"), "T?") = "T?"
+verify ivl(asinh([]), "T?") = "T?"
+
+// ATAN
+
+verify abs(atan(1) * 180/pi() - 45) < eps
+verify atan(0) = 0
+verify abs(atan(1) + atan(-1)) < eps
+
+verify ivl(atan(?), "T?") = "T?"
+verify ivl(atan(1/0), "T?") = "T?"
+verify ivl(atan(na()), "T?") = "T?"
+verify ivl(atan(false()), "T?") = "T?"
+verify ivl(atan( true()), "T?") = "T?"
+verify ivl(atan(date()), "T?") = "T?"
+verify ivl(atan(time()), "T?") = "T?"
+verify ivl(atan( now()), "T?") = "T?"
+verify ivl(atan("7"), "T?") = "T?"
+verify ivl(atan([]), "T?") = "T?"
+
+// ATAN2
+
+verify abs(atan2(1, 1) - (pi()/4)) < eps
+verify abs(atan2(-1, -1) + (3*pi()/4)) < eps
+verify abs(atan2(0,1) - (pi()/2)) < eps
+verify atan2(1,0) = 0
+verify atan2(0,0) = 0
+
+// ATANH
+
+verify abs(atanh(0.761594155955765) - 1) < eps
+verify abs(atanh(-0.1) + 0.100335347731076) < eps
+verify abs(atanh(0.1) + atanh(-.1)) < eps
+verify atanh(-2) = invalid("#NUM!")
+
+// CEIL
+
+verify ivl(ceil(?), "T?") = "T?"
+verify ivl(ceil(1/0), "T?") = "T?"
+verify ivl(ceil(na()), "T?") = "T?"
+verify ivl(ceil(false()), "T?") = "T?"
+verify ivl(ceil( true()), "T?") = "T?"
+verify ivl(ceil(date()), "T?") = "T?"
+verify ivl(ceil(time()), "T?") = "T?"
+verify ivl(ceil( now()), "T?") = "T?"
+verify ivl(ceil("7"), "T?") = "T?"
+verify ivl(ceil([]), "T?") = "T?"
+
+// CEILING
+
+verify ceiling(0,1) = 0
+verify ceiling(0.0,1) = 0
+
+lazy double a :- 0.123456789;
+
+verify ceiling(a, 1) = 1
+verify ceiling(a, 0) = 0
+verify ceiling(a, 0.1) = 0.2
+verify ceiling(a, 0.3) = 0.3
+verify ceiling( a,  0.001) = 0.124
+verify ceiling(-a, -0.001) = -0.124
+
+verify ceiling(-10.77,  0.1) = invalid("#NUM!")
+verify ceiling( 10.77, -0.1) = invalid("#NUM!")
+
+sys.undefine('a')
+
+// COMBIN
+
+verify combin(8,2) = 28
+verify ivl(combin(8.2, 2.98), "T?") = "T?"
+verify combin(100,1) = 100
+verify combin(10000,1) = 10000
+verify combin(20, 10) = combin(19, 9) + combin(19, 10)
+verify combin(-1,-2) = invalid("#NUM!")
+verify combin(1,-1) = invalid("#NUM!")
+verify combin(10,12) = invalid("#NUM!")
+
+// COS
+
+verify abs(cos(1) - 0.54030230586814) < eps
+verify abs(cos(pi()) + 1) < eps
+verify abs(cos(radians(60)) - 0.5) < eps 
+verify abs(cos(1+2*pi()) - cos(1)) < eps
+
+verify ivl(cos(?), "T?") = "T?"
+verify ivl(cos(1/0), "T?") = "T?"
+verify ivl(cos(na()), "T?") = "T?"
+verify ivl(cos(false()), "T?") = "T?"
+verify ivl(cos( true()), "T?") = "T?"
+verify ivl(cos(date()), "T?") = "T?"
+verify ivl(cos(time()), "T?") = "T?"
+verify ivl(cos( now()), "T?") = "T?"
+verify ivl(cos("7"), "T?") = "T?"
+verify ivl(cos([]), "T?") = "T?"
+
+// COSH
+
+verify abs(cosh(-1) - 1.54308063481524) < eps
+verify abs(cosh(1) - cosh(-1)) < eps
+verify abs(cosh(1.31695789692482) - 2) < eps
+verify abs(cosh(0) - 1) < eps
+
+verify ivl(cosh(?), "T?") = "T?"
+verify ivl(cosh(1/0), "T?") = "T?"
+verify ivl(cosh(na()), "T?") = "T?"
+verify ivl(cosh(false()), "T?") = "T?"
+verify ivl(cosh( true()), "T?") = "T?"
+verify ivl(cosh(date()), "T?") = "T?"
+verify ivl(cosh(time()), "T?") = "T?"
+verify ivl(cosh( now()), "T?") = "T?"
+verify ivl(cosh("7"), "T?") = "T?"
+verify ivl(cosh([]), "T?") = "T?"
+
+// DEGREES
+
+verify degrees(radians(0.56789)) - 0.56789 < eps
+verify abs(degrees(pi()) - 180) < eps
+verify abs(degrees(asin(1/2)) - 30) < eps
+verify abs(degrees(-2*pi()) + 360) < eps
+verify abs(degrees(1000) - 57295.7795130823) < eps
+
+verify ivl(degrees(?), "T?") = "T?"
+verify ivl(degrees(1/0), "T?") = "T?"
+verify ivl(degrees(na()), "T?") = "T?"
+verify ivl(degrees(false()), "T?") = "T?"
+verify ivl(degrees( true()), "T?") = "T?"
+verify ivl(degrees(date()), "T?") = "T?"
+verify ivl(degrees(time()), "T?") = "T?"
+verify ivl(degrees( now()), "T?") = "T?"
+verify ivl(degrees("7"), "T?") = "T?"
+verify ivl(degrees([]), "T?") = "T?"
+
+// EVEN
+
+verify even(0.00001) = 2
+verify even(-1) = -2
+verify even(-4.002) = -6
+
+verify ivl(even(?), "T?") = "T?"
+verify ivl(even(1/0), "T?") = "T?"
+verify ivl(even(na()), "T?") = "T?"
+verify ivl(even(false()), "T?") = "T?"
+verify ivl(even( true()), "T?") = "T?"
+verify ivl(even(date()), "T?") = "T?"
+verify ivl(even(time()), "T?") = "T?"
+verify ivl(even( now()), "T?") = "T?"
+verify ivl(even("7"), "T?") = "T?"
+verify ivl(even([]), "T?") = "T?"
+
+// EXP
+
+verify abs(exp(1) - 2.71828182845905) < eps
+verify abs(exp(-.23) - 0.794533602503334) < eps
+verify abs(ln(exp(12.345)) - 12.345) < eps
+
+verify ivl(exp(?), "T?") = "T?"
+verify ivl(exp(1/0), "T?") = "T?"
+verify ivl(exp(na()), "T?") = "T?"
+verify ivl(exp(false()), "T?") = "T?"
+verify ivl(exp( true()), "T?") = "T?"
+verify ivl(exp(date()), "T?") = "T?"
+verify ivl(exp(time()), "T?") = "T?"
+verify ivl(exp( now()), "T?") = "T?"
+verify ivl(exp("7"), "T?") = "T?"
+verify ivl(exp([]), "T?") = "T?"
+
+// FACT
+
+verify fact(5) = 120
+verify fact(1.9) = 1
+verify fact(0) = 1
+verify fact(-1) = invalid("#NUM!")
+verify fact(1) = 1
+verify abs(fact(170)/fact(169) - 170) < eps
+
+verify ivl(fact(?), "T?") = "T?"
+verify ivl(fact(1/0), "T?") = "T?"
+verify ivl(fact(na()), "T?") = "T?"
+verify ivl(fact(false()), "T?") = "T?"
+verify ivl(fact( true()), "T?") = "T?"
+verify ivl(fact(date()), "T?") = "T?"
+verify ivl(fact(time()), "T?") = "T?"
+verify ivl(fact( now()), "T?") = "T?"
+verify ivl(fact("7"), "T?") = "T?"
+verify ivl(fact([]), "T?") = "T?"
+
+// FLOOR
+
+verify floor(0.123456789, 1) = 0
+verify floor(0.123456789, 0.1) = 0.1
+verify floor(0.123456789, 0.3) = 0
+verify floor(0.123456789, 0) = invalid("#DIV/0!")
+verify floor(0.123456789, 0.001) = 0.123
+verify floor(-0.123456789, -0.001) = -.123
+verify floor(-10, 1) = invalid("#NUM!")
+verify floor(0,1) = 0
+
+// FMOD
+
+// INT
+
+verify int(false()) = 0
+verify int( true()) = 1
+
+verify int(-32768) = -32768
+verify int(    -1) =     -1
+verify int(     0) =      0
+verify int(     1) =      1
+verify int( 32767) =  32767
+
+verify int( 8.9) =  8
+verify int(-8.9) = -9 
+verify abs((8.9 - int(8.9)) - .9) < eps
+
+verify int("7") = 7
+verify int("7.9") = 7
+
+verify ivl(int(?), "T?") = "T?"
+verify ivl(int(1/0), "T?") = "T?"
+verify ivl(int(na()), "T?") = "T?"
+verify ivl(int(date()), "T?") = "T?"
+verify ivl(int(time()), "T?") = "T?"
+verify ivl(int( now()), "T?") = "T?"
+verify ivl(int([]), "T?") = "T?"
+
+// LN
+
+verify abs(ln(86) - 4.45434729625351) < eps
+verify abs(ln(2.71828182845904) - 1) < eps
+verify abs(ln(exp(12.345)) - 12.345) < eps
+verify ln(0) = invalid("#NUM!")
+
+verify ivl(ln(?), "T?") = "T?"
+verify ivl(ln(1/0), "T?") = "T?"
+verify ivl(ln(na()), "T?") = "T?"
+verify ivl(ln(false()), "T?") = "T?"
+verify ivl(ln( true()), "T?") = "T?"
+verify ivl(ln(date()), "T?") = "T?"
+verify ivl(ln(time()), "T?") = "T?"
+verify ivl(ln( now()), "T?") = "T?"
+verify ivl(ln("7"), "T?") = "T?"
+verify ivl(ln([]), "T?") = "T?"
+
+// LOG
+
+verify ivl(log(?), "T?") = "T?"
+verify ivl(log(1/0), "T?") = "T?"
+verify ivl(log(na()), "T?") = "T?"
+verify ivl(log(false()), "T?") = "T?"
+verify ivl(log( true()), "T?") = "T?"
+verify ivl(log(date()), "T?") = "T?"
+verify ivl(log(time()), "T?") = "T?"
+verify ivl(log( now()), "T?") = "T?"
+verify ivl(log("7"), "T?") = "T?"
+verify ivl(log([]), "T?") = "T?"
+
+verify log(-1) = #NUM!
+verify log( 0) = #NUM!
+verify log( 1) = 0
+
+verify log(10) = 1
+verify log(8,2) = 3
+verify abs(log(86, 2.7182818) - 4.45434734288829) < eps
+verify abs(log(4^pi(), 4) - pi()) < eps
+verify log(0,2) = invalid("#NUM!")
+verify log(1,0) = invalid("#NUM!")
+verify log(0, 10) = invalid("#NUM!")
+verify log(10, 10) = 1
+verify log(100,10) = 2
+verify log(10000000000.0, 10) = 10
+verify log(100,1) = invalid("#DIV/0!")
+
+// MDETERM
+// worksheet W[4][4]
+// W :- [[1,1,1,7],[3,3,1,3],[8,6,1,10],[5,1,0,2]];
+// verify mdeterm(W!A1:D4)
+// verify mdeterm({3,6,1;1,1,0;3,10,2})
+// verify mdeterm({3,6;1,1})
+// verify mdeterm({1,3,8,5;1,3,6,1})
+// verify mdeterm(E106:F109)
+// verify mdeterm(E112:F113)
+// verify mdeterm(G112:H113)
+// verify mdeterm(123)
+
+// MINVERT
+
+// MMULT (array[] => array[] => version)
+
+array[] => array[] => double a := [ [1, 0, 0], [0, 2, 0], [0, 0, 3] ];
+array[] => array[] => double b := [ [9, 1, 7], [3, 0, 2], [1, 2, 3] ];
+array[] => array[] => double x := [ [9, 1, 7], [6, 0, 4], [3, 6, 9] ];
+
+:: c := mmult(a, b);
+
+verify c[0][0] = 9
+verify c[0][1] = 1
+verify c[0][2] = 7
+verify c[1][0] = 6
+verify c[1][1] = 0
+verify c[1][2] = 4
+verify c[2][0] = 3
+verify c[2][1] = 6
+verify c[2][2] = 9
+
+verify c[0][0] = 9.0
+verify c[0][1] = 1.0
+verify c[0][2] = 7.0
+verify c[1][0] = 6.0
+verify c[1][1] = 0.0
+verify c[1][2] = 4.0
+verify c[2][0] = 3.0
+verify c[2][1] = 6.0
+verify c[2][2] = 9.0
+
+verify c = [ [9.0, 1.0, 7.0], [6.0, 0.0, 4.0], [3.0, 6.0, 9.0] ]
+
+verify c = [ [9, 1, 7], [6, 0, 4], [3, 6, 9] ]
+
+verify c = x
+
+verify mmult([ [1, 0, 0], [0, 2, 0], [0, 0, 3] ], [ [9, 1, 7], [3, 0, 2], [1, 2, 3] ]) = [ [9, 1, 7], [6, 0, 4], [3, 6, 9] ]
+
+verify mmult(a, b) = c
+
+sys.undefine('a')
+sys.undefine('b')
+sys.undefine('c')
+sys.undefine('x')
+
+// MMULT (array[,] version)
+
+array[,] => double A := [ [1, 0, 0], [0, 2, 0], [0, 0, 3] ];
+array[,] => double B := [ [9, 1, 7], [3, 0, 2], [1, 2, 3] ];
+array[,] => double X := [ [9, 1, 7], [6, 0, 4], [3, 6, 9] ];
+
+array[,] => double C := mmult(A, B);
+
+// verify  C[0,0] = 9
+// verify  C[0,1] = 1
+// verify  C[0,2] = 7
+// verify  C[1,0] = 6
+// verify  C[1,1] = 0
+// verify  C[1,2] = 4
+// verify  C[2,0] = 3
+// verify  C[2,1] = 6
+// verify  C[2,2] = 9
+
+// verify  C[0,0] = 9.0
+// verify  C[0,1] = 1.0
+// verify  C[0,2] = 7.0
+// verify  C[1,0] = 6.0
+// verify  C[1,1] = 0.0
+// verify  C[1,2] = 4.0
+// verify  C[2,0] = 3.0
+// verify  C[2,1] = 6.0
+// verify  C[2,2] = 9.0
+
+// verify  C = [ [9, 1, 7], [6, 0, 4], [3, 6, 9] ]
+
+// verify  C = [ [9.0, 1.0, 7.0], [6.0, 0.0, 4.0], [3.0, 6.0, 9.0] ]
+
+// verify  C = X
+
+// verify mmult([ [1, 0, 0], [0, 2, 0], [0, 0, 3] ], [ [9, 1, 7], [3, 0, 2], [1, 2, 3] ]) = [ [9, 1, 7], [6, 0, 4], [3, 6, 9] ]
+
+sys.undefine('A')
+sys.undefine('B')
+sys.undefine('C')
+sys.undefine('X')
+
+// MOD
+
+verify mod(-3, 10) = 7
+verify mod(-3,-10) = -3
+
+verify abs( 4.3 %  2.1 - 0.1) < eps 
+verify abs( 4.3 % -2.1 + 2.0) < eps
+verify abs(-4.3 %  2.1 - 2.0) < eps
+verify abs(-4.3 % -2.1 + 0.1) < eps
+
+verify abs(mod(1.1, 0.7) - .4) < eps
+verify mod(10,0) = invalid("#DIV/0!")
+verify mod(0,10) = 0
+
+// ODD
+
+verify odd(0.0001) = 1
+verify odd(-0.234) = -1
+verify odd(4.5) = 5
+
+verify ivl(odd(?), "T?") = "T?"
+verify ivl(odd(1/0), "T?") = "T?"
+verify ivl(odd(na()), "T?") = "T?"
+verify ivl(odd(false()), "T?") = "T?"
+verify ivl(odd( true()), "T?") = "T?"
+verify ivl(odd(date()), "T?") = "T?"
+verify ivl(odd(time()), "T?") = "T?"
+verify ivl(odd( now()), "T?") = "T?"
+verify ivl(odd("7"), "T?") = "T?"
+verify ivl(odd([]), "T?") = "T?"
+
+// PI
+verify abs(pi() - 3.14159265358979) < eps
+
+// POWER
+
+verify power(5,2) = 25
+verify power(0,123) = 0
+verify power(0,0) = 1
+verify power(123,0) = 1
+verify abs(power(4,-5/4) - 0.176776695296637) < eps
+verify power(-1, 2.1) = invalid("#NUM!")
+
+// PRODUCT
+
+verify product(0) = 0
+verify product(1) = 1
+verify product([]) = 1
+verify product(1,  2,  3,  4) = 24
+verify product(1, -2,  3, -4) = 24
+verify product(1.0, -2,  3, -4) = 24
+verify product(1.0, -2,  3, -4) = 24.0
+verify product(1.0, -2.0,  3.0, -4.0) = 24
+verify product(1.0, -2.0,  3.0, -4.0) = 24.0
+verify product(1, 2, "Non numeric is ignored", []) = 2
+
+// QUOTIENT
+
+verify quotient(42,0) = invalid("#DIV/0!")
+verify quotient(0,42) = 0
+verify quotient(1, 1) = 1
+verify quotient(42, 1) = 42
+verify quotient(1, 42) = 0
+verify quotient(42, 42) = 1
+verify quotient(100,  9) = 11
+verify quotient(100, 10) = 10
+verify quotient(100, 11) =  9
+verify quotient(-100,  9) = -11
+verify quotient(-100, 10) = -10
+verify quotient(-100, 11) =  -9
+verify quotient(100,  -9) = -11
+verify quotient(100, -10) = -10
+verify quotient(100, -11) =  -9
+verify quotient(-100,  -9) = 11
+verify quotient(-100, -10) = 10
+verify quotient(-100, -11) =  9
+
+// RADIANS
+
+verify abs(radians(180) - pi()) < eps
+verify abs(radians(30) - asin(1/2)) < eps
+verify abs(radians(-360) + 2*pi()) < eps
+verify abs(radians(57295.7795130823) - 1000) < eps
+
+verify ivl(radians(?), "T?") = "T?"
+verify ivl(radians(1/0), "T?") = "T?"
+verify ivl(radians(na()), "T?") = "T?"
+verify ivl(radians(false()), "T?") = "T?"
+verify ivl(radians( true()), "T?") = "T?"
+verify ivl(radians(date()), "T?") = "T?"
+verify ivl(radians(time()), "T?") = "T?"
+verify ivl(radians( now()), "T?") = "T?"
+verify ivl(radians("7"), "T?") = "T?"
+verify ivl(radians([]), "T?") = "T?"
+
+// ROMAN
+
+// verify roman(499,0) = "CDXCIX"
+// verify roman(499,1) = "LDVLIV"
+// verify roman(499,2) = "XDIX"
+// verify roman(499,3) = "VDIV"
+// verify roman(499,4) = "ID"
+// verify roman(499,  true()) = "CDXCIX"
+// verify roman(499, false()) = "ID"
+// verify roman(2013) = "MMXIII"
+// verify roman(-1) = invalid("#VALUE!")
+// verify roman(12345) = invalid("#VALUE!")
+
+// ROUND
+
+double a := 0.123456789;
+
+verify round(1234.567, 2) = 1234.57
+verify round(1234.567, -2) = 1200
+verify round(-1234.567, -1) = -1230
+verify round(-0.123, 4) = -0.123
+verify round(round(round(round(1.445,3),2),1),0) = 2
+verify round(a, 3) = 0.123
+verify round(a, 4) = 0.1235
+verify round(a, 5) = 0.12346
+
+// ROUNDDOWN
+
+verify rounddown(a, 3) = 0.123
+verify rounddown(a, 4) = 0.1234
+verify rounddown(a, 5) = 0.12345
+
+// ROUNDUP
+
+verify roundup(a, 2) = 0.13
+verify roundup(a, 3) = 0.124
+verify roundup(a, 4) = 0.1235
+verify roundup(a, 5) = 0.12346
+
+sys.undefine('a')
+
+// SIGN
+
+verify sign(0) = 0
+verify sign(-0.123324) = -1
+verify sign(12353) = 1
+
+verify ivl(sign(?), "T?") = "T?"
+verify ivl(sign(1/0), "T?") = "T?"
+verify ivl(sign(na()), "T?") = "T?"
+verify ivl(sign(false()), "T?") = "T?"
+verify ivl(sign( true()), "T?") = "T?"
+verify ivl(sign(date()), "T?") = "T?"
+verify ivl(sign(time()), "T?") = "T?"
+verify ivl(sign( now()), "T?") = "T?"
+verify ivl(sign("7"), "T?") = "T?"
+verify ivl(sign([]), "T?") = "T?"
+
+// SIN
+
+verify sin(pi()/2) = 1
+verify abs(sin(pi())) < eps
+verify abs(sin(30*pi()/180) - 0.5) < eps
+verify abs(sin(radians(30)) - 0.5) < eps
+
+verify ivl(sin(?), "T?") = "T?"
+verify ivl(sin(1/0), "T?") = "T?"
+verify ivl(sin(na()), "T?") = "T?"
+verify ivl(sin(false()), "T?") = "T?"
+verify ivl(sin( true()), "T?") = "T?"
+verify ivl(sin(date()), "T?") = "T?"
+verify ivl(sin(time()), "T?") = "T?"
+verify ivl(sin( now()), "T?") = "T?"
+verify ivl(sin("7"), "T?") = "T?"
+verify ivl(sin([]), "T?") = "T?"
+
+// SINH
+
+verify abs(sinh(-1) + 1.1752011936438) < eps
+verify abs(sinh(1) + sinh(-1)) < eps
+verify abs(sinh(1.44363547517881) - 2) < eps
+verify abs(sinh(0)) < eps
+
+verify ivl(sinh(?), "T?") = "T?"
+verify ivl(sinh(1/0), "T?") = "T?"
+verify ivl(sinh(na()), "T?") = "T?"
+verify ivl(sinh(false()), "T?") = "T?"
+verify ivl(sinh( true()), "T?") = "T?"
+verify ivl(sinh(date()), "T?") = "T?"
+verify ivl(sinh(time()), "T?") = "T?"
+verify ivl(sinh( now()), "T?") = "T?"
+verify ivl(sinh("7"), "T?") = "T?"
+verify ivl(sinh([]), "T?") = "T?"
+
+// SQRT
+
+verify sqrt(0) = 0
+verify sqrt(1/4) = .5
+verify sqrt(-1) = invalid("#NUM!")
+verify sqrt(256) = 16
+verify abs(sqrt(123.456) - 11.1110755554987) < eps
+
+verify ivl(sqrt(?), "T?") = "T?"
+verify ivl(sqrt(1/0), "T?") = "T?"
+verify ivl(sqrt(na()), "T?") = "T?"
+verify ivl(sqrt(false()), "T?") = "T?"
+verify ivl(sqrt( true()), "T?") = "T?"
+verify ivl(sqrt(date()), "T?") = "T?"
+verify ivl(sqrt(time()), "T?") = "T?"
+verify ivl(sqrt( now()), "T?") = "T?"
+verify ivl(sqrt("7"), "T?") = "T?"
+verify ivl(sqrt([]), "T?") = "T?"
+
+// SUBTOTAL
+
+// SUM
+
+array[] => int I := [0, 1, 2, 3];
+verify sum(I) = 6
+verify sum(I[1..2]) = 3
+
+var A := [0, 1, 2, 3];
+verify sum(A) = 6
+verify sum(A[1..2]) = 3
+
+var B :- [ -5, 15, 30, "5", true() ];
+
+verify sum(3, 2) = 5
+verify sum(value("5"), [10, 5], true()) = 20
+verify sum(B) = 40
+verify sum(B, 15) = 55
+verify sum(value(B[3]), B[3], B[4], 2) = 7
+verify sum([1,2,3], 1, B[0], B[1]) = 17
+
+sys.undefine('I')
+sys.undefine('A')
+sys.undefine('B')
+
+// SUMIF
+
+array[] => int t := [ 0,  1,  2,  3];
+array[] => int v := [10, 11, 12, 13];
+
+lazy var zs :- sumif(t, criteria, v);
+
+string criteria := ">= 0";
+verify zs = 10 + 11 + 12 + 13
+
+criteria := "> 0";
+verify zs = 11 + 12 + 13
+
+criteria := "> 1";
+verify zs = 12 + 13
+
+criteria := "> 2";
+verify zs = 13
+
+criteria := "> 3";
+verify zs = 0
+
+sys.undefine('t')
+sys.undefine('v')
+sys.undefine('zs')
+sys.undefine('criteria')
+
+//
+
+var A :- [[100000,200000,300000,400000, "Hello", 0.001], [7000, 14000, 21000, 28000, 1=1, 0.001]];
+
+verify sumif(A[0], ">160000", A[1]) = 63000
+verify sumif(A[0], ">160000", A[0]) = 900000
+verify sumif(A[0],  "200000", A[1]) = 14000
+verify sumif(A[1],  ">15000", A[0]) = 700000
+verify sumif(A[1],  ">15000", A[1]) = 49000
+
+
+sys.undefine('A')
+
+// SUMPRODUCT
+
+// @@ add tests for type and dimension checking
+
+verify sumproduct([]) = 0.0
+verify sumproduct([0, 1, 2, 3]) = 6.0
+verify sumproduct([0, 1, 2, 3], [0, 1, 2, 3]) = 14.0
+verify sumproduct([0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3]) = 36.0
+
+//
+
+var A :- [[1,2,3,4],[4,5,6,7]];
+var x :- [1,2,3,4];
+var y :- [4,5,6,7];
+
+// SUMSQ
+
+verify sumsq(0,1,2,3,4) = 30
+verify abs(sumsq(A[0]   )) = 30
+verify abs(sumsq(A[0], 3)) = 39
+verify sumsq(true, 3, A[0]) = 39
+verify sumsq(2,3,5) = 38
+verify sumsq([2,3,5]) = 38
+
+// SUMX2MY2
+
+verify sumx2my2([], []) = 0
+verify sumx2my2(x, y) = -96
+verify sumx2my2(y, A[0]) = 96
+verify sumx2my2(A, A) = 0
+verify sumx2my2([1], [4]) = -15
+verify ivl(sumx2my2([], [1]), "V?") = "V?"
+
+// SUMX2PY2
+
+verify sumx2py2([], []) = 0
+verify sumx2py2(x, y) = 156
+verify sumx2py2(y, A[0]) = 156
+verify sumx2py2(A[0], x) = 60
+verify sumx2py2([1], [4]) = 17
+verify ivl(sumx2py2([], [1]), "V?") = "V?"
+
+// SUMXMY2
+
+verify sumxmy2([], []) = 0
+verify sumxmy2(x, y) = 36
+verify sumxmy2(y, A[0]) = 36
+verify sumxmy2(A[0], x) = 0
+verify sumxmy2([1], [4]) = 9
+verify ivl(sumxmy2([], [1]), "V?") = "V?"
+
+sys.undefine('A')
+sys.undefine('x')
+sys.undefine('y')
+
+// TAN
+
+verify abs(tan(pi()/4) - 1) < eps
+verify tan(0) = 0
+verify abs(tan(123.123) - 0.685439033424731) < eps
+
+verify ivl(tan(?), "T?") = "T?"
+verify ivl(tan(1/0), "T?") = "T?"
+verify ivl(tan(na()), "T?") = "T?"
+verify ivl(tan(false()), "T?") = "T?"
+verify ivl(tan( true()), "T?") = "T?"
+verify ivl(tan(date()), "T?") = "T?"
+verify ivl(tan(time()), "T?") = "T?"
+verify ivl(tan( now()), "T?") = "T?"
+verify ivl(tan("7"), "T?") = "T?"
+verify ivl(tan([]), "T?") = "T?"
+
+// TANH
+
+verify abs(tanh(-1) + 0.761594155955765) < eps
+verify abs(tanh(1) + tanh(-1)) < eps
+verify abs(tanh(0.549306144334055) - 0.5) < eps
+verify tanh(0) = 0
+
+verify ivl(tanh(?), "T?") = "T?"
+verify ivl(tanh(1/0), "T?") = "T?"
+verify ivl(tanh(na()), "T?") = "T?"
+verify ivl(tanh(false()), "T?") = "T?"
+verify ivl(tanh( true()), "T?") = "T?"
+verify ivl(tanh(date()), "T?") = "T?"
+verify ivl(tanh(time()), "T?") = "T?"
+verify ivl(tanh( now()), "T?") = "T?"
+verify ivl(tanh("7"), "T?") = "T?"
+verify ivl(tanh([]), "T?") = "T?"
+
+// TRUNC
+
+lazy double a :- 0.123456789;
+
+verify trunc(a, 0) = 0
+verify trunc(a, 1) = 0.1
+verify trunc(a, 2) = 0.12
+verify trunc(a, 3) = 0.123
+
+sys.undefine('a')
+
+// xcarlos.sym tests
+
+// GCD
+
+verify gcd([96, 33, 63, 15, 123, 30]) = 3
+verify gcd([13, 23, 57]) = 1
+verify gcd([32, 64, 512, 1024]) = 32
+verify gcd([32, 64, 512, 1024, 0]) = 32
+verify gcd([123]) = 123
+verify gcd([-2, 3, -4]) = #NUM!
+
+
+// LCM
+
+verify lcm([5,7,9]) = 315
+verify lcm([64,845,954,154,584]) = 145000215360.0
+verify lcm([64,845,954,154,584,0]) = 0
+verify lcm([32]) = 32
+verify lcm([-5,7,9]) = #NUM!
+
+// MROUND
+
+verify abs(mround(2.3434, 0.123) - 2.3370) <= eps
+verify abs(mround(159.874587, 0.1014) - 159.907800) <= eps
+verify abs(mround(-0.00157464, -0.0000545) - (-0.0015805)) <= eps
+verify mround(0.00157464, -0.0000545) = #NUM!
+verify mround(-0.00157464, 0.0000545) = #NUM!
+
+
+// MULTINOMIAL
+
+verify abs(multinomial([1,2,4,8]) - 675675) <= eps
+verify abs(multinomial([5,3,2,10]) - 465585120) <= eps
+verify multinomial([-5,3,2,10]) = #NUM!
+
+
+// SERIESSUM
+
+verify abs(seriessum( 2,  1,  2, [1,2,3,4,5]  ) -   3186 )   <= eps 
+verify abs(seriessum( 2,  1,  2, [1,-2,3,-4,5]) -   2130 )   <= eps 
+verify abs(seriessum(-2,  1,  2, [1,-2,3,-4,5]) - (-2130))   <= eps 
+verify abs(seriessum( 2, -1,  2, [1,-2,3,-4,5]) -   532.5)   <= eps 
+verify abs(seriessum( 2,  1, -2, [1,-2,3,-4,5]) - 1.2890625) <= eps
+
+// Grand Finale!
+
+sys.undefine('eps');
+
+verify symbols() = []
+
+verify true
+
+
+
+.
+var B :- [[ 0, 1, 2, 3], [10, 20, 30, 40]];
+
+lazy var criteria :- ">= xp";
+
+lazy var zs :- sumif(B[0], criteria, B[1]);
+
+lazy var xp :- 0;
+verify zs = 100.0
+
+xp :- 2;
+verify zs = 70.0
+sys.undefine('B')
+sys.undefine('criteria')
+sys.undefine('zs')
+sys.undefine('xp')
+
+.
+// @@ JL: Javascript parsing problem. ">= xp" is a non-trivial criteria
+var B :- [[ 0, 1, 2, 3], [10, 20, 30, 40]];
+
+lazy var criteria :- ">= xp";
+
+lazy var zs :- sumif(B[0], criteria, B[1]);
+
+lazy var xp :- 0;
+verify zs = 100.0
+
+xp :- 2;
+verify zs = 70.0
+sys.undefine('B')
+sys.undefine('criteria')
+sys.undefine('zs')
+sys.undefine('xp')

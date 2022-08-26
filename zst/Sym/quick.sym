@@ -5,12 +5,19 @@
 echo off
 
 run info
-run logical
+run basic
+run boolean
 run tuple
+run struct
+run table
 run 1D
 run 2D
 run 3D
+run inference
 run lazy
+run undefined
+run logical
+run math
 run lambda
 run closure
 run sort

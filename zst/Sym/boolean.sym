@@ -1,0 +1,94 @@
+////
+/// boolean.sym
+///
+/// ZenVM test suite for boolean values
+///
+
+//
+
+sys.reset();
+
+verify true
+verify true()
+
+verify not(false)
+verify not(false())
+
+bool T := true;
+bool F := false;
+
+verify   T || T
+verify   T || F
+verify   F || T
+verify !(F || F)
+
+verify   T && T
+verify !(T && F)
+verify !(F && T)
+verify !(F && F)
+
+//
+
+sys.reset();
+
+lazy var f :- false;
+lazy var t :- true;
+
+verify t
+verify not(f)
+
+//
+
+sys.reset();
+
+lazy var f;
+lazy var t;
+
+f :- false;
+t :- true;
+
+verify t
+verify not(f)
+
+//
+
+sys.reset();
+
+var f := false;
+var t := true;
+
+verify t
+verify not(f)
+
+//
+
+sys.reset();
+
+var f;
+var t;
+
+f := false;
+t := true;
+
+verify t
+verify not(f)
+
+//
+
+sys.reset();
+
+lazy var x :- true;
+verify x
+
+lazy var y :- false;
+verify not(y)
+
+verify x <> y
+verify !x = y
+verify x = !y
+
+// Boolean algebra and other logical function tests in logical.sym
+
+//
+
+verify true

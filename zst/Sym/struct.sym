@@ -1,0 +1,894 @@
+///
+/// struct.sym
+///
+
+//
+
+sys.reset();
+
+:: px := struct{var first; var second;}(0, "zero");
+
+verify px[0] = 0
+verify px[1] = "zero"
+
+px[0] := 1;
+px[1] := "one";
+
+verify px[0] = 1
+verify px[1] = "one"
+
+//
+
+sys.reset();
+
+:: px := struct{var first; var second;}(0, "zero");
+
+verify px.first  = 0
+verify px.second = "zero"
+
+px[0] := 1;
+px[1] := "one";
+
+verify px.first  = 1
+verify px.second = "one"
+
+//
+
+sys.reset();
+
+:: px := struct{var first; var second;}(0, "zero");
+
+verify px.first  = 0
+verify px.second = "zero"
+
+px.first  := 1;
+px.second := "one";
+
+verify px.first  = 1
+verify px.second = "one"
+
+//
+
+sys.reset();
+
+:: px := struct{var first; var second;}(0, "zero");
+
+verify px.first  = 0
+verify px.second = "zero"
+
+px := (1, "one");
+
+verify px.first  = 1
+verify px.second = "one"
+
+px := (0, "zero");
+
+verify px.first  = 0
+verify px.second = "zero"
+
+//
+
+sys.reset();
+
+:: px := struct{var first; var second;}(0, "zero");
+
+verify | symbols() | = 1
+
+:: py := struct{var first; var second;}(0, "zero");
+
+verify | symbols() | = 2
+
+verify px = struct{var first; var second;}(0, "zero")
+verify py = struct{var first; var second;}(0, "zero")
+
+verify | symbols() | = 2
+
+verify px = py
+verify px.first = py.first
+verify px.second = py.second
+
+verify | symbols() | = 2
+
+//
+
+sys.reset();
+
+:: px := struct{var first; var second;}(0, "zero");
+:: py := struct{var first; var second;}(1,  "one");
+
+verify px.first  = 0
+verify px.second = "zero"
+
+px := py;
+
+verify px.first  = 1
+verify px.second = "one"
+
+px := (0, "zero");
+
+verify px.first  = 0
+verify px.second = "zero"
+
+//
+
+sys.reset();
+
+:: px := struct{var first; var second;}(0, "zero");
+
+verify px.first  = 0
+verify px.second = "zero"
+
+:: py := struct{var first; var second;}(1,  "one");
+px := py;
+
+verify px.first  = 1
+verify px.second = "one"
+
+px := (0, "zero");
+
+verify px.first  = 0
+verify px.second = "zero"
+
+//
+
+sys.reset();
+
+:: p0 := struct{var first; var second;}(0, "zero");
+:: p1 := struct{var first; var second;}(1, "one");
+
+:: pt := p0;
+p0 := p1;
+p1 := pt;
+
+verify p0[0] = 1
+verify p0[1] = "one"
+verify p0.first = 1
+verify p0.second = "one"
+
+verify p1[0] = 0
+verify p1[1] = "zero"
+verify p1.first = 0
+verify p1.second = "zero"
+
+//
+
+sys.reset();
+
+struct { string s; bool b; int i; double x; } t1 := ("test", false, 0, 0.0);
+struct { string; bool; int; double; } t2 := ("test", false, 0, 0.0);
+
+verify t1 = ("test", false, 0, 0.0)
+verify t2 = ("test", false, 0, 0.0)
+verify t1 = t2
+
+verify t1[0] = "test"
+verify t1[1] = false
+verify t1[2] = 0
+verify t1[3] = 0.0
+
+verify t2[0] = "test"
+verify t2[1] = false
+verify t2[2] = 0
+verify t2[3] = 0.0
+
+verify t1.s = "test"
+verify t1.b = false
+verify t1.i = 0
+verify t1.x = 0.0
+
+//
+
+sys.reset();
+
+:: x := 0.0;
+
+struct { string f; lazy double x; lazy double x2; lazy double x3; } tf1 := ("tf1", 'x', 'x^2', 'x^3');
+struct { string; lazy double; lazy double; lazy double; } tt1 := ("tf1", 'x', 'x^2', 'x^3');
+
+verify tf1 = ("tf1", x, x^2, x^3)
+verify tt1 = ("tf1", x, x^2, x^3)
+verify tt1 = tf1
+
+verify tf1[0] = "tf1"
+verify tf1[1] = 0.0
+verify tf1[2] = 0.0
+verify tf1[3] = 0.0
+
+verify tf1.f  = "tf1"
+verify tf1.x  = 0.0
+verify tf1.x2 = 0.0
+verify tf1.x3 = 0.0
+
+x := 8;
+
+verify tf1 = ("tf1", x, x^2, x^3)
+verify tt1 = ("tf1", x, x^2, x^3)
+verify tt1 = tf1
+
+verify tf1[0] = "tf1"
+verify tf1[1] =   8.0
+verify tf1[2] =  64.0
+verify tf1[3] = 512.0
+
+verify tf1.f  = "tf1"
+verify tf1.x  =   8.0
+verify tf1.x2 =  64.0
+verify tf1.x3 = 512.0
+
+//
+
+sys.reset();
+
+:: p0 := struct{var first; var second;}(0, "zero");
+:: p1 := struct{var first; var second;}(1, "one");
+
+verify p0[0] = 0
+verify p0[1] = "zero"
+verify p0.first = 0
+verify p0.second = "zero"
+
+verify p1[0] = 1
+verify p1[1] = "one"
+verify p1.first = 1
+verify p1.second = "one"
+
+p0[0] := 1;
+p0[1] := "one";
+
+p1.first := 0;
+p1.second := "zero";
+
+verify p0[0] = 1
+verify p0[1] = "one"
+verify p0.first = 1
+verify p0.second = "one"
+
+verify p1[0] = 0
+verify p1[1] = "zero"
+verify p1.first = 0
+verify p1.second = "zero"
+
+//
+
+sys.reset();
+
+:: p0 := struct{var first; var second;}(0, "zero");
+:: p1 := struct{var first; var second;}(0, "zero");
+:: p2 := p1;
+
+verify p0 = p1
+verify p1 = p2
+verify p2 = p0
+
+p1 := struct{var first; var second;}(1, "one");
+p2 := struct{var first; var second;}(2, "two");
+
+verify p0[0] = 0
+verify p0[1] = "zero"
+verify p0.first = 0
+verify p0.second = "zero"
+
+verify p1[0] = 1
+verify p1[1] = "one"
+verify p1.first = 1
+verify p1.second = "one"
+
+verify p2[0] = 2
+verify p2[1] = "two"
+verify p2.first = 2
+verify p2.second = "two"
+
+//
+
+sys.reset();
+
+:: p0 := struct{var first; var second;}(0, "zero");
+:: p1 := struct{var first; var second;}(1, "one");
+
+verify p0 = struct{var first; var second;}(0, "zero")
+verify p1 = struct{var first; var second;}(1, "one")
+
+var pt := p0;
+
+verify p0 = struct{var first; var second;}(0, "zero")
+verify p1 = struct{var first; var second;}(1, "one")
+verify pt = struct{var first; var second;}(0, "zero")
+
+p0 := p1;
+
+verify p0 = struct{var first; var second;}(1, "one")
+verify p1 = struct{var first; var second;}(1, "one")
+verify pt = struct{var first; var second;}(0, "zero")
+
+p1 := pt;
+
+verify p0 = struct{var first; var second;}(1, "one")
+verify p1 = struct{var first; var second;}(0, "zero")
+verify pt = struct{var first; var second;}(0, "zero")
+
+sys.undefine('pt')
+
+verify p0 = struct{var first; var second;}(1, "one")
+verify p1 = struct{var first; var second;}(0, "zero")
+
+verify | symbols() | = 2
+
+//
+
+sys.reset();
+
+:: p0 := struct{var first; var second;}(0, "zero");
+:: p1 := struct{var first; var second;}(1, "one");
+
+verify p0[0] = 0
+verify p0[1] = "zero"
+verify p0.first = 0
+verify p0.second = "zero"
+
+verify p1[0] = 1
+verify p1[1] = "one"
+verify p1.first = 1
+verify p1.second = "one"
+
+var pt := p0;
+p0 := p1;
+p1 := pt;
+
+verify p0[0] = 1
+verify p0[1] = "one"
+verify p0.first = 1
+verify p0.second = "one"
+
+verify p1[0] = 0
+verify p1[1] = "zero"
+verify p1.first = 0
+verify p1.second = "zero"
+
+//
+
+sys.reset();
+
+:: A := [
+	struct{var first; var second;}( 0, "zero"  ),
+	struct{var first; var second;}( 1, "one"   )
+];
+
+verify | A | = 2
+
+verify A[0] = struct{var first; var second;}( 0, "zero"  )
+verify A[0].first  = 0
+verify A[0].second = "zero"
+
+verify A[1] = struct{var first; var second;}( 1, "one"  )
+verify A[1].first  = 1
+verify A[1].second = "one"
+
+//
+
+sys.reset();
+
+:: A := [
+	struct { var first; var second; }( 0, "zero"  ),
+	struct { var first; var second; }( 1, "one"   ),
+	struct { var first; var second; }( 2, "two"   ),
+	struct { var first; var second; }( 3, "three" ),
+	struct { var first; var second; }( 4, "four"  ),
+	struct { var first; var second; }( 5, "five"  ),
+	struct { var first; var second; }( 6, "six"   ),
+	struct { var first; var second; }( 7, "seven" )
+];
+
+verify | A | = 8
+
+verify A[0] = struct { var first; var second; }( 0, "zero"  )
+verify A[0].first  = 0
+verify A[0].second = "zero"
+
+verify A[7] = struct { var first; var second; }( 7, "seven"  )
+verify A[7].first  = 7
+verify A[7].second = "seven"
+
+:: x42 := struct { var first; var second; }( 42, "forty two" );
+:: x67 := struct { var first; var second; }( 67, "sixty seven" );
+
+A[0] := x42;
+A[7] := x42;
+
+verify A[0] = x42
+verify A[0] = struct { var first; var second; }( 42, "forty two"  )
+verify A[7] = x42
+verify A[7] = struct { var first; var second; }( 42, "forty two"  )
+verify A[0] = A[7]
+
+A[7].first  := 67;
+A[7].second := "sixty seven";
+
+verify A[7] <> x42
+verify A[7] = x67
+
+//
+
+sys.reset();
+
+:: A := [
+	struct { int first; string second; }( 0, "zero"  ),
+	struct { int first; string second; }( 1, "one"   ),
+	struct { int first; string second; }( 2, "two"   ),
+	struct { int first; string second; }( 3, "three" ),
+	struct { int first; string second; }( 4, "four"  ),
+	struct { int first; string second; }( 5, "five"  ),
+	struct { int first; string second; }( 6, "six"   ),
+	struct { int first; string second; }( 7, "seven" )
+];
+
+verify | A | = 8
+
+verify A[0] = struct { int first; string second; }( 0, "zero"  )
+verify A[0].first  = 0
+verify A[0].second = "zero"
+
+verify A[7] = struct { int first; string second; }( 7, "seven"  )
+verify A[7].first  = 7
+verify A[7].second = "seven"
+
+:: x42 := struct { int first; string second; }( 42, "forty two" );
+:: x67 := struct { int first; string second; }( 67, "sixty seven" );
+
+A[0] := x42;
+A[7] := x42;
+
+verify A[0] = x42
+verify A[0] = struct { int first; string second; }( 42, "forty two"  )
+verify A[7] = x42
+verify A[7] = struct { int first; string second; }( 42, "forty two"  )
+verify A[0] = A[7]
+
+A[7].first  := 67;
+A[7].second := "sixty seven";
+
+verify A[7] <> x42
+verify A[7] = x67
+
+//
+
+sys.reset();
+
+:: A := [
+	struct{var first; var second;}( 0, "zero" )
+];
+
+verify A[0].first = 0
+verify A[0].second = "zero"
+verify A[0] = struct{var first; var second;}( 0, "zero" )
+
+A[0] := struct{var first; var second;}( 1, "one" );
+
+verify A[0].first = 1
+verify A[0].second = "one"
+verify A[0] = struct{var first; var second;}( 1, "one" )
+
+A[0].first := 2;
+A[0].second := "two";
+
+verify A[0].first = 2
+verify A[0].second = "two"
+verify A[0] = struct{var first; var second;}( 2, "two" )
+
+//
+
+sys.reset();
+
+:: A := [
+	struct{var first; var second;}( 0, "zero" ),
+	struct{var first; var second;}( 1, "one" ),
+	struct{var first; var second;}( 2, "two" )
+];
+
+verify A[0].first = 0
+verify A[0].second = "zero"
+verify A[0] = struct{var first; var second;}( 0, "zero" )
+
+verify A[1].first = 1
+verify A[1].second = "one"
+verify A[1] = struct{var first; var second;}( 1, "one" )
+
+verify A[2].first = 2
+verify A[2].second = "two"
+verify A[2] = struct{var first; var second;}( 2, "two" )
+
+:: t := A[0];
+A[0] := A[1];
+A[1] := A[2];
+A[2] := t;
+
+verify A[0].first = 1
+verify A[0].second = "one"
+verify A[0] = struct{var first; var second;}( 1, "one" )
+
+verify A[1].first = 2
+verify A[1].second = "two"
+verify A[1] = struct{var first; var second;}( 2, "two" )
+
+verify A[2].first = 0
+verify A[2].second = "zero"
+verify A[2] = struct{var first; var second;}( 0, "zero" )
+
+//
+
+sys.reset();
+
+var x := (8, 3);
+:: y := (8, 3);
+
+verify rtype(x) = var
+verify rtype(y) = struct { int; int; }
+
+verify x = y
+
+x := (8, 3);
+
+verify x = y
+
+y := (7, 4);
+x := y;
+
+verify x = y
+
+y[0] := 6;
+y[1] := 5;
+x := y;
+
+verify x = y
+
+x := (5, 6);
+y := x;
+
+verify x = y
+
+x := (4, 7);
+y[0] := x[0];
+y[1] := x[1];
+
+verify x = y
+
+//
+
+sys.reset();
+
+// Explicit struct declaration using tuple for initialization
+
+struct { int first; string second; } x1 := (1, "one");
+
+// Equivalent example using type inference and struct type constructor applied to tuple as initializer
+
+:: x2 := struct { int first; string second; }(1, "one");
+
+// Corresponding tuple declarations/initializations: tuples are structs with nameless fields
+
+struct { int; string; } x3 := (1, "one");
+
+// As above using type inference and struct with nameless fields constructor
+
+:: x4 := struct { int; string; }(1, "one");
+
+// As above, using minimal tuple notation
+
+:: x5 := (1, "one");
+
+verify x1 = x2
+verify x2 = x3
+verify x3 = x4
+verify x4 = x5
+
+// These are currently not supported
+// verify x2 = struct { int first; string second; }(x3)
+// verify x5 = (struct { int; string; }) x1
+// verify struct { int; string; } x2 = x3
+// verify (struct { int first; string second; }) x5 = x1
+
+// BREAK
+
+.
+
+//
+// Named types not yet implemented
+//
+// WATCH OUT: the name Pair here causes the next test (table.sym) to crash, even after sys.reset()!!!
+//
+
+type Pair := struct { int first; string second; };
+
+Pair x6 := Pair(1, "one");
+Pair x7 := (1, "one");
+:: x8 := Pair(1, "one");
+
+//
+// arrays of structs and tuples
+//
+
+// general array type declaration: array[] => <T> where <T> is the element type
+
+// some examples, where fields have names, so you can use a[i].first and a[i].second
+
+array[] => struct { int first; string second; } a1 := [(1, "one"), (2, "two")];
+
+array[] => Pair a2 := [(1, "one"), (2, "two")];
+
+:: a3 := [Pair(1, "one"), Pair(2, "two")];
+
+// some examples with nameless fields (arrays of tuples)
+
+array[] => struct { int; string; } a4 := [(1, "one"), (2, "two")];
+
+:: a5 := [(1, "one"), (2, "two")];
+
+//
+// some examples using struct with nested struct
+//
+
+struct { int number; struct { string english; string spanish; }; } q1 := ( 1, ("one", "uno"));
+
+:: q2 := struct { int number; struct { string english; string spanish; }; }( 1, ("one", "uno"));
+
+type Translation := struct { int number; struct { string english; string spanish; }; };
+
+:: q3 := Translation(1, ("one", "uno"));
+
+// array of Translations
+
+array[] => Translation aq := [( 1, ("one", "uno")), ( 2, ("two", "dos"))];
+
+:: aq := [
+	Translation( 0, (  "zero",    "cero")),
+	Translation( 1, (   "one",     "uno")),
+	Translation( 2, (   "two",     "dos")),
+	Translation( 3, ( "three",    "tres")),
+	Translation( 4, (  "four",  "cuatro")),
+	Translation( 5, (  "five",   "cinco")),
+	Translation( 6, (   "six",    "seis")),
+	Translation( 7, ( "seven",   "siete")),
+	Translation( 8, ( "eight",    "ocho")),
+	Translation( 9, (  "nine",   "nueve"))
+];
+
+//
+
+sys.reset();
+
+type pair :- struct {
+	var first;
+	var second;
+};
+
+:: pair0 := pair(0, "zero");
+:: pair1 := pair(1,  "one");
+
+verify pair0[0] = 0
+verify pair0[1] = "zero"
+
+verify pair1[0] = 1
+verify pair1[1] = "one"
+
+verify pair0.first = 0
+verify pair0.second = "zero"
+
+verify pair1.first = 1
+verify pair1.second = "one"
+
+//
+
+sys.reset();
+
+type pair :- struct {
+	var first;
+	var second;
+};
+
+:: p0 := pair(0, "zero");
+:: p1 := pair(1,  "one");
+
+verify p0[0] = 0
+verify p0[1] = "zero"
+
+verify p1[0] = 1
+verify p1[1] = "one"
+
+verify p0.first = 0
+verify p0.second = "zero"
+
+verify p1.first = 1
+verify p1.second = "one"
+
+p0.first := 1;
+p0.second := "one";
+
+verify p0.first = 1
+verify p0.second = "one"
+verify p0 = p1
+
+//
+
+sys.reset();
+
+type pair :- struct {
+	int first;
+	string second;
+};
+
+:: p0 := pair(0, "zero");
+:: p1 := pair(1,  "one");
+
+verify p0[0] = 0
+verify p0[1] = "zero"
+
+verify p1[0] = 1
+verify p1[1] = "one"
+
+verify p0.first = 0
+verify p0.second = "zero"
+
+verify p1.first = 1
+verify p1.second = "one"
+
+p0.first := 1;
+p0.second := "one";
+
+verify p0.first = 1
+verify p0.second = "one"
+verify p0 = p1
+
+//
+
+sys.reset();
+
+type Box :- struct {
+	var stuff;
+};
+
+verify Box(0) = Box(0)
+
+:: box := Box(0);
+verify box = box
+verify box = Box(0)
+verify box.stuff = 0
+
+box := Box("zero");
+verify box = box
+verify box = Box("zero")
+verify box.stuff = "zero"
+
+box.stuff := 0;
+verify box.stuff = 0
+verify box[0] = 0
+box[0] := "zero";
+verify box.stuff = "zero"
+verify box[0] = "zero"
+
+//
+
+sys.reset();
+
+type pair :- struct {
+	var first;
+	var second;
+};
+
+:: p0 := pair(0, "zero");
+:: p1 := pair(1,  "one");
+
+verify p0[0] = 0
+verify p0[1] = "zero"
+
+verify p1[0] = 1
+verify p1[1] = "one"
+
+p0[0] := 1;
+p0[1] := "one";
+
+verify p0[0] = 1
+verify p0[1] = "one"
+
+verify pair0 = pair1
+
+//
+
+sys.reset();
+
+type pair :- struct {
+	int first;
+	string second;
+};
+
+:: pair0 := pair(0, "zero");
+:: pair1 := pair(1,  "one");
+
+verify pair0[0] = 0
+verify pair0[1] = "zero"
+
+verify pair1[0] = 1
+verify pair1[1] = "one"
+
+//
+
+sys.reset();
+
+:: x1 := (1, "one");
+
+:: x2 := struct { int; string; }(1, "one");
+
+verify x1 = x2
+
+:: x3 := struct { int first; string second; }(1, "one");
+
+verify x2 <> x3
+
+:: x4 := struct { int first; string second; }(1, "one");
+
+verify x3 = x4
+
+type Pair :- struct {
+	int first;
+	string second;
+};
+
+:: x5 := Pair(1, "one");
+
+verify x4 = x5
+
+//
+
+sys.reset();
+
+type pair :- struct {
+	var first;
+	var second;
+};
+
+:: pair0 := pair( 0, "zero" );
+
+:: tuple3 := ( 0, "zero", pair0 );
+
+verify tuple3[2] = pair0
+
+//
+
+sys.reset();
+
+struct { string s; bool b; int i; double x; } s0 := ("tuple", false, 0, 0.0);
+struct { string  ; bool  ; int  ; double  ; } t0 := ("tuple", false, 0, 0.0);
+struct { string  ; bool  ; int  ; double  ; } tx := ("tuple", false, 0, 0.0);
+struct { string  ; bool  ; int  ; double  ; } tz := t0;
+
+verify s0[0] = "tuple"
+verify s0[1] = false
+verify s0[2] = 0
+verify s0[3] = 0.0
+
+verify s0.s = "tuple"
+verify s0.b = false
+verify s0.i = 0
+verify s0.x = 0.0
+
+verify t0[0] = "tuple"
+verify t0[1] = false
+verify t0[2] = 0
+verify t0[3] = 0.0
+
+verify tz[0] = "tuple"
+verify tz[1] = false
+verify tz[2] = 0
+verify tz[3] = 0.0
+
+verify s0 <> t0
+verify t0 =  tx
+verify tx =  tz
+
+//
+
+sys.reset();
+
+:: my_field := struct{ lazy int x; }('41');
+verify (/. (struct{ lazy int x; } f) -> f.x + 1)(my_field) = 42
+
+
+verify true

@@ -1,0 +1,389 @@
+///
+/// table.sym
+///
+/// ZenVM test suite for tables (array[] => struct{})
+///
+
+//
+
+sys.reset();
+
+:: x :- 8 + uniform();
+
+:: f :- g;
+:: g := /.(x) -> ln(1 + x);
+:: h := /.(double x) => double -> ln(1 + x);
+
+array[8] => struct { lazy var g; lazy var y; lazy var result; } as;
+
+as[0] := ('f', 'uniform()', 'as[0].g(as[0].y + x)' );
+as[1] := ('f', 'uniform()', 'as[1].g(as[1].y + x)' );
+as[2] := ('f', 'uniform()', 'as[2].g(as[2].y + x)' );
+as[3] := ('f', 'uniform()', 'as[3].g(as[3].y + x)' );
+as[4] := ('f', 'uniform()', 'as[4].g(as[4].y + x)' );
+as[5] := ('f', 'uniform()', 'as[5].g(as[5].y + x)' );
+as[6] := ('f', 'uniform()', 'as[6].g(as[6].y + x)' );
+as[7] := ('f', 'uniform()', 'as[7].g(as[7].y + x)' );
+
+verify | as | = 8
+
+verify and(fmap(/.(r) -> r.result = g(r.y + x), as))
+verify fmap(/.(r) -> r.result, as) = fmap(/.(r) -> g(r.y + x), as)
+
+//
+
+sys.reset();
+
+array[8] => struct { lazy int; lazy double; lazy double; lazy double; lazy double; lazy double; } table;
+
+table :- [
+	(0, table[0][0]^2, table[0][0]^3, sin(table[0][0]), cos(table[0][0]), log(table[0][0])),
+	(1, table[1][0]^2, table[1][0]^3, sin(table[1][0]), cos(table[1][0]), log(table[1][0])),
+	(2, table[2][0]^2, table[2][0]^3, sin(table[2][0]), cos(table[2][0]), log(table[2][0])),
+	(3, table[3][0]^2, table[3][0]^3, sin(table[3][0]), cos(table[3][0]), log(table[3][0])),
+	(4, table[4][0]^2, table[4][0]^3, sin(table[4][0]), cos(table[4][0]), log(table[4][0])),
+	(5, table[5][0]^2, table[5][0]^3, sin(table[5][0]), cos(table[5][0]), log(table[5][0])),
+	(6, table[6][0]^2, table[6][0]^3, sin(table[6][0]), cos(table[6][0]), log(table[6][0])),
+	(7, table[7][0]^2, table[7][0]^3, sin(table[7][0]), cos(table[7][0]), log(table[7][0]))
+];
+
+table[0][0] :- 0 + uniform();
+table[1][0] :- 1 + uniform();
+table[2][0] :- 2 + uniform();
+table[3][0] :- 3 + uniform();
+table[4][0] :- 4 + uniform();
+table[5][0] :- 5 + uniform();
+table[6][0] :- 6 + uniform();
+table[7][0] :- 7 + uniform();
+
+:: row :- ( 0.0, 1.0, 2.0, 3.0, 4.0, 5.0 );
+
+row[0] :- 0;
+row[1] :- row[0]^2;
+row[2] :- row[0]^3;
+row[3] :- sin(row[0]);
+row[4] :- cos(row[0]);
+row[5] :- log(row[0]);
+
+row[0] :- table[0][0];
+verify row = table[0]
+
+row[0] :- table[1][0];
+verify row = table[1]
+
+row[0] :- table[2][0];
+verify row = table[2]
+
+row[0] :- table[3][0];
+verify row = table[3]
+
+row[0] :- table[4][0];
+verify row = table[4]
+
+row[0] :- table[5][0];
+verify row = table[5]
+
+row[0] :- table[6][0];
+verify row = table[6]
+
+row[0] :- table[7][0];
+verify row = table[7]
+
+//
+
+sys.reset();
+
+array[] => double numbers := [0, 1, 2, 3, 4, 5, 6, 7];
+
+array[] => :: tx :- [
+	(numbers[0], numbers[0]^2, numbers[0]^3),
+	(numbers[1], numbers[1]^2, numbers[1]^3),
+	(numbers[2], numbers[2]^2, numbers[2]^3),
+	(numbers[3], numbers[3]^2, numbers[3]^3),
+	(numbers[4], numbers[4]^2, numbers[4]^3),
+	(numbers[5], numbers[5]^2, numbers[5]^3),
+	(numbers[6], numbers[6]^2, numbers[6]^3),
+	(numbers[7], numbers[7]^2, numbers[7]^3)
+];
+
+// Warning: this appears to be incorrect: the arguments should be quoted as shown in the excluded section
+
+array[] => struct { lazy double x; lazy double x2; lazy double x3; } ty := [
+	struct { lazy double x; lazy double x2; lazy double x3; }(numbers[0], numbers[0]^2, numbers[0]^3),
+	struct { lazy double x; lazy double x2; lazy double x3; }(numbers[1], numbers[1]^2, numbers[1]^3),
+	struct { lazy double x; lazy double x2; lazy double x3; }(numbers[2], numbers[2]^2, numbers[2]^3),
+	struct { lazy double x; lazy double x2; lazy double x3; }(numbers[3], numbers[3]^2, numbers[3]^3),
+	struct { lazy double x; lazy double x2; lazy double x3; }(numbers[4], numbers[4]^2, numbers[4]^3),
+	struct { lazy double x; lazy double x2; lazy double x3; }(numbers[5], numbers[5]^2, numbers[5]^3),
+	struct { lazy double x; lazy double x2; lazy double x3; }(numbers[6], numbers[6]^2, numbers[6]^3),
+	struct { lazy double x; lazy double x2; lazy double x3; }(numbers[7], numbers[7]^2, numbers[7]^3)
+];
+
+verify tx[0] = ty[0]
+verify tx[1] = ty[1]
+verify tx[2] = ty[2]
+verify tx[3] = ty[3]
+verify tx[4] = ty[4]
+verify tx[5] = ty[5]
+verify tx[6] = ty[6]
+verify tx[7] = ty[7]
+
+//
+
+sys.reset();
+
+array[] => double numbers := [0, 1, 2, 3, 4, 5, 6, 7];
+
+array[] => :: tx :- [
+	(numbers[0], numbers[0]^2, numbers[0]^3),
+	(numbers[1], numbers[1]^2, numbers[1]^3),
+	(numbers[2], numbers[2]^2, numbers[2]^3),
+	(numbers[3], numbers[3]^2, numbers[3]^3),
+	(numbers[4], numbers[4]^2, numbers[4]^3),
+	(numbers[5], numbers[5]^2, numbers[5]^3),
+	(numbers[6], numbers[6]^2, numbers[6]^3),
+	(numbers[7], numbers[7]^2, numbers[7]^3)
+];
+
+array[] => struct { lazy double; lazy double; lazy double; } ty := [
+	('numbers[0]', 'numbers[0]^2', 'numbers[0]^3'),
+	('numbers[1]', 'numbers[1]^2', 'numbers[1]^3'),
+	('numbers[2]', 'numbers[2]^2', 'numbers[2]^3'),
+	('numbers[3]', 'numbers[3]^2', 'numbers[3]^3'),
+	('numbers[4]', 'numbers[4]^2', 'numbers[4]^3'),
+	('numbers[5]', 'numbers[5]^2', 'numbers[5]^3'),
+	('numbers[6]', 'numbers[6]^2', 'numbers[6]^3'),
+	('numbers[7]', 'numbers[7]^2', 'numbers[7]^3')
+];
+
+array[] => struct { lazy double x; lazy double x2; lazy double x3; } tz := [
+	struct { lazy double x; lazy double x2; lazy double x3; }('numbers[0]', 'numbers[0]^2', 'numbers[0]^3'),
+	struct { lazy double x; lazy double x2; lazy double x3; }('numbers[1]', 'numbers[1]^2', 'numbers[1]^3'),
+	struct { lazy double x; lazy double x2; lazy double x3; }('numbers[2]', 'numbers[2]^2', 'numbers[2]^3'),
+	struct { lazy double x; lazy double x2; lazy double x3; }('numbers[3]', 'numbers[3]^2', 'numbers[3]^3'),
+	struct { lazy double x; lazy double x2; lazy double x3; }('numbers[4]', 'numbers[4]^2', 'numbers[4]^3'),
+	struct { lazy double x; lazy double x2; lazy double x3; }('numbers[5]', 'numbers[5]^2', 'numbers[5]^3'),
+	struct { lazy double x; lazy double x2; lazy double x3; }('numbers[6]', 'numbers[6]^2', 'numbers[6]^3'),
+	struct { lazy double x; lazy double x2; lazy double x3; }('numbers[7]', 'numbers[7]^2', 'numbers[7]^3')
+];
+
+verify ltype(tx) = array[] => struct { lazy double  ; lazy double   ; lazy double   ; }
+verify ltype(ty) = array[] => struct { lazy double  ; lazy double   ; lazy double   ; }
+verify ltype(tz) = array[] => struct { lazy double x; lazy double x2; lazy double x3; }
+
+verify tx = ty
+
+// note: tz <> tx and tz <> ty because tz is a struct with named fields
+
+//
+
+sys.reset();
+
+:: table :- [
+	(0, numbers[0]^2, numbers[0]^3, sin(numbers[0]), cos(numbers[0])),
+	(1, numbers[1]^2, numbers[1]^3, sin(numbers[1]), cos(numbers[1])),
+	(2, numbers[2]^2, numbers[2]^3, sin(numbers[2]), cos(numbers[2])),
+	(3, numbers[3]^2, numbers[3]^3, sin(numbers[3]), cos(numbers[3])),
+	(4, numbers[4]^2, numbers[4]^3, sin(numbers[4]), cos(numbers[4])),
+	(5, numbers[5]^2, numbers[5]^3, sin(numbers[5]), cos(numbers[5])),
+	(6, numbers[6]^2, numbers[6]^3, sin(numbers[6]), cos(numbers[6])),
+	(7, numbers[7]^2, numbers[7]^3, sin(numbers[7]), cos(numbers[7]))
+];
+
+:: noise := /.() => double -> 0;
+
+:: numbers :- [
+	0 + noise(),
+	1 + noise(),
+	2 + noise(),
+	3 + noise(),
+	4 + noise(),
+	5 + noise(),
+	6 + noise(),
+	7 + noise()
+];
+
+:: trow :- ( 0, 1.0, 2.0, 3.0, 4.0 );
+
+trow[0] :- 0;
+trow[1] :- trow[0]^2;
+trow[2] :- trow[0]^3;
+trow[3] :- sin(trow[0]);
+trow[4] :- cos(trow[0]);
+
+verify trow = table[trow[0]]
+trow[0] := trow[0] + 1;
+verify trow = table[trow[0]]
+trow[0] := trow[0] + 1;
+verify trow = table[trow[0]]
+trow[0] := trow[0] + 1;
+verify trow = table[trow[0]]
+trow[0] := trow[0] + 1;
+verify trow = table[trow[0]]
+trow[0] := trow[0] + 1;
+verify trow = table[trow[0]]
+trow[0] := trow[0] + 1;
+verify trow = table[trow[0]]
+trow[0] := trow[0] + 1;
+verify trow = table[trow[0]]
+
+noise := uniform;
+
+trow[0] :- 0;
+trow[1] :- trow[0]^2;
+trow[2] :- trow[0]^3;
+trow[3] :- sin(trow[0]);
+trow[4] :- cos(trow[0]);
+
+verify trow <> table[trow[0]]
+trow[0] := trow[0] + 1;
+verify trow <> table[trow[0]]
+trow[0] := trow[0] + 1;
+verify trow <> table[trow[0]]
+trow[0] := trow[0] + 1;
+verify trow <> table[trow[0]]
+trow[0] := trow[0] + 1;
+verify trow <> table[trow[0]]
+trow[0] := trow[0] + 1;
+verify trow <> table[trow[0]]
+trow[0] := trow[0] + 1;
+verify trow <> table[trow[0]]
+trow[0] := trow[0] + 1;
+verify trow <> table[trow[0]]
+
+//
+
+sys.reset();
+
+:: table :- [
+	(0, numbers[0]^2, numbers[0]^3, sin(numbers[0]), cos(numbers[0]), log(numbers[0])),
+	(1, numbers[1]^2, numbers[1]^3, sin(numbers[1]), cos(numbers[1]), log(numbers[1])),
+	(2, numbers[2]^2, numbers[2]^3, sin(numbers[2]), cos(numbers[2]), log(numbers[2])),
+	(3, numbers[3]^2, numbers[3]^3, sin(numbers[3]), cos(numbers[3]), log(numbers[3])),
+	(4, numbers[4]^2, numbers[4]^3, sin(numbers[4]), cos(numbers[4]), log(numbers[4])),
+	(5, numbers[5]^2, numbers[5]^3, sin(numbers[5]), cos(numbers[5]), log(numbers[5])),
+	(6, numbers[6]^2, numbers[6]^3, sin(numbers[6]), cos(numbers[6]), log(numbers[6])),
+	(7, numbers[7]^2, numbers[7]^3, sin(numbers[7]), cos(numbers[7]), log(numbers[7]))
+];
+
+:: noise := /.() => double -> 0;
+
+:: numbers :- [
+	0 + noise(),
+	1 + noise(),
+	2 + noise(),
+	3 + noise(),
+	4 + noise(),
+	5 + noise(),
+	6 + noise(),
+	7 + noise()
+];
+
+struct { lazy int; lazy double; lazy double; lazy double; lazy double; lazy double; } trow;
+
+trow[0] :- 0;
+trow[1] :- trow[0]^2;
+trow[2] :- trow[0]^3;
+trow[3] :- sin(trow[0]);
+trow[4] :- cos(trow[0]);
+trow[5] :- log(trow[0]);
+
+// Part I
+
+verify trow = table[trow[0]]
+trow[0] := trow[0] + 1;
+verify trow = table[trow[0]]
+trow[0] := trow[0] + 1;
+verify trow = table[trow[0]]
+trow[0] := trow[0] + 1;
+verify trow = table[trow[0]]
+trow[0] := trow[0] + 1;
+verify trow = table[trow[0]]
+trow[0] := trow[0] + 1;
+verify trow = table[trow[0]]
+trow[0] := trow[0] + 1;
+verify trow = table[trow[0]]
+trow[0] := trow[0] + 1;
+verify trow = table[trow[0]]
+
+noise := uniform;
+
+trow[0] :- 0;
+
+verify trow <> table[trow[0]]
+trow[0] := trow[0] + 1;
+verify trow <> table[trow[0]]
+trow[0] := trow[0] + 1;
+verify trow <> table[trow[0]]
+trow[0] := trow[0] + 1;
+verify trow <> table[trow[0]]
+trow[0] := trow[0] + 1;
+verify trow <> table[trow[0]]
+trow[0] := trow[0] + 1;
+verify trow <> table[trow[0]]
+trow[0] := trow[0] + 1;
+verify trow <> table[trow[0]]
+trow[0] := trow[0] + 1;
+verify trow <> table[trow[0]]
+
+// Part II
+
+noise := /.() => double -> 0;
+
+trow[0] :- table[0][0];
+verify trow = table[0]
+
+trow[0] :- table[1][0];
+verify trow = table[1]
+
+trow[0] :- table[2][0];
+verify trow = table[2]
+
+trow[0] :- table[3][0];
+verify trow = table[3]
+
+trow[0] :- table[4][0];
+verify trow = table[4]
+
+trow[0] :- table[5][0];
+verify trow = table[5]
+
+trow[0] :- table[6][0];
+verify trow = table[6]
+
+trow[0] :- table[7][0];
+verify trow = table[7]
+
+
+noise := uniform;
+
+
+trow[0] :- table[0][0];
+verify trow <> table[0]
+
+trow[0] :- table[1][0];
+verify trow <> table[1]
+
+trow[0] :- table[2][0];
+verify trow <> table[2]
+
+trow[0] :- table[3][0];
+verify trow <> table[3]
+
+trow[0] :- table[4][0];
+verify trow <> table[4]
+
+trow[0] :- table[5][0];
+verify trow <> table[5]
+
+trow[0] :- table[6][0];
+verify trow <> table[6]
+
+trow[0] :- table[7][0];
+verify trow <> table[7]
+
+//
+
+sys.reset();
+
+verify "table.sym" <> ?
