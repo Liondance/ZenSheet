@@ -38,13 +38,21 @@ const ZVM = "./vm/";
 // @@ WARNING: zst_dir and zst_dir_absolute are shared!
 zst_dir = process.argv[2];
 zst_dir_absolute = path.isAbsolute(zst_dir) ? zst_dir : path.resolve(zst_dir);
+zst_dir_absolute = zst_dir_absolute.replace(/\\/g, "/");
 
 const HOST = "localhost";
 const PORT = process.argv[3];
 
-// const zda = path.isAbsolute(zst_dir) ? zst_dir : path.resolve(zst_dir);
-// zst_dir_absolute = zda.replace(/\\/g, "/")
-// console.log(`The zst dir is ${zst_dir} and the absolute is ${zst_dir_absolute}`);
+const debug = true;
+
+if (debug) {
+  console.log(`argv[1] is ${process.argv[1]}`);
+  console.log(`The zvm dir is ${ZVM}`);
+  console.log(`The zst dir is ${zst_dir} absolute path ${zst_dir_absolute}`);
+  console.log(`The VM HOST is ${HOST}`);
+  console.log(`The VM PORT is ${PORT}`);
+}
+
 
 // Binding
 echo = true;
