@@ -71,7 +71,7 @@ _my_context = null;
 last_command_time = 0;
 command_invocation_time = new Date();
 
-client = net.createServer(function (sock) {
+const server = net.createServer(function (sock) {
   g_sock = sock;
   // Add a 'data' event handler to this instance of socket
   sock.on("data", function (data) {
@@ -136,7 +136,7 @@ client = net.createServer(function (sock) {
 
             console.log("Shutting VM down");
             sock.destroy();
-            client.close();
+            server.close();
             process.exit();
             return;
         }
@@ -218,16 +218,16 @@ client = net.createServer(function (sock) {
     //console.log('CLOSED: ' + sock.remoteAddress +' '+ sock.remotePort);
     console.log("Closing VM socket");
     sock.destroy();
-    client.close();
+    server.close();
     process.exit();
   });
 
   sock.on("error", function () {
     console.log("App error");
     sock.destroy();
-    client.close();
+    server.close();
     process.exit();
   });
 });
 
-client.listen(PORT, HOST);
+server.listen(PORT, HOST);
