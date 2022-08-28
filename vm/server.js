@@ -43,7 +43,7 @@ zst_dir_absolute = zst_dir_absolute.replace(/\\/g, "/");
 const HOST = "localhost";
 const PORT = process.argv[3];
 
-const debug = true;
+const debug = false;
 
 if (debug) {
   console.log(`argv[1] is ${process.argv[1]}`);
