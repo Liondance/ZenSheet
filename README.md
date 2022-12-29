@@ -75,7 +75,7 @@ Open one window shell in the ZenSheet directory
 
 Run the zen script, which should start the server in a separate shell window
 
-	./zen
+	./zenstart
 
 Run the cli script, which will run the ZenSheet REPL in your current window
 
@@ -147,7 +147,7 @@ Instead of opening two shells, just open *one* in the ZenSheet directory.
 
 Run the newly added zen script: this will start the server in a separate shell window!
 
-	./zen
+	./zenstart
 
 Then run the cli script, which will run the ZenSheet REPL in your current window.
 
