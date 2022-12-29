@@ -51,7 +51,7 @@ A minimal ZenSheet deployment requires two processes:
 - A ZenSheet Server
 - A ZenSheet REPL Client
 
-First, we strongly recommend running the server and client processes in different shell windows. Technically, you could start both processes in the same shell, running the ZenSheet Server in the background and the REPL in the foreground. However, it is best to have a separate windows to better distinguish server messages from REPL feedback. It also makes easier to kill the server, doing Ctrl^C in the corresponding window.
+First, we strongly recommend running the server and client processes in different shell windows. Technically, you could start both processes in the same shell, running the ZenSheet Server in the background and the REPL in the foreground. However, it is best to have separate window to better distinguish server messages from REPL feedback. It also makes easier to kill the server, doing Ctrl^C in the corresponding window.
   
 Here we show two ways to start the ZenSheet processes:
 
