@@ -1,6 +1,9 @@
-# ZenSheet Beta
+# ZenSheet Beta distributions
 
-ZenSheet Beta distribution - Windows version
+Note: as of this writing, this code is proprietary and meant only for testing ZenSheet and other ZenSheet related programs.
+
+### Warning: the following instructions are for Windows.
+It should not be hard to adapt them for Ubuntu ... we'll know soon.
 
 ## 1. Requisites
 
