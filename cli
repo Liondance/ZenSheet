@@ -1,1 +1,1 @@
-node cli.js
+ZST=./zst node cli.js
