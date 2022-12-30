@@ -5,7 +5,7 @@
 echo off
 
 run zilly
-run zilly-min
+run zillyb
 run ackermann
 
 echo on
