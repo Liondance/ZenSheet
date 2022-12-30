@@ -1,5 +1,5 @@
 ///
-/// wsWorker.js
+/// const module = "wsWorker";
 ///
 /// websocket worker thread
 ///
@@ -10,31 +10,39 @@
 /// LRQS 7
 ///
 
-const module = "wsWorker";
+/* eslint-disable no-restricted-globals */ // allow use of "self"
+
+// https://stackoverflow.com/questions/44118600/web-workers-how-to-import-modules
+// https://stackoverflow.com/questions/73126309/how-to-use-import-in-the-web-worker
+const WWT = import("./wwt.js");
+
+const debug = true;
+
+const ETB = "\x17";
 
 function startWS(url) {
   const wsc = new WebSocket(url);
 
   wsc.onopen = function () {
-    const message = `0[0]\tWSW: "ACK: connected to ${url}"`;
+    const message = `0[0]\tWSW: ACK: connected to ${url}`;
     self.postMessage(message);
   };
 
   wsc.onclose = function (event) {
-    const message = `0[0]\tWSW: "ERROR: connection closed: ${event.toString()}"`;
+    const message = `0[0]\tWSW: ERROR: connection closed: ${event.toString()}`;
     self.postMessage(message);
   };
 
   wsc.onerror = function (event) {
-    const message = `0[0]\tWSW: "ERROR: connection error: ${event.toString()}"`;
+    const message = `0[0]\tWSW: ERROR: connection error: ${event.toString()}`;
     self.postMessage(message);
   };
 
   let buffer = "";
 
-  wsc.onmessage = event => {
+  wsc.onmessage = function (event) {
     const message = event.data.toString();
-    const packets = message.split("\x17");
+    const packets = message.split(ETB);
 
     let packet = buffer + packets[0];
     for (let i = 0; i < packets.length - 1; ) {
@@ -54,7 +62,7 @@ function startWS(url) {
       interval = 2 * interval;
       if (THRESHOLD < interval) {
         const total = interval - 1;
-        const message = `0[0]\tWSW: "ERROR: connection not ready after ${total} ms"`;
+        const message = `0[0]\tWSW: ERROR: connection not ready after ${total} ms`;
         self.postMessage(message);
       }
       setTimeout(function () {
@@ -64,9 +72,9 @@ function startWS(url) {
   }
 
   const worker = {
-    send: function (message) {
+    send: function (request) {
       _waitForConnection(function () {
-        wsc.send(message);
+        wsc.send(request);
       }, 1);
     },
   };
@@ -76,14 +84,21 @@ function startWS(url) {
 
 let worker = null;
 
-// messages sent to the worker thread (from Main.js)
+// messages sent to the worker thread from the Web client
 self.onmessage = function (event) {
   const request = event.data;
 
+  if (debug) console.log(`request = ${request}`);
+
   if (typeof request !== "string") {
-    const message = `0[0]\tWSW: "ERROR: bad request: ${request.toString()}"`;
+    const message = `0[0]\tWSW: ERROR: bad request: ${request.toString()}`;
     self.postMessage(message);
     return;
+  }
+
+  if (debug && !worker) {
+    console.log(`WTT: ${typeof WWT}`);
+    console.log(`WTT = ${WWT}`);
   }
 
   if (request.startsWith("ws://")) {

@@ -1,7 +1,7 @@
 ///
-/// wlWorker.js
+/// const module = "wlWorker";
 ///
-/// websocket worker thread
+/// web local worker thread
 ///
 /// Notes:
 /// Web Workers don't have a window object, functions like alert are not allowed
@@ -10,88 +10,85 @@
 /// LRQS 7
 ///
 
-const module = "wlWorker";
+/* eslint-disable no-restricted-globals */ // allow use of "self"
+
+// https://stackoverflow.com/questions/44118600/web-workers-how-to-import-modules
+// https://stackoverflow.com/questions/73126309/how-to-use-import-in-the-web-worker
+const WWT = import("./wwt.js");
+
+const debug = true;
+
+const ETB = "\x17";
 
 function startWS(url) {
-  const wsc = new WebSocket(url);
-
-  wsc.onopen = function () {
-    const message = `0[0]\tWSW: "ACK: connected to ${url}"`;
-    self.postMessage(message);
-  };
-
-  wsc.onclose = function (event) {
-    const message = `0[0]\tWSW: "ERROR: connection closed: ${event.toString()}"`;
-    self.postMessage(message);
-  };
-
-  wsc.onerror = function (event) {
-    const message = `0[0]\tWSW: "ERROR: connection error: ${event.toString()}"`;
-    self.postMessage(message);
-  };
-
-  let buffer = "";
-
-  wsc.onmessage = event => {
-    const message = event.data.toString();
-    const packets = message.split("\x17");
-
-    let packet = buffer + packets[0];
-    for (let i = 0; i < packets.length - 1; ) {
-      self.postMessage(packet);
-      packet = packets[++i];
+  function parse(packet) {
+    // eslint-disable-next-line no-control-regex
+    const regex = /([0-9]+)\[([0-9]+)\]\t(.*)/;
+    const matches = packet.match(regex);
+    if (matches === null) {
+      return null;
     }
-    buffer = packet;
-  };
-
-  const THRESHOLD = 1024;
-
-  function _waitForConnection(send, interval) {
-    if (wsc.readyState === 1) {
-      send();
-    } else {
-      // Formula reminder: sum[i = 0:n-1](2^i) = 2^n - 1
-      interval = 2 * interval;
-      if (THRESHOLD < interval) {
-        const total = interval - 1;
-        const message = `0[0]\tWSW: "ERROR: connection not ready after ${total} ms"`;
-        self.postMessage(message);
-      }
-      setTimeout(function () {
-        _waitForConnection(send, interval);
-      }, interval);
-    }
+    return { channel: matches[1], sequence: matches[2], command: matches[3] };
   }
 
   const worker = {
-    send: function (message) {
-      _waitForConnection(function () {
-        wsc.send(message);
-      }, 1);
+    send: function (request) {
+      const packet = parse(request.replace(ETB, ""));
+      const { channel, sequence, command } = packet;
+      const JS = channel === "12"; // future CHANNEL.JS === 13
+      if (JS) {
+        // eslint-disable-next-line no-eval
+        const result = eval(command);
+        const response = `OK: ${command} ==> ${result}`;
+        const message = `${channel}[${sequence}]\t${response}`;
+        self.postMessage(message);
+      } else {
+        self.postMessage(`worker::send: '${request}' ignored`);
+      }
     },
   };
+
+  console.log(`startWS 51: WWT is ${WWT}`);
 
   return worker;
 }
 
 let worker = null;
 
-// messages sent to the worker thread (from Main.js)
-self.onmessage = function (event) {
+// messages sent to the worker thread from the Web client
+self.onmessage = async function (event) {
   const request = event.data;
 
+  if (debug) console.log(`request = ${request}`);
+
   if (typeof request !== "string") {
-    const message = `0[0]\tWSW: "ERROR: bad request: ${request.toString()}"`;
+    const message = `0[0]\tWSW: ERROR: bad request: ${request.toString()}`;
     self.postMessage(message);
     return;
   }
 
+  if (debug && !worker) {
+    console.log(`self.onmessage: type of WTT is ${typeof WWT}`);
+    console.log(`self.onmessage: WTT is ${WWT}`);
+    const WMX = await WWT;
+    console.log(`self.onmessage: WTT is ${WMX}`);
+    console.log(`self.onmessage: WTT is ${WMX}`);
+  }
+
   if (request.startsWith("ws://")) {
     worker = startWS(request);
+    const channel = 0; // CHANNEL.ASY
+    const sequence = 0;
+    const response = "ACK: worker started";
+    const message = `${channel}[${sequence}]\t${response}`;
+    self.postMessage(message);
     return;
   }
 
   if (worker) {
     worker.send(request);
+  } else {
+    const message = `0[0]\tWSW: ERROR: worker is null: '${request}' ignored`;
+    self.postMessage(message);
   }
 };
