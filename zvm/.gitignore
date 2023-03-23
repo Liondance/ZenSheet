@@ -1,0 +1,8 @@
+# Generated files
+version.js
+
+# Backup files
+*.bak
+
+# Local scripts
+gr

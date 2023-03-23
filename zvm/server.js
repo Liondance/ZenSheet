@@ -7,7 +7,7 @@ const net = require("net");
 const path = require("path");
 
 // ZenSheet Library
-const ZLIB = "./ZLIB/";
+const ZLIB = "./zlib/";
 
 const Varlib = require(ZLIB + "varlib.js");
 const Arraylib = require(ZLIB + "arraylib.js");
@@ -33,7 +33,7 @@ const { IntRange } = require(ZLIB + "int_range.js");
 // The function passed to net.createServer() becomes the event handler for the 'connection' event
 // The sock object the callback function receives UNIQUE for each connection
 
-const ZVM = "./vm/";
+const ZVM = "./zvm/";
 
 // @@ WARNING: zst_dir and zst_dir_absolute are shared!
 zst_dir = process.argv[2];

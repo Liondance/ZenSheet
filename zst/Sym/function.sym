@@ -1,0 +1,496 @@
+///
+/// function.sym
+///
+
+// Smooth operators
+
+const fun(int x) => int _uminus_;
+const fun(double x) => double _uminus_;
+const fun(var x) => var _uminus_;
+
+const fun(int x, int y) => int _plus_;
+const fun(double x, int y) => double _plus_;
+const fun(int x, double y) => double _plus_;
+const fun(double x, double y) => double _plus_;
+
+const fun(int x, int y) => int _minus_;
+const fun(double x, int y) => double _minus_;
+const fun(int x, double y) => double _minus_;
+const fun(double x, double y) => double _minus_;
+
+// Constructors, Conversions, & Information (Reflection)
+
+// a2d and a3d waiting for template instantiation mechanism or similar
+// meta{type T} const fun(array[] => array[] => T arg) => array[,] => T a2d;
+// meta{type T} const fun(array[] => array[] => array[] => T arg) => array[,,] => T a3d;
+// meta{type T} const fun(array[] => array[,] => T arg) => array[,,] => T a3d;
+// meta{type T} const fun(array[,] => array[] => T arg) => array[,,] => T a3d;
+
+const fun(type lhs, type rhs) => bool conform;
+const fun(var exp) => array[] => int dim;
+const fun(var exp) => type dynamic_type;
+const fun(invalid x) => int error_type;
+const fun(string attribute) => string info;
+// const fun(string s) => invalid invalid;
+// meta{type T} const fun(T arg) => bool isblank;
+const fun(var arg) => bool isblank;
+// meta{type T} const fun(T arg) => bool isbool;
+const fun(var arg) => bool isbool;
+// meta{type T} const fun(T arg) => bool isdate;
+const fun(var arg) => bool isdate;
+// meta{type T} const fun(T arg) => bool isdatetime;
+const fun(var arg) => bool isdatetime;
+
+// meta{type T} const fun(T arg) => bool iserr;
+const fun(var arg) => bool iserr;
+// meta{type T} const fun(T arg) => bool iserror;
+const fun(var arg) => bool iserror;
+// meta{type T} const fun(T arg) => bool isint;
+const fun(var arg) => bool isint;
+// meta{type T} const fun(T arg) => bool isinvalid;
+const fun(var arg) => bool isinvalid;
+// meta{type T} const fun(T arg) => bool isna;
+const fun(var arg) => bool isna;
+// meta{type T} const fun(T arg) => bool islogical;
+const fun(var arg) => bool islogical;
+// meta{type T} const fun(T arg) => bool isnull;
+const fun(var arg) => bool isnull;
+// meta{type T} const fun(T arg) => bool isnontext;
+const fun(var arg) => bool isnontext;
+// meta{type T} const fun(T arg) => bool isnumber;
+const fun(var arg) => bool isnumber;
+// meta{type T} const fun(T arg) => bool isreal;
+const fun(var arg) => bool isreal;
+// meta{type T} const fun(T arg) => bool isref;
+const fun(var arg) => bool isref;
+// meta{type T} const fun(T arg) => bool isstring;
+const fun(var arg) => bool isstring;
+// meta{type T} const fun(T arg) => bool istext;
+const fun(var arg) => bool istext;
+// meta{type T} const fun(T arg) => bool istime;
+const fun(var arg) => bool istime;
+// meta{type T, type D} const fun(T x, D default) => (T + D) ivl;
+const fun(var exp, var default) => var ivl;
+const fun(var exp) => type ltype;
+const fun(type T) => type ltype2rtype;
+// meta{type T} const fun(T arg) => double n;
+const fun(var arg) => double n;
+const fun() => invalid na;
+// meta{type T, type D} const fun(T x, D default) => (T + D) nvl;
+const fun(var exp, var default) => var nvl;
+const fun(var exp) => type rtype;
+const fun(type T) => type structural;
+const fun() => var symbols;
+const fun(type lhs, type rhs) => type tjoin;
+const fun(type lhs, type rhs) => type tmeet;
+const fun(invalid x) => string what;
+const fun(var exp) => int xlstype;
+
+// Math
+
+// meta{type T} const fun(T x) => T abs;
+const fun(var x) => var abs;
+const fun(double x) => double abs;
+const fun(int exp) => int abs;
+const fun(double x) => double acos;
+const fun(double x) => double acosh;
+const fun(double x) => double asin;
+const fun(double x) => double asinh;
+const fun(double x) => double atan;
+const fun(double x, double y) => double atan2;
+const fun(double x) => double atanh;
+const fun(int n, double p) => int binomial;
+const fun(double x) => double ceil;
+const fun(var exp) => double ceil;
+const fun(double x, double y) => double ceiling;
+const fun(var x, var y) => double ceiling;
+const fun(double d) => double chi_squared;
+const fun(int n, int k) => int combin;
+const fun(double x) => double cos;
+const fun(double x) => double cosh;
+const fun(double x) => double degrees;
+const fun(double x) => double even;
+const fun(double x) => double exp;
+const fun(double x) => double fabs;
+const fun(double x) => double fact;
+// const fun(double x, double y) => double fmod;
+const fun(double m, double n) => double fisher_f;
+const fun(double y) => double fisherinv;
+const fun(double number) => double floor;
+const fun(double number, double significance) => double floor;
+const fun(int M, int N, fun(int i, int j) => double init) => array[,] => double matrix;
+// const fun(ref const array[,] => double x, ref const array[,] => double y) => array[,] => double mmult;
+const fun(ref const array[] => array[] => double x, ref const array[] => array[] => double y) => array[] => array[] => double mmult;
+const fun(var x, var y) => var mmult;
+const fun(double x) => double ln;
+const fun(double x) => double log;
+const fun(double x, double base) => double log;
+const fun(int n, int d) => int mod;
+const fun() => double normal;
+const fun(double x) => double odd;
+const fun() => double pi;
+const fun(double d) => int poisson;
+const fun(double x, double y) => double pow;
+const fun(double x, double y) => double power;
+const fun(ref const array[] => double args) => double product;
+const fun() => double product;
+const fun(var x0) => double product;
+const fun(var x0, var x1) => double product;
+const fun(var x0, var x1, var x2) => double product;
+const fun(var x0, var x1, var x2, var x3) => double product;
+const fun(var x0, var x1, var x2, var x3, var x4) => double product;
+const fun(var x0, var x1, var x2, var x3, var x4, var x5) => double product;
+const fun(var x0, var x1, var x2, var x3, var x4, var x5, var x6) => double product;
+const fun(var x0, var x1, var x2, var x3, var x4, var x5, var x6, var x7) => double product;
+const fun(int n, int d) => int quotient;
+const fun(double x) => double radians;
+const fun() => double rand;
+const fun() => double random;
+const fun(double number, int decimals) => double  round;
+const fun(double number, int decimals) => double  rounddown;
+const fun(double number, int decimals) => double  roundup;
+const fun(double n) => int sign;
+const fun(double x) => double sin;
+const fun(double x) => double sinh;
+const fun(double x) => double sqrt;
+const fun(int n) => double student_t;
+const fun(ref const array[] => double args) => double sum;
+const fun(ref const array[] => var args) => double sum;
+const fun() => double sum;
+const fun(var x0) => double sum;
+const fun(var x0, var x1) => double sum;
+const fun(var x0, var x1, var x2) => double sum;
+const fun(var x0, var x1, var x2, var x3) => double sum;
+const fun(var x0, var x1, var x2, var x3, var x4) => double sum;
+const fun(var x0, var x1, var x2, var x3, var x4, var x5) => double sum;
+const fun(var x0, var x1, var x2, var x3, var x4, var x5, var x6) => double sum;
+const fun(var x0, var x1, var x2, var x3, var x4, var x5, var x6, var x7) => double sum;
+const fun(var test_range, var criteria, var sum_range) => var sumif;
+const fun(ref const array[] => var range, var criteria) => double sumif;
+// meta{type T} const fun(ref const array[] => T range, string criteria) => T sumif;
+// meta{type T} const fun(ref const array[] => T range, const fun(T) => bool criteria) => T sumif;
+// meta{type T} const fun(ref const array[] => T range, string criteria, ref const array[] => T srange ) => T sumif;
+// meta{type T} const fun(ref const array[] => T range, const fun(T) => bool criteria, ref const array[] => T srange ) => T sumif;
+const fun(ref const array[] => double x) => double sumproduct;
+const fun(ref const array[] => double x, ref const array[] => double y) => double sumproduct;
+const fun(ref const array[] => double x, ref const array[] => double y, ref const array[] => double z) => double sumproduct;
+const fun(ref const array[] => double args) => double sumsq;
+const fun(ref const array[] => var args) => double sumsq;
+const fun() => double sumsq;
+const fun(var x0) => double sumsq;
+const fun(var x0, var x1) => double sumsq;
+const fun(var x0, var x1, var x2) => double sumsq;
+const fun(var x0, var x1, var x2, var x3) => double sumsq;
+const fun(var x0, var x1, var x2, var x3, var x4) => double sumsq;
+const fun(var x0, var x1, var x2, var x3, var x4, var x5) => double sumsq;
+const fun(var x0, var x1, var x2, var x3, var x4, var x5, var x6) => double sumsq;
+const fun(var x0, var x1, var x2, var x3, var x4, var x5, var x6, var x7) => double sumsq;
+const fun(ref const array[] => double x, ref const array[] => double y) => double sumx2my2;
+const fun(ref const array[] => double x, ref const array[] => double y) => double sumx2py2;
+const fun(ref const array[] => double x, ref const array[] => double y) => double sumxmy2;
+const fun(double x) => double tan;
+const fun(double x) => double tanh;
+const fun() => double uniform;
+const fun(double lb, double ub) => double uniform;
+const fun(int M, fun(int i) => double init) => array[] => double vector;
+const fun(ref const array[] => int values) => int gcd;
+const fun(ref const array[] => int values) => double lcm;
+const fun(double number, double multiple) => double mround;
+const fun(ref const array[] => int values) => double multinomial;
+const fun(double x, double n, double m, ref const array[] => double coefficients) => double seriessum;
+
+// Logical
+
+const fun() and;
+const fun(var a0) => var and;
+const fun(var a0, var a1) => var and;
+const fun(var a0, var a1, var a2) => var and;
+const fun(var a0, var a1, var a2, var a3) => var and;
+const fun(var a0, var a1, var a2, var a3, var a4) => var and;
+
+const fun() nand;
+const fun(var a0) => var nand;
+const fun(var a0, var a1) => var nand;
+const fun(var a0, var a1, var a2) => var nand;
+const fun(var a0, var a1, var a2, var a3) => var nand;
+const fun(var a0, var a1, var a2, var a3, var a4) => var nand;
+
+const fun() nor;
+const fun(var a0) => var nor;
+const fun(var a0, var a1) => var nor;
+const fun(var a0, var a1, var a2) => var nor;
+const fun(var a0, var a1, var a2, var a3) => var nor;
+const fun(var a0, var a1, var a2, var a3, var a4) => var nor;
+
+const fun(var x) => var not;
+
+const fun() or;
+const fun(var a0) => var or;
+const fun(var a0, var a1) => var or;
+const fun(var a0, var a1, var a2) => var or;
+const fun(var a0, var a1, var a2, var a3) => var or;
+const fun(var a0, var a1, var a2, var a3, var a4) => var or;
+
+// Date-Time
+
+// const fun() => date date;
+// const fun(int year) => date date;
+// const fun(int year, int month) => date date;
+// const fun(int year, int month, int day) => date date;
+// const fun(int year, int month, int day, int hour, int minute, int second) => datetime datetime;
+const fun(string s) => date datevalue;
+const fun(datetime t) => array[] => int date_vector;
+const fun(datetime t) => int day;
+const fun(datetime t) => int hour;
+const fun(time t) => int hour;
+const fun(datetime t) => int millisecond;
+const fun(time t) => int millisecond;
+const fun(datetime t) => int minute;
+const fun(time t) => int minute;
+const fun(datetime t) => int month;
+const fun() => datetime now;
+const fun(datetime t) => int second;
+const fun(time t) => int second;
+// const fun() => time time;
+// const fun(int hour) => time time;
+// const fun(int hour, int minute) => time time;
+// const fun(int hour, int minute, int second) => time time;
+// const fun(int hour, int minute, int second, int millisecond) => time time;
+const fun(string s) => time timevalue;
+const fun(time t) => array[] => int time_vector;
+const fun() => date today;
+const fun(double d) => double trunc;
+const fun(double d, double decimals) => double trunc;
+const fun(datetime t) => array[] => int utc;
+const fun(date d) => int weekday;
+const fun(date d, int mode) => int weekday;
+const fun(datetime t) => int year;
+
+// Text (String)
+
+const fun(int exp) => string char;
+const fun(int exp, ref const array[] => var args) => var char;
+const fun(string s) => string clean;
+const fun(string s) => int code;
+const fun(ref const array[] => string s) => string concatenate;
+const fun() => double concatenate;
+const fun(var s0) => double concatenate;
+const fun(var s0, var s1) => double concatenate;
+const fun(var s0, var s1, var s2) => double concatenate;
+const fun(var s0, var s1, var s2, var s3) => double concatenate;
+const fun(var s0, var s1, var s2, var s3, var s4) => double concatenate;
+const fun(var s0, var s1, var s2, var s3, var s4, var s5) => double concatenate;
+const fun(var s0, var s1, var s2, var s3, var s4, var s5, var s6) => double concatenate;
+const fun(var s0, var s1, var s2, var s3, var s4, var s5, var s6, var s7) => double concatenate;
+const fun(double number) => string dollar;
+const fun(double number, int decimals) => string dollar;
+const fun(string s, string z) => bool exact;
+const fun(string pattern, string text) => int find;
+const fun(string pattern, string text, int start) => int find;
+const fun(double number) => string fixed;
+const fun(double number, int decimals) => string fixed;
+const fun(double number, int decimals, bool commas) => string fixed;
+const fun(string f, double n) => string format;
+const fun(string s, int length) => string left;
+const fun(string s) => int len;
+const fun(string s) => string lower;
+const fun(string s, int start, int length) => string mid;
+const fun(string s) => string proper;
+const fun(string text, int start, int length, string replacement) => string replace;
+const fun(string s, int number) => string rept;
+const fun(string s, int length) => string right;
+const fun(string pattern, string text) => int search;
+const fun(string pattern, string text, int start) => int search;
+const fun(string s) => int strlen;
+const fun(string text, string pattern, string replacement) => string substitute;
+const fun(string text, string pattern, string replacement, int occurrence) => string substitute;
+// meta{type T} const fun(T x) => string t;
+const fun(var x) => string t;
+const fun(double n, string format) => string text;
+const fun(string s) => string trim;
+const fun(string s) => string upper;
+const fun(var exp) => var value;
+const fun(string s, string z) => int wcscmp;
+
+// Statistics
+
+const fun(ref const array[] => double range) => double average;
+const fun(ref const array[] => double x, ref const array[] => double y) => double correl;
+// meta{type T} const fun(ref const array[] => T list) => int count;
+// meta{type T} const fun(array[,] => T list, int dim) => int count;
+// meta{type T} const fun(array[,,] => T list, int dim) => int count;
+// meta{type T} const fun(ref const array[] => T range) => int counta;
+// meta{type T} const fun(ref const array[] => T range, string s) => int countif;
+const fun(ref const array[] => var range, var s) => int countif;
+const fun(ref const array[] => var range, const fun(var) => bool test) => int countif;
+// meta{type T} const fun(ref const array[] => T range, const fun(T) => bool test) => int countif;
+const fun(ref const array[] => double x, ref const array[] => double y) => double covar;
+const fun(ref const array[] => double bins, ref const array[] => int freq, ref const array[] => double outliers) => double fdaverage;
+const fun(ref const array[] => double bins, ref const array[] => int freq, ref const array[] => double outliers, double percentile) => double fdpercentile;
+const fun(ref const array[] => double bins, ref const array[] => int freq, ref const array[] => double outliers) => double fdstdev;
+const fun(ref const array[] => double bins, ref const array[] => int freq, ref const array[] => double outliers) => double fdstdevp;
+const fun(ref const array[] => double x, ref const array[] => double y) => double intercept;
+const fun(ref const array[] => var) => int length;
+const fun(ref var) => int length;
+const fun(double, double) => double max;
+// meta{type T} const fun(ref const array[] => T args) => T max;
+const fun(double, double) => double min;
+// meta{type T} const fun(ref const array[] => T args) => T min;
+const fun(ref const array[] => double x, ref const array[] => double y) => double slope;
+const fun(ref const array[] => double range) => double stdev;
+const fun(ref const array[] => double range) => double stdevp;
+// meta{type T} const fun(ref const array[] => T range) => T sum;
+const fun(ref const array[] => double range) => double variance;
+const fun(ref const array[] => double range) => double varp;
+const fun(ref const array[] => double value, ref const array[] => double weight) => double weighted_average;
+
+// Extras (classify)
+
+const fun(var n, var trials, var p, var cumulative) => var binomdist;
+const fun(var x, var lambda, var cumulative) => var expondist;
+const fun(var x) => var normsdist;
+const fun(var x, var mu, var sigma) => var lognormdist;
+const fun(var n, var k) => var permut;
+
+const fun(var x0) => var geomean;
+const fun(var x0, var x1) => var geomean;
+const fun(var x0, var x1, var x2) => var geomean;
+const fun(var x0, var x1, var x2, var x3) => var geomean;
+const fun(var x0, var x1, var x2, var x3, var x4) => var geomean;
+const fun(var x0, var x1, var x2, var x3, var x4, var x5) => var geomean;
+const fun(var x0, var x1, var x2, var x3, var x4, var x5, var x6) => var geomean;
+const fun(var x0, var x1, var x2, var x3, var x4, var x5, var x6, var x7) => var geomean;
+
+const fun(var x0) => var harmean;
+const fun(var x0, var x1) => var harmean;
+const fun(var x0, var x1, var x2) => var harmean;
+const fun(var x0, var x1, var x2, var x3) => var harmean;
+const fun(var x0, var x1, var x2, var x3, var x4) => var harmean;
+const fun(var x0, var x1, var x2, var x3, var x4, var x5) => var harmean;
+const fun(var x0, var x1, var x2, var x3, var x4, var x5, var x6) => var harmean;
+const fun(var x0, var x1, var x2, var x3, var x4, var x5, var x6, var x7) => var harmean;
+
+// Functional + Array Transforms
+
+// meta{type T} const fun(ref const array[] => T lhs, ref const array[] => T rhs) => array[] => T append;
+const fun(ref const array[] => var lhs, ref const array[] => var rhs) => array[] => var append;
+// meta{type T, type R} const fun(fun(T) => R fun, T arg) => R apply;
+// meta{type T, int rank} const fun() Array;
+// meta{type T, int rank} const fun(ref const array[] => int dimensions) Array;
+// meta{type T} const fun(ref const T list) => int base;
+// meta{type T, type I, type R} const fun(fun(I x) => R f, const fun(T x) => I g) => const fun(T x) => R compose;
+// meta{type T} const fun(T head, ref const array[] => T tail) => array[] => T cons;
+const fun(var head, ref const array[] => var tail) => array[] => var cons;
+// meta{type T} const fun(ref const array[] => T list, int dim) => int count;
+// meta{type T} const fun(ref const array[] => T s) => bool empty;
+const fun(ref const array[] => var s) => bool empty;
+const fun(var s) => bool empty;
+// const fun(var criteria, var list) => var filter;
+const fun(fun(var exp) => bool criteria, var list) => var filter;
+// meta{type T} const fun(fun(T x) => bool pred, ref const array[] => T list) => array[] => T filter;
+// meta{type T} const fun(fun(T x) => bool pred, ref const array[] => T list) => int findindex;
+const fun(fun(var x) => bool predicate, var list) => int findindex;
+const fun(ref const array[] => var args) => array[] => var flatten;
+// meta{type T, type R} const fun(fun(T) => R conv, ref const array[] => T list) => array[] => R fmap;
+const fun(var conv, var list) => var fmap;
+// meta{type T, type R} const fun(fun(R, T) => R acc, R init, ref const array[] => T list) => array[] => R fold;
+const fun(var acc, var init, var list) => var fold;
+// meta{type T} const fun(ref const array[] => T list) => T head;
+const fun(ref const array[] => var list) => var head;
+const fun(ref array[] => var a, int start, int n) => null insert;
+// join
+const fun(ref const array[] => int cols, var table) => var project;
+const fun(ref array[] => var a, int start, int n) => null remove;
+const fun(ref const array[] => var list) => array[] => var runs;
+// select
+// meta{type T, type R} const fun(ref const array[] => T list, R empty, R multi) => (T + R) single;
+const fun(var list, var empty, var multi) => var single;
+const fun(ref const array[] => var list, var empty, var multi) => var single;
+// const fun(ref const array[] => var list) => int size;
+// meta{type T} const fun(ref const array[] => T list) => int size;
+// meta{type T} const fun(ref const array[] => T list, int dim) => int size;
+// meta{type T} const fun(ref const array[,] => T list, int dim) => int size;
+// meta{type T} const fun(ref const array[,,] => T list, int dim) => int size;
+// meta{type T} const fun(ref const T list) => int size;
+// meta{type T} const fun(ref const array[] => T list) => array[] => T sort;
+const fun(ref const array[] => var list) => array[] => var sort;
+const fun(var list) => var sort;
+const fun() => var sort;
+const fun(var x0) => var sort;
+const fun(var x0, var x1) => var sort;
+const fun(var x0, var x1, var x2) => var sort;
+const fun(var x0, var x1, var x2, var x3) => var sort;
+const fun(var x0, var x1, var x2, var x3, var x4) => var sort;
+const fun(var x0, var x1, var x2, var x3, var x4, var x5) => var sort;
+const fun(var x0, var x1, var x2, var x3, var x4, var x5, var x6) => var sort;
+const fun(var x0, var x1, var x2, var x3, var x4, var x5, var x6, var x7) => var sort;
+// meta{type T} const fun(ref const array[] => T list) => array[] => T tail;
+const fun(ref const array[] => var list) => array[] => var tail;
+
+// Reference & Lookup
+
+// const fun(int row, int col, int mode, (bool + null) a1, (string + null) sheet) => string address;
+const fun(int row, int col, int mode, bool a1, string sheet) => string address;
+const fun(int exp, ref const array[] => var args) => var choose;
+const fun() => int col;
+const fun(var v) => int col;
+const fun() => int column;
+const fun(var v) => int column;
+const fun(var v) => int columns;
+const fun(string s) => var eval;
+const fun(var variable) => var formula;
+const fun(var value, var table, int index) => var hlookup;
+const fun(var value, var table, int row, bool range) => var hlookup;
+const fun(string url, string caption) => string hyperlink;
+// const fun(var table, (int + null) row, (int + null) col) => var index;
+const fun(var table, int row, int col) => var index;
+// const fun(var table, (int + null) row, (int + null) col, (int + null) area) => var index;
+const fun(var table, int row, int col, int area) => var index;
+const fun(var v) => var indirect;
+const fun(var v, bool a1) => var indirect;
+const fun(var value, var range) => var lookup;
+const fun(var value, var range, var result) => var lookup;
+const fun(var value, var range) => var match;
+const fun(var value, var range, int mtype) => var match;
+// const fun(var v, int rows, int cols, (int + null) height, (int + null) width) => var offset;
+const fun(var v, int rows, int cols, int height, int width) => var offset;
+// const fun(var v) => var previous;
+const fun() => int row;
+const fun(var v) => int row;
+const fun(var v) => int rows;
+const fun(string source, ref const array[] => string topic) => var rtd;
+const fun(string prog, string server, ref const array[] => string topic) => var rtd;
+const fun(string source, string topic) => var rtt;
+// meta{type T} const fun(array[,] => T matrix) => array[,] => T transpose;
+const fun(var value, var table, int col) => var vlookup;
+const fun(var value, var table, int col, bool range) => var vlookup;
+
+// Finance
+
+const fun(double rate, ref const array[] => double cf) => double npv;
+const fun(double cost, double salvage, double life, int period) => double db;
+const fun(double cost, double salvage, double life, int period, int month) => double db;
+const fun(double cost, double salvage, double life, int period) => double ddb;
+const fun(double cost, double salvage, double life, int period, double factor) => double ddb;
+const fun(double rate, double nper, double pmt) => double fv;
+const fun(double rate, double nper, double pmt, double pv) => double fv;
+const fun(double rate, double nper, double pmt, double pv, bool t) => double fv;
+const fun(double rate, double nper, double pmt) => double pv;
+const fun(double rate, double nper, double pmt, double fv) => double pv;
+const fun(double rate, double nper, double pmt, double fv, bool t) => double pv;
+const fun(double rate, double pmt, double pv) => double nper;
+const fun(double rate, double pmt, double pv, double fv) => double nper;
+const fun(double rate, double pmt, double pv, double fv, bool t) => double nper;
+const fun(double rate, double nper, double pv) => double pmt;
+const fun(double rate, double nper, double pv, double fv) => double pmt;
+const fun(double rate, double nper, double pv, double fv, bool t) => double pmt;
+const fun(double rate, double per, double nper, double pv) => double ipmt;
+const fun(double rate, double per, double nper, double pv, double fv) => double ipmt;
+const fun(double rate, double per, double nper, double pv, double fv, bool t) => double ipmt;
+const fun(double rate, double per, double nper, double pv) => double ppmt;
+const fun(double rate, double per, double nper, double pv, double fv) => double ppmt;
+const fun(double rate, double per, double nper, double pv, double fv, bool t) => double ppmt;
+const fun(double nper, double pmt, double pv) => double rate;
+const fun(double nper, double pmt, double pv, double fv) => double rate;
+const fun(double nper, double pmt, double pv, double fv, bool t) => double rate;
+const fun(double nper, double pmt, double pv, double fv, bool t, double guess) => double rate;

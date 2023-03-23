@@ -1,3 +1,0 @@
-export ZEN=.
-export ZVM=$ZEN/zvm
-export ZST=$ZEN/zst

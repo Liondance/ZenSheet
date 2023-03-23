@@ -1,0 +1,68 @@
+///
+/// sys.sym
+///
+
+// System
+
+const fun() => string _sys_version;
+const fun() => null _sys_build;
+const fun() => null _sys_info;
+const fun(string name) => null _sys_load;
+const fun(string name) => null _sys_save;
+const fun(string name) => null _sys_run;
+const fun() => null _sys_tick;
+const fun(string name, string op, var remove, var add) => var _sys_view;
+const fun() => null _sys_refresh;
+const fun(string name) => null _sys_describe;
+const fun(var v) => null _sys_undefine;
+const fun() => null _sys_reset;
+const fun(int level) => null _sys_debug;
+const fun(string) => string _sys_parse;
+const fun() => null _sys_shutdown;
+
+:: sys := struct {
+	const fun() => string version;
+	const fun() => null build;
+	const fun() => null info;
+	const fun(string name) => null load;
+	const fun(string name) => null save;
+	const fun(string name) => null run;
+	const fun() => null tick;
+	const fun(string name, string op, var remove, var add) => var view;
+	const fun() => null refresh;
+	const fun(var v) => null describe;
+	const fun(var v) => null undefine;
+	const fun() => null reset;
+	const fun(int level) => null debug;
+	const fun(string) => string parse;
+	const fun() => null shutdown;
+} (
+	_sys_version,
+	_sys_build,
+	_sys_info,
+	_sys_load,
+	_sys_save,
+	_sys_run,
+	_sys_tick,
+	_sys_view,
+	_sys_refresh,
+	_sys_describe,
+	_sys_undefine,
+	_sys_reset,
+	_sys_debug,
+	_sys_parse,
+	_sys_shutdown
+);
+
+// Monte Carlo
+
+const fun(string view, int nb, double lb, double ub) => null _mc_params;
+const fun(int n, int k) => null _mc_run;
+
+:: mc := struct {
+	const fun(string view, int nb, double lb, double ub) => null params;
+	const fun(string view, int n, int k) => null run;
+} (
+	_mc_params,
+	_mc_run
+);

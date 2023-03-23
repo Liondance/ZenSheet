@@ -1,0 +1,92 @@
+Richard,
+
+(cc Monica: you may want to read this also, to get a sense for the value and future implications of Peano signatures)
+
+Juan Andres reminded me of some things I should have told you.
+
+In addition to the MS-Excel documentation, you need to pay attention to the Peano signature of a function.
+The Peano signature tells you:
+
+- whether you need to validate.argument types or not
+- whether you can return errors or not
+
+Before I show you how and why, let's define a simple constructor for invalid values. Something like this:
+
+var Error = function(code, message) {
+    return { code: code, message: message };
+};
+
+Which we can call like this (first argument is the MS-Excel error code, second one (optional) a better error description):
+
+Error("#NUM!", "zero or negative argument passed to log function")
+Error("#VALUE!", "log argument must be a number")
+Error("#DIV/0!")
+
+Instead of an abstract explanation, I found a simple yet powerful example that shows how function signatures matter.
+
+Now, let's assume we are implementing the base 10 logarithm function in the target language (Javascript), and ...
+... let's consider, four possible Peano signatures for the function, which is named log in MS-Excel.
+
+1)    const function(double n -> double) log;
+2)    const function(double n -> var) log;
+3)    const function(var n -> double) log;
+4)    const function(var n -> var) log;
+
+Always remember: the compiler validates types before translating functions calls, to Javascript in our case.
+The compiler (obviously) validates calls according to the signature of the function. That's what signature types are for.
+When you implement built-in functions, your code should take that into account, often to your advantage.
+
+Here we go. In the case of signatures 1 and 2 (where argument n is declared as double):
+We are not only entitled, but required to assume that, when the log function is called, argument n is a number.
+
+Why are we entitled to assume that? Because, the type checker has already proven that, at run time, the argument will be a number.
+Why are we not just entitled to assume, but required to do so? For performance reasons: no need to check again at run time!
+
+    principle: do not add dynamic checks that are redundant with compile time checks
+
+In the case of signatures 3 and 4, we need to validate that the argument is a number, and not, let's say, a null value, a string, or worse.
+Because it is now legal to call the function with a variable that can be ... anything (variant can be anything) the compiler will allow it.
+
+So the Javascript code, at the very beginning of the log function, will need something like this pseudocode:
+
+    if (n is not a number) {
+        // Oops, we ave a #VALUE! error, just like MS-Excel
+        ... (what should we do here? keep reading, more on this later) ...
+    }
+
+After you have validated the type of the argument (if needed, as is the case with signatures 3 and 4), you are not necessarily done validating.
+For instance, the log function (how convenient) is not defined if the argument is negative or zero. So you need to add this:
+
+    if (n <= 0.0) {
+        // Oops, we are out of the log domain a #NUM! error, just like MS-Excel
+        ... (what should we do here? keep reading, it's finally coming) ...
+    }
+
+Note that the the check for (n <= 0.0) will be required in all four cases.
+The types are correct and, in general, the value of the argument can only be known at run time.
+If the execution passes both validations (where the first one is possibly done at compile time) we can finally compute the log
+
+    var result = Mathlib.log(n);
+    return result;
+
+But what about the errors above? How can we communicate the error to the rest of the program?
+You have two choices: you either return the Error value or you throw it. The Peano signature tells you which one you should do!
+
+Functions 1 and 3 guarantee that the value returned is a double (for Javascript VM runtime that means a number), so ...
+... we are NOT going to break that promise! If we break the promise, we are defeating the type system we worked so hard to implement.
+If we cannot return an error we have to throw it, as simple as something like this:
+
+    throw Error("#NUM!", "zero or negative argument passed to log function");
+
+Functions 2 and 4 "guarantee" that they will return a var, the Peano way to say (a cara e' perro) "I can give you back anything I want!"
+So you don't throw (note that spreadsheets don't throw, instead show you #MERDE! in the cells) but return instead
+
+    return Error("#NUM!", "zero or negative argument passed to log function");
+
+If you write full code for all four cases you will find that they are all different in some ways. But variations of the same theme.
+
+I have a little follow up on this regarding overloading, which does not change anything here.
+But I need to go to Yale now, so will get to it later.
+
+Sorry I waited one day to tell you this. Yesterday was a very busy day.
+I leave it up to Juan Andres to add more.
